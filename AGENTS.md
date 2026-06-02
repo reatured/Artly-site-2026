@@ -56,6 +56,11 @@ Never do the following without explicit confirmation:
 
 Use subagents by default for execution. The Leader Agent stays in conversation with Richard, coordinates the work, and reviews results.
 
+### Subagent Model Defaults
+
+- Worker subagents default to `gpt-5.3-codex-spark` or another fast/small model unless the task risk or complexity warrants a stronger model.
+- Sub-Managers and other manager-level subagents default to `gpt-5.5` (or the highest-end available model) for coordination, synthesis, and high-judgment work.
+
 ## Agent Traceability
 
 Every spawned agent should receive a vault ID and be recorded in the Agent Registry.
