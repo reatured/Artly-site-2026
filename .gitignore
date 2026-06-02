@@ -1,0 +1,13 @@
+.env
+.env.*
+!.env.example
+
+.shopify/
+node_modules/
+dist/
+build/
+.next/
+coverage/
+
+.DS_Store
+Thumbs.db
