@@ -1,6 +1,14 @@
 {%- assign block_settings = block.settings -%}
 {%- assign plain_text = block_settings.text | strip_newlines | strip_html | strip -%}
 {%- assign block_index = section.blocks | find_index: 'id', block.id -%}
+{%- assign has_timer = false -%}
+{%- if block_settings.enable_countdown and block_settings.countdown_end_date != blank and block_settings.countdown_end_time != blank -%}
+  {%- assign has_timer = true -%}
+{%- endif -%}
+{%- assign show_button = false -%}
+{%- if block_settings.show_button and block_settings.button_text != blank and block_settings.button_url != blank -%}
+  {%- assign show_button = true -%}
+{%- endif -%}
 
 {%- unless plain_text == '' -%}
   <slideshow-slide
@@ -24,11 +32,49 @@
     {{ block.shopify_attributes }}
     aria-hidden="{% if block_index == 0 %}false{% else %}true{% endif %}"
   >
-    <p class="announcement-bar__text">
-      {{ block.settings.text }}
-    </p>
+    <div class="announcement-bar__content">
+      <p class="announcement-bar__text">
+        {{ block.settings.text }}
+      </p>
 
-    {% if block_settings.link != blank %}
+      {% if has_timer %}
+        <announcement-countdown
+          class="announcement-bar__countdown"
+          data-announcement-countdown
+          data-countdown-date="{{ block_settings.countdown_end_date | escape }}"
+          data-countdown-time="{{ block_settings.countdown_end_time | escape }}"
+        >
+          <span class="announcement-bar__countdown-label" data-countdown-label>Ends in:</span>
+          <span class="announcement-bar__countdown-parts" aria-live="polite">
+            <span class="announcement-bar__countdown-part">
+              <span class="announcement-bar__countdown-value" data-countdown-part="days">--</span><span class="announcement-bar__countdown-unit">d</span>
+            </span>
+            <span class="announcement-bar__countdown-part">
+              <span class="announcement-bar__countdown-value" data-countdown-part="hours">--</span><span class="announcement-bar__countdown-unit">h</span>
+            </span>
+            <span class="announcement-bar__countdown-part">
+              <span class="announcement-bar__countdown-value" data-countdown-part="minutes">--</span><span class="announcement-bar__countdown-unit">m</span>
+            </span>
+            <span class="announcement-bar__countdown-part">
+              <span class="announcement-bar__countdown-value" data-countdown-part="seconds">--</span><span class="announcement-bar__countdown-unit">s</span>
+            </span>
+          </span>
+        </announcement-countdown>
+      {% endif %}
+
+      {% if show_button %}
+        <a
+          class="announcement-bar__button button button-secondary"
+          href="{{ block_settings.button_url }}"
+        >
+          <span class="announcement-bar__button-text">
+            {{- block_settings.button_text | escape -}}
+          </span>
+        </a>
+      {% endif %}
+    </div>
+
+    {% if block_settings.link != blank and show_button == false %}
       <a
         class="announcement-bar__link"
         href="{{ block_settings.link }}"
@@ -127,6 +173,147 @@
       "type": "url",
       "id": "link",
       "label": "t:settings.link"
+    },
+    {
+      "type": "header",
+      "content": "Countdown Timer"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_countdown",
+      "label": "Enable countdown timer",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "countdown_end_date",
+      "label": "Countdown end date",
+      "info": "Use YYYY-MM-DD (example: 2026-12-31)."
+    },
+    {
+      "type": "select",
+      "id": "countdown_end_time",
+      "label": "Countdown end time",
+      "info": "Local time for this shop.",
+      "options": [
+        {
+          "value": "00:00",
+          "label": "12:00 AM"
+        },
+        {
+          "value": "01:00",
+          "label": "1:00 AM"
+        },
+        {
+          "value": "02:00",
+          "label": "2:00 AM"
+        },
+        {
+          "value": "03:00",
+          "label": "3:00 AM"
+        },
+        {
+          "value": "04:00",
+          "label": "4:00 AM"
+        },
+        {
+          "value": "05:00",
+          "label": "5:00 AM"
+        },
+        {
+          "value": "06:00",
+          "label": "6:00 AM"
+        },
+        {
+          "value": "07:00",
+          "label": "7:00 AM"
+        },
+        {
+          "value": "08:00",
+          "label": "8:00 AM"
+        },
+        {
+          "value": "09:00",
+          "label": "9:00 AM"
+        },
+        {
+          "value": "10:00",
+          "label": "10:00 AM"
+        },
+        {
+          "value": "11:00",
+          "label": "11:00 AM"
+        },
+        {
+          "value": "12:00",
+          "label": "12:00 PM"
+        },
+        {
+          "value": "13:00",
+          "label": "1:00 PM"
+        },
+        {
+          "value": "14:00",
+          "label": "2:00 PM"
+        },
+        {
+          "value": "15:00",
+          "label": "3:00 PM"
+        },
+        {
+          "value": "16:00",
+          "label": "4:00 PM"
+        },
+        {
+          "value": "17:00",
+          "label": "5:00 PM"
+        },
+        {
+          "value": "18:00",
+          "label": "6:00 PM"
+        },
+        {
+          "value": "19:00",
+          "label": "7:00 PM"
+        },
+        {
+          "value": "20:00",
+          "label": "8:00 PM"
+        },
+        {
+          "value": "21:00",
+          "label": "9:00 PM"
+        },
+        {
+          "value": "22:00",
+          "label": "10:00 PM"
+        },
+        {
+          "value": "23:00",
+          "label": "11:00 PM"
+        }
+      ],
+      "default": "00:00"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_button",
+      "label": "Enable button",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "Button link"
     },
     {
       "type": "header",

@@ -1,3 +1,9 @@
+<script
+  src="{{ 'announcement-bar-countdown.js' | asset_url }}"
+  type="module"
+  fetchpriority="low"
+></script>
+
 {% if section.blocks.size > 1 %}
   <script
     src="{{ 'announcement-bar.js' | asset_url }}"
@@ -64,13 +70,104 @@
     grid-area: stack;
   }
 
+  .announcement-bar__content {
+    display: flex;
+    align-items: center;
+    gap: var(--padding-xs);
+    margin: 0;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .announcement-bar__text {
+    margin: 0;
+  }
+
   .announcement-bar__slide {
     transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
     content-visibility: visible;
+    padding-block: 0.25rem;
+    padding-inline: 0.25rem;
+    min-height: 2.35rem;
 
     &[aria-hidden='true'] {
       opacity: 0;
       visibility: hidden;
+    }
+  }
+
+  .announcement-bar__countdown {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    white-space: nowrap;
+    font-size: var(--font-size-sm, 0.8125rem);
+    color: var(--color-foreground-muted);
+  }
+
+  .announcement-bar__countdown-parts {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .announcement-bar__countdown-value {
+    min-width: 2ch;
+    display: inline-block;
+    text-align: center;
+  }
+
+  .announcement-bar__countdown-unit {
+    margin-inline-start: 2px;
+    font-size: 0.75em;
+    color: var(--color-foreground-muted);
+  }
+
+  .announcement-bar__button {
+    flex-shrink: 0;
+    min-height: 2rem;
+    padding-inline: 0.6rem;
+  }
+
+  .announcement-bar__button:empty {
+    display: none;
+  }
+
+  @media screen and (min-width: 750px) {
+    .announcement-bar__content {
+      flex-wrap: nowrap;
+      justify-content: center;
+      gap: var(--padding-sm);
+    }
+
+    .announcement-bar__text {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  [data-announcement-countdown][hidden],
+  [data-announcement-countdown][data-announcement-countdown-invalid] {
+    display: none;
+  }
+
+  @media screen and (max-width: 749px) {
+    .announcement-bar__content {
+      gap: 0.3rem;
+    }
+
+    .announcement-bar__countdown {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .announcement-bar__button {
+      width: auto;
     }
   }
 
@@ -109,10 +206,6 @@
 
   .announcement-bar__slide {
     place-content: center;
-  }
-
-  .announcement-bar__text:first-child {
-    margin: 0;
   }
 
   .announcement-bar__link {

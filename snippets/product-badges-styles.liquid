@@ -30,6 +30,10 @@
 
   .product-badges__badge {
     --badge-font-size: var(--font-size--xs);
+    --badge-font-family: var(--font-paragraph--family);
+    --badge-font-weight: 600;
+    --badge-text-transform: uppercase;
+    --badge-border-radius: var(--style-border-radius-pills);
 
     display: flex;
     align-items: center;
@@ -47,5 +51,16 @@
   .product-badges__badge--rectangle {
     padding-block: var(--badge-rectangle-padding-block);
     padding-inline: var(--badge-rectangle-padding-inline);
+  }
+
+  .product-badges__badge--pill {
+    padding-block: var(--badge-rectangle-padding-block);
+    padding-inline: var(--badge-rectangle-padding-inline);
+    border-radius: var(--badge-border-radius, var(--style-border-radius-pills));
+  }
+
+  .product-badges__badge :is(.svg-wrapper, svg) {
+    width: var(--icon-size-xs);
+    height: var(--icon-size-xs);
   }
 {% endstylesheet %}

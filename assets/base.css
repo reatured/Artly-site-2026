@@ -23,6 +23,21 @@ body {
   --surface-transition-timing: var(--ease-out-quad);
   --submenu-animation-speed: 360ms;
   --submenu-animation-easing: cubic-bezier(0.25, 0.1, 0.25, 1);
+
+  /* Design system foundation aliases */
+  --foundation-color-surface: var(--color-background);
+  --foundation-color-on-surface: var(--color-foreground);
+  --foundation-color-surface-muted: rgb(var(--color-foreground-rgb) / var(--opacity-5));
+  --foundation-color-outline: var(--color-border);
+  --foundation-color-outline-muted: rgb(var(--color-border-rgb) / var(--opacity-30));
+  --foundation-color-success: var(--color-success);
+  --foundation-color-warning: var(--color-foreground-muted, rgb(var(--color-foreground-rgb) / var(--opacity-subdued-text)));
+  --foundation-color-error: var(--color-error);
+  --foundation-color-out-of-stock: var(--color-outofstock);
+  --foundation-space-inline-sm: var(--gap-sm);
+  --foundation-space-inline-md: var(--gap-md);
+  --foundation-space-inline-lg: var(--gap-lg);
+  --foundation-icon-button-size: var(--minimum-touch-target);
 }
 
 html {
@@ -1373,6 +1388,36 @@ button.shopify-payment-button__button--unbranded:hover:not([disabled]) {
   --button-border-color: var(--color-secondary-button-hover-border);
 }
 
+.icon-button {
+  --icon-button-size: var(--icon-size-md);
+
+  width: var(--minimum-touch-target);
+  height: var(--minimum-touch-target);
+  min-width: var(--minimum-touch-target);
+  min-height: var(--minimum-touch-target);
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  border-radius: var(--style-border-radius-buttons-primary);
+  text-decoration: none;
+  color: var(--color-foreground);
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.icon-button .svg-wrapper,
+.icon-button svg {
+  width: var(--icon-button-size);
+  height: var(--icon-button-size);
+}
+
+.icon-button--ghost {
+  color: var(--color-foreground);
+  border-color: transparent;
+}
+
 /* Needed to override the default Shopify styles */
 button.shopify-payment-button__button--unbranded:hover:not([disabled]) {
   background-color: var(--button-background-color);
@@ -2659,6 +2704,7 @@ form.payment-terms {
   border: none;
   outline: none;
   font-size: var(--font-paragraph--size);
+  min-height: var(--minimum-touch-target);
 
   &:autofill {
     background-color: var(--color-input-background);
@@ -2689,6 +2735,22 @@ form.payment-terms {
   pointer-events: none;
   position: absolute;
   transition: top var(--animation-speed) ease, font-size var(--animation-speed) ease;
+}
+
+.field__error,
+.field__status {
+  margin-block-start: var(--padding-2xs);
+  color: var(--color-error);
+  font-size: var(--font-size--xs);
+}
+
+.field__input[aria-invalid='true'] {
+  --input-box-shadow-focus: 0 0 0 calc(var(--input-box-shadow-width) + 0.5px) var(--color-error);
+  box-shadow: var(--input-box-shadow-focus);
+}
+
+.field--success .field__label {
+  color: var(--color-success);
 }
 
 /* RTE styles */

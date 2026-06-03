@@ -314,6 +314,25 @@
     }
   }
 
+  .header-actions__action {
+    min-width: var(--minimum-touch-target);
+    min-height: var(--minimum-touch-target);
+    border-radius: var(--style-border-radius-buttons-primary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding-inline: var(--padding-sm);
+    transition: background-color var(--animation-speed) var(--animation-easing);
+
+    &:focus-visible {
+      background-color: rgb(var(--color-foreground-rgb) / var(--opacity-10));
+    }
+
+    &:hover {
+      background-color: rgb(var(--color-foreground-rgb) / var(--opacity-5));
+    }
+  }
+
   .account-button__fallback {
     width: 28px;
     height: 28px;

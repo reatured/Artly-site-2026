@@ -38,6 +38,16 @@
     display: flex;
   }
 
+  .search-action button {
+    min-width: var(--minimum-touch-target);
+    min-height: var(--minimum-touch-target);
+    border-radius: var(--style-border-radius-buttons-primary);
+    align-items: center;
+    justify-content: center;
+    padding: 0 var(--padding-sm);
+    display: inline-flex;
+  }
+
   @media screen and (max-width: 749px) {
     .search-action--hidden-on-drawer {
       display: none;

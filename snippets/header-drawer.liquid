@@ -774,7 +774,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: var(--padding-lg);
+    min-width: var(--minimum-touch-target);
+    min-height: var(--minimum-touch-target);
+    border-radius: var(--style-border-radius-buttons-primary);
+    padding: 0 var(--padding-sm);
   }
 
   .header__icon--summary .header-drawer-icon {
