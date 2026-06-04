@@ -1,0 +1,568 @@
+{% liquid
+  assign media_type = section.settings.media_type
+  assign has_image = false
+  assign has_video = false
+  assign media_image = section.settings.media_fallback_image
+  assign media_alt_text = section.settings.media_alt_text
+
+  if media_type == 'video' and section.settings.media_video != blank
+    assign has_video = true
+  elsif media_type == 'image' and section.settings.media_image != blank
+    assign has_image = true
+    assign media_image = section.settings.media_image
+  elsif section.settings.media_video != blank
+    assign has_video = true
+  elsif section.settings.media_image != blank
+    assign has_image = true
+    assign media_image = section.settings.media_image
+  elsif section.settings.media_fallback_image != blank
+    assign has_image = true
+  endif
+
+  if has_video
+    assign media_poster = section.settings.media_fallback_image
+    if media_poster == blank
+      assign media_poster = section.settings.media_video.preview_image
+    endif
+    assign media_alt_text = media_alt_text | default: section.settings.media_video.alt
+    assign media_tag = section.settings.media_video
+  endif
+
+  if has_image
+    assign media_alt_text = media_alt_text | default: media_image.alt
+  endif
+
+  assign media_height_mobile = 'auto'
+  case section.settings.media_height
+    when '50svh'
+      assign media_height_mobile = '30svh'
+    when '60svh'
+      assign media_height_mobile = '50svh'
+    when '80svh'
+      assign media_height_mobile = '70svh'
+    when '100svh'
+      assign media_height_mobile = '100svh'
+  endcase
+%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div
+  class="section section--{{ section.settings.section_width }} spacing-style barista-bot-feature color-{{ section.settings.color_scheme }} barista-bot-feature--{{ section.settings.media_position }} barista-bot-feature--{{ section.settings.media_width }}"
+  style="
+    {%- render 'spacing-style', settings: section.settings -%}
+    {% render 'border-override', settings: section.settings -%}
+    --barista-bot-feature-media-height: {{ section.settings.media_height }};
+    --barista-bot-feature-media-height-mobile: {{ media_height_mobile }};
+  "
+>
+  <div
+    class="barista-bot-feature__media"
+    role="img"
+    {% if media_alt_text != blank %}aria-label="{{ media_alt_text | escape }}"{% endif %}
+  >
+    {% if has_video %}
+      {{
+        media_tag
+        | video_tag:
+          autoplay: section.settings.video_autoplay,
+          loop: section.settings.video_loop,
+          muted: section.settings.video_autoplay,
+          controls: true,
+          poster: media_poster,
+          class: 'barista-bot-feature__media-player'
+      }}
+    {% elsif has_image %}
+      {{
+        media_image
+        | image_url: width: 2400
+        | image_tag:
+          width: media_image.width,
+          widths: '416, 600, 768, 1024, 1440, 1920, 2400',
+          height: media_image.height,
+          alt: media_alt_text,
+          loading: 'lazy',
+          class: 'barista-bot-feature__media-player'
+      }}
+    {% else %}
+      <div class="barista-bot-feature__media-player barista-bot-feature__media-player--placeholder">
+        {{ 'hero-apparel-1' | placeholder_svg_tag }}
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="barista-bot-feature__content">
+    {% if section.settings.eyebrow != blank %}
+      <p class="barista-bot-feature__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+    {% endif %}
+
+    {% if section.settings.heading != blank %}
+      <h2 class="barista-bot-feature__heading">{{ section.settings.heading | escape }}</h2>
+    {% endif %}
+
+    {% if section.settings.body != blank %}
+      <p class="barista-bot-feature__body">{{ section.settings.body | escape }}</p>
+    {% endif %}
+
+    <div class="barista-bot-feature__actions">
+      {% if section.settings.primary_cta_label != blank %}
+        <a
+          class="size-style {{ section.settings.primary_cta_style }}"
+          {% if section.settings.primary_cta_link == blank %}
+            role="link"
+            aria-disabled="true"
+          {% else %}
+            href="{{ section.settings.primary_cta_link }}"
+            {% if section.settings.primary_cta_open_in_new_tab %}
+              target="_blank"
+              rel="noopener noreferrer"
+            {% endif %}
+          {% endif %}
+        >
+          {{ section.settings.primary_cta_label | escape }}
+        </a>
+      {% endif %}
+
+      {% if section.settings.secondary_cta_label != blank %}
+        <a
+          class="size-style {{ section.settings.secondary_cta_style }}"
+          {% if section.settings.secondary_cta_link == blank %}
+            role="link"
+            aria-disabled="true"
+          {% else %}
+            href="{{ section.settings.secondary_cta_link }}"
+            {% if section.settings.secondary_cta_open_in_new_tab %}
+              target="_blank"
+              rel="noopener noreferrer"
+            {% endif %}
+          {% endif %}
+        >
+          {{ section.settings.secondary_cta_label | escape }}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .barista-bot-feature {
+    --barista-bot-feature-media-column: 3.5fr;
+    --barista-bot-feature-content-column: 2.5fr;
+    display: grid;
+    gap: var(--spacer-lg, 2rem);
+    grid-template-areas:
+      'media'
+      'content';
+    align-items: start;
+  }
+
+  .barista-bot-feature--medium {
+    --barista-bot-feature-media-column: 1fr;
+    --barista-bot-feature-content-column: 1fr;
+  }
+
+  .barista-bot-feature--narrow {
+    --barista-bot-feature-media-column: 2fr;
+    --barista-bot-feature-content-column: 4fr;
+  }
+
+  @media screen and (min-width: 750px) {
+    .barista-bot-feature {
+      grid-template-columns:
+        minmax(0, var(--barista-bot-feature-media-column))
+        minmax(0, var(--barista-bot-feature-content-column));
+      grid-template-areas:
+        'media content';
+    }
+
+    .barista-bot-feature--media-right {
+      grid-template-areas:
+        'content media';
+    }
+  }
+
+  .barista-bot-feature__media {
+    grid-area: media;
+    min-width: 0;
+  }
+
+  .barista-bot-feature__media-player,
+  .barista-bot-feature__media-player--placeholder {
+    display: block;
+    width: 100%;
+    height: var(--barista-bot-feature-media-height);
+    min-height: var(--barista-bot-feature-media-height);
+    object-fit: cover;
+    border-radius: 8px;
+  }
+
+  .barista-bot-feature__media-player--placeholder svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .barista-bot-feature__media-player--placeholder {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 16 / 9;
+    min-height: auto;
+  }
+
+  .barista-bot-feature__content {
+    grid-area: content;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 54ch;
+  }
+
+  .barista-bot-feature__eyebrow {
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.8rem;
+    color: rgb(var(--color-foreground-rgb) / var(--opacity-75, 0.75));
+    margin-block-end: 0.45rem;
+  }
+
+  .barista-bot-feature__heading {
+    margin: 0;
+    margin-block-end: 0.35rem;
+    font-family: var(--font-heading--family, var(--font-body--family));
+    font-size: clamp(1.9rem, 2.6vw, 2.85rem);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    max-width: 16ch;
+  }
+
+  .barista-bot-feature__body {
+    margin: 0;
+    color: rgb(var(--color-foreground-rgb) / var(--opacity-75, 0.75));
+    max-width: 64ch;
+    line-height: 1.7;
+  }
+
+  .barista-bot-feature__actions {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 0.95rem;
+    margin-block-start: 0.4rem;
+  }
+
+  @media screen and (max-width: 749px) {
+    .barista-bot-feature {
+      --barista-bot-feature-media-height: var(--barista-bot-feature-media-height-mobile);
+    }
+
+    .barista-bot-feature__actions {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .barista-bot-feature__actions > .size-style {
+      width: fit-content;
+      max-width: 100%;
+    }
+  }
+
+  .barista-bot-feature__actions > .size-style {
+    max-width: 100%;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Barista bot feature",
+  "tag": "section",
+  "class": "barista-bot-feature-section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Barista Bot™"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Specialty coffee, designed around you."
+    },
+    {
+      "type": "text",
+      "id": "body",
+      "label": "Body",
+      "default": "Meet the AI-trained robotic barista built for autonomous operation. Barista Bot’s 4x5 footprint, self-cleaning components, and automatic calibration make a quality café experience possible in even the most demanding environments."
+    },
+    {
+      "type": "text",
+      "id": "primary_cta_label",
+      "label": "Primary CTA label",
+      "default": "Book a Demo"
+    },
+    {
+      "type": "url",
+      "id": "primary_cta_link",
+      "label": "Primary CTA link"
+    },
+    {
+      "type": "checkbox",
+      "id": "primary_cta_open_in_new_tab",
+      "label": "Open primary CTA in new tab",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "primary_cta_style",
+      "label": "Primary CTA style",
+      "options": [
+        {
+          "value": "button",
+          "label": "Primary"
+        },
+        {
+          "value": "button-secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "link",
+          "label": "Text link"
+        }
+      ],
+      "default": "button"
+    },
+    {
+      "type": "text",
+      "id": "secondary_cta_label",
+      "label": "Secondary CTA label",
+      "default": "Learn More"
+    },
+    {
+      "type": "url",
+      "id": "secondary_cta_link",
+      "label": "Secondary CTA link"
+    },
+    {
+      "type": "checkbox",
+      "id": "secondary_cta_open_in_new_tab",
+      "label": "Open secondary CTA in new tab",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "secondary_cta_style",
+      "label": "Secondary CTA style",
+      "options": [
+        {
+          "value": "button",
+          "label": "Primary"
+        },
+        {
+          "value": "button-secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "link",
+          "label": "Text link"
+        }
+      ],
+      "default": "link"
+    },
+    {
+      "type": "header",
+      "content": "Media"
+    },
+    {
+      "type": "select",
+      "id": "media_type",
+      "label": "Media type",
+      "options": [
+        {
+          "value": "image",
+          "label": "Image"
+        },
+        {
+          "value": "video",
+          "label": "Video"
+        }
+      ],
+      "default": "video"
+    },
+    {
+      "type": "image_picker",
+      "id": "media_image",
+      "label": "Image",
+      "visible_if": "{{ section.settings.media_type == 'image' }}"
+    },
+    {
+      "type": "video",
+      "id": "media_video",
+      "label": "Video",
+      "visible_if": "{{ section.settings.media_type == 'video' }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "media_fallback_image",
+      "label": "Video poster / fallback image",
+      "visible_if": "{{ section.settings.media_type == 'video' }}"
+    },
+    {
+      "type": "text",
+      "id": "media_alt_text",
+      "label": "Media alt text",
+      "default": "Artly Barista Bot in a compact 4x5 workcell producing specialty coffee"
+    },
+    {
+      "type": "checkbox",
+      "id": "video_autoplay",
+      "label": "Video autoplay",
+      "default": false,
+      "visible_if": "{{ section.settings.media_type == 'video' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "video_loop",
+      "label": "Video loop",
+      "default": true,
+      "visible_if": "{{ section.settings.media_type == 'video' }}"
+    },
+    {
+      "type": "header",
+      "content": "Layout & width"
+    },
+    {
+      "type": "select",
+      "id": "media_position",
+      "label": "Media position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "media_width",
+      "label": "Media width",
+      "options": [
+        {
+          "value": "narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "wide",
+          "label": "Wide"
+        }
+      ],
+      "default": "wide"
+    },
+    {
+      "type": "select",
+      "id": "media_height",
+      "label": "Media height",
+      "options": [
+        {
+          "value": "auto",
+          "label": "Auto"
+        },
+        {
+          "value": "50svh",
+          "label": "50svh"
+        },
+        {
+          "value": "60svh",
+          "label": "60svh"
+        },
+        {
+          "value": "80svh",
+          "label": "80svh"
+        },
+        {
+          "value": "100svh",
+          "label": "100svh"
+        }
+      ],
+      "default": "60svh"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page width"
+        },
+        {
+          "value": "full-width",
+          "label": "Full width"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 32
+    }
+  ],
+  "presets": [
+    {
+      "name": "Barista bot feature",
+      "category": "Storytelling",
+      "settings": {
+        "media_type": "video",
+        "media_position": "left",
+        "media_width": "wide",
+        "media_height": "60svh",
+        "section_width": "page-width",
+        "color_scheme": "scheme-1",
+        "padding-block-start": 32,
+        "padding-block-end": 32
+      }
+    }
+  ]
+}
+{% endschema %}

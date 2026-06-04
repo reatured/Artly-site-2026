@@ -1,0 +1,356 @@
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+{% assign strip_alignment = 'flex-start' %}
+{% case section.settings.alignment %}
+  {% when 'center' %}
+    {% assign strip_alignment = 'center' %}
+  {% when 'right' %}
+    {% assign strip_alignment = 'flex-end' %}
+{% endcase %}
+
+<section
+  class="
+    section
+    section--{{ section.settings.section_width }}
+    spacing-style
+    color-{{ section.settings.color_scheme }}
+    trusted-by-logo-strip
+    trusted-by-logo-strip--{{ section.settings.strip_mode }}
+    trusted-by-logo-strip--{{ section.settings.alignment }}
+  "
+  style="
+    {%- render 'spacing-style', settings: section.settings -%}
+    --trusted-by-logo-height: {{ section.settings.logo_height }}px;
+    --trusted-by-logo-gap: {{ section.settings.logo_gap }}px;
+    --trusted-by-logo-alignment: {{ strip_alignment }};
+  "
+  {{ section.shopify_attributes }}
+>
+  {% if section.settings.show_heading and section.settings.heading != blank %}
+    <h2 class="trusted-by-logo-strip__heading">{{ section.settings.heading | escape }}</h2>
+  {% endif %}
+
+  {% if section.blocks.size > 0 %}
+    <div class="trusted-by-logo-strip__viewport">
+      <ul
+        class="trusted-by-logo-strip__list"
+        role="list"
+        aria-label="{{ section.settings.heading | default: 'Trusted by logos' | escape }}"
+      >
+        {% content_for 'blocks' %}
+      </ul>
+    </div>
+  {% endif %}
+</section>
+
+{% stylesheet %}
+  .trusted-by-logo-strip {
+    --trusted-by-logo-height: 44px;
+    --trusted-by-logo-gap: 24px;
+    --trusted-by-logo-alignment: flex-start;
+    display: grid;
+    gap: var(--trusted-by-logo-gap);
+  }
+
+  .trusted-by-logo-strip__heading {
+    margin: 0;
+  }
+
+  .trusted-by-logo-strip--left .trusted-by-logo-strip__heading {
+    text-align: left;
+  }
+
+  .trusted-by-logo-strip--center .trusted-by-logo-strip__heading {
+    text-align: center;
+  }
+
+  .trusted-by-logo-strip--right .trusted-by-logo-strip__heading {
+    text-align: right;
+  }
+
+  .trusted-by-logo-strip__viewport {
+    width: 100%;
+  }
+
+  .trusted-by-logo-strip__list {
+    --list-top-bottom-padding: 0px;
+    margin: 0;
+    padding: var(--list-top-bottom-padding) 0;
+    list-style: none;
+    display: flex;
+    gap: var(--trusted-by-logo-gap);
+    align-items: center;
+    scroll-padding-inline: var(--trusted-by-logo-gap);
+  }
+
+  .trusted-by-logo-strip__item {
+    flex: 0 0 auto;
+  }
+
+  .trusted-by-logo-strip--static .trusted-by-logo-strip__list {
+    flex-wrap: wrap;
+    justify-content: var(--trusted-by-logo-alignment, flex-start);
+  }
+
+  .trusted-by-logo-strip--scroll .trusted-by-logo-strip__list {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-bottom: 0.25rem;
+  }
+
+  .trusted-by-logo-strip--scroll .trusted-by-logo-strip__list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .trusted-by-logo-strip__item {
+    scroll-snap-align: center;
+  }
+
+  @media screen and (max-width: 749px) {
+    .trusted-by-logo-strip__list {
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      padding-bottom: 0.25rem;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .trusted-by-logo-strip__list::-webkit-scrollbar {
+      display: none;
+    }
+
+    .trusted-by-logo-strip--static .trusted-by-logo-strip__list {
+      justify-content: flex-start;
+    }
+
+    .trusted-by-logo-strip__item {
+      flex: 0 0 auto;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Trusted by logo strip",
+  "class": "trusted-by-logo-strip-section",
+  "max_blocks": 12,
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section content"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_heading",
+      "label": "Show heading",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Trusted By"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "strip_mode",
+      "label": "Strip mode",
+      "options": [
+        {
+          "value": "static",
+          "label": "Static"
+        },
+        {
+          "value": "scroll",
+          "label": "Scroll"
+        }
+      ],
+      "default": "scroll"
+    },
+    {
+      "type": "range",
+      "id": "logo_height",
+      "label": "Default logo height",
+      "min": 24,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "default": 44
+    },
+    {
+      "type": "range",
+      "id": "logo_gap",
+      "label": "Gap",
+      "min": 4,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "checkbox",
+      "id": "open_in_new_tab",
+      "label": "Open logo links in new tab by default",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page width"
+        },
+        {
+          "value": "full-width",
+          "label": "Full width"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-start",
+      "label": "Left padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-end",
+      "label": "Right padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "trusted-by-logo"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trusted by logo strip",
+      "category": "Trust and proof",
+      "settings": {
+        "show_heading": true,
+        "heading": "Trusted By",
+        "alignment": "center",
+        "strip_mode": "scroll",
+        "logo_height": 44,
+        "logo_gap": 24,
+        "open_in_new_tab": false,
+        "section_width": "page-width",
+        "color_scheme": "scheme-1",
+        "padding-block-start": 28,
+        "padding-block-end": 28
+      },
+      "blocks": {
+        "logo-a": {
+          "type": "trusted-by-logo",
+          "settings": {
+            "logo_name": "Trusted Brand 1",
+            "logo_alt_text": "Trusted Brand 1 logo",
+            "display_height": 44,
+            "open_in_new_tab": "inherit"
+          }
+        },
+        "logo-b": {
+          "type": "trusted-by-logo",
+          "settings": {
+            "logo_name": "Trusted Brand 2",
+            "logo_alt_text": "Trusted Brand 2 logo",
+            "display_height": 44,
+            "open_in_new_tab": "inherit"
+          }
+        },
+        "logo-c": {
+          "type": "trusted-by-logo",
+          "settings": {
+            "logo_name": "Trusted Brand 3",
+            "logo_alt_text": "Trusted Brand 3 logo",
+            "display_height": 44,
+            "open_in_new_tab": "inherit"
+          }
+        },
+        "logo-d": {
+          "type": "trusted-by-logo",
+          "settings": {
+            "logo_name": "Trusted Brand 4",
+            "logo_alt_text": "Trusted Brand 4 logo",
+            "display_height": 44,
+            "open_in_new_tab": "inherit"
+          }
+        }
+      },
+      "block_order": ["logo-a", "logo-b", "logo-c", "logo-d"]
+    }
+  ]
+}
+{% endschema %}

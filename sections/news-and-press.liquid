@@ -1,0 +1,790 @@
+﻿{% liquid
+  assign content_mode = section.settings.content_mode | default: 'manual'
+  assign section_title = section.settings.section_title | default: 'News & Press'
+  assign section_intro = section.settings.section_intro | default: 'Recent announcements, field updates, and coverage that show how Artly is scaling reliable coffee and service robotics.'
+  assign section_eyebrow = section.settings.section_eyebrow | default: 'News & Press'
+  assign section_cta_label = section.settings.cta_label | default: 'More Resources'
+  assign section_cta_link = section.settings.cta_link
+
+  assign max_items = section.settings.post_limit | default: 4
+  if max_items < 4
+    assign max_items = 4
+  elsif max_items > 4
+    assign max_items = 4
+  endif
+%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div
+  class="
+    section
+    section--{{ section.settings.section_width }}
+    color-{{ section.settings.color_scheme }}
+    section-resource-list
+    news-and-press
+    spacing-style
+  "
+  style="
+    {% render 'spacing-style', settings: section.settings %}
+    --news-and-press-columns: {{ section.settings.columns | default: 4 }};
+  "
+>
+  <div class="section-resource-list__header news-and-press__header">
+    <p class="news-and-press__eyebrow">{{ section_eyebrow }}</p>
+    <h2 class="news-and-press__title">{{ section_title }}</h2>
+    {% if section_intro != blank %}
+      <p class="news-and-press__intro">{{ section_intro }}</p>
+    {% endif %}
+    {% if section_cta_label != blank and section_cta_link != blank %}
+      <a class="news-and-press__cta" href="{{ section_cta_link }}">
+        {{ section_cta_label }}
+      </a>
+    {% endif %}
+  </div>
+
+  {% liquid
+    assign news_items = blank
+    if content_mode == 'blog' and section.settings.blog != blank and section.settings.blog.articles_count > 0
+      paginate section.settings.blog.articles by max_items
+        assign news_items = paginate.items
+      endpaginate
+    endif
+  %}
+
+  {% capture list_items %}
+    {% if content_mode == 'blog' and news_items != blank %}
+      {% for article in news_items %}
+        {% assign card_title = article.title %}
+        {% assign card_excerpt = article.excerpt_or_content | strip_html | truncate: 160 %}
+        {% assign card_image = article.image %}
+        {% assign card_image_alt = article.image.alt | default: card_title %}
+        {% assign card_link = article.url %}
+        {% assign card_cta_label = section_cta_label %}
+        {% assign card_category = article.tags.first %}
+        {% assign card_source = article.blog.title %}
+        {% assign card_date = article.published_at | date: '%B %-d, %Y' %}
+        {% assign card_author = article.author %}
+        {% assign card_open_in_new_tab = false %}
+        {% assign is_placeholder = false %}
+
+        {% if card_title == blank %}
+          {% assign card_title = 'News story title' %}
+          {% assign is_placeholder = true %}
+        {% endif %}
+
+        {% if card_date == blank %}
+          {% assign card_date = 'Recent' %}
+        {% endif %}
+
+        <article class="resource-list__item news-and-press__item">
+          <div class="news-and-press-card{% if is_placeholder %} news-and-press-card--placeholder{% endif %}">
+            {% if card_link != blank %}
+              <a class="news-and-press-card__media-link" href="{{ card_link }}">
+            {% endif %}
+              <div class="news-and-press-card__media{% if card_image == blank %} news-and-press-card__media--placeholder{% endif %}">
+                {% if card_image != blank %}
+                  {{
+                    card_image
+                    | image_url: width: 1200
+                    | image_tag: alt: card_image_alt, class: 'news-and-press-card__image', loading: 'lazy'
+                  }}
+                {% else %}
+                  {{ 'blog-apparel-1' | placeholder_svg_tag: 'news-and-press-card__image-placeholder-icon' }}
+                {% endif %}
+              </div>
+            {% if card_link != blank %}
+              </a>
+            {% endif %}
+
+            <div class="news-and-press-card__content">
+              <div class="news-and-press-card__meta">
+                {% if card_category != blank %}
+                  <span class="news-and-press-card__meta-item news-and-press-card__meta-item--category">{{ card_category }}</span>
+                {% endif %}
+                {% if card_source != blank %}
+                  <span class="news-and-press-card__meta-item">{{ card_source }}</span>
+                {% endif %}
+                {% if card_date != blank %}
+                  <span class="news-and-press-card__meta-item">{{ card_date }}</span>
+                {% endif %}
+                {% if card_author != blank %}
+                  <span class="news-and-press-card__meta-item">{{ card_author }}</span>
+                {% endif %}
+              </div>
+              <h3 class="news-and-press-card__headline">{{ card_title }}</h3>
+              <p class="news-and-press-card__excerpt">{{ card_excerpt }}</p>
+              {% if card_link != blank and card_cta_label != blank %}
+                <a
+                  class="news-and-press-card__card-cta"
+                  href="{{ card_link }}"
+                  {% if card_open_in_new_tab %}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  {% endif %}
+                >
+                  {{ card_cta_label }}
+                </a>
+              {% endif %}
+            </div>
+          </div>
+        </article>
+        {% unless forloop.last %}
+          <!--@list/split-->
+        {% endunless %}
+      {% endfor %}
+
+      {% if max_items > news_items.size %}
+        {% assign remaining_news_cards = max_items | minus: news_items.size %}
+        {% for i in (1..remaining_news_cards) %}
+          <article class="resource-list__item news-and-press__item">
+            <div class="news-and-press-card news-and-press-card--placeholder" data-placeholder="true">
+              <div class="news-and-press-card__media news-and-press-card__media--placeholder" role="presentation" aria-hidden="true">
+                {{ 'blog-apparel-1' | placeholder_svg_tag: 'news-and-press-card__image-placeholder-icon' }}
+              </div>
+              <div class="news-and-press-card__content">
+                <h3 class="news-and-press-card__headline">News story title</h3>
+                <p class="news-and-press-card__excerpt">Add a short summary to help readers understand why this piece is worth opening.</p>
+              </div>
+            </div>
+          </article>
+          {% unless forloop.last %}
+            <!--@list/split-->
+          {% endunless %}
+        {% endfor %}
+      {% endif %}
+
+    {% else %}
+      {% for i in (1..max_items) %}
+        {% if content_mode == 'manual' and forloop.index <= section.blocks.size %}
+          {% assign block = section.blocks[forloop.index0] %}
+          {% assign card_category = block.settings.card_category %}
+          {% assign card_source = block.settings.card_source %}
+          {% assign card_date = block.settings.card_date %}
+          {% assign card_author = block.settings.card_author %}
+          {% assign card_title = block.settings.card_title %}
+          {% assign card_excerpt = block.settings.card_excerpt %}
+          {% assign card_image = block.settings.card_image %}
+          {% assign card_image_alt = block.settings.card_image_alt | default: card_title %}
+          {% assign card_link = block.settings.card_link %}
+          {% assign card_cta_label = block.settings.card_cta_label %}
+          {% assign card_open_in_new_tab = block.settings.open_in_new_tab %}
+          {% assign is_placeholder = false %}
+
+          {% unless card_title != blank %}
+            {% assign card_title = 'News story title' %}
+            {% assign is_placeholder = true %}
+          {% endunless %}
+          {% unless card_excerpt != blank %}
+            {% assign card_excerpt = 'Add a short summary to help readers understand why this piece is worth opening.' %}
+            {% assign is_placeholder = true %}
+          {% endunless %}
+          {% unless card_link != blank %}
+            {% assign card_link = '#' %}
+            {% assign is_placeholder = true %}
+          {% endunless %}
+          {% unless card_cta_label != blank %}
+            {% assign card_cta_label = section_cta_label %}
+          {% endunless %}
+          {% unless card_image_alt != blank %}
+            {% assign card_image_alt = card_title %}
+          {% endunless %}
+
+          <article class="resource-list__item news-and-press__item" {{ block.shopify_attributes }}>
+            <div class="news-and-press-card{% if is_placeholder %} news-and-press-card--placeholder{% endif %}">
+              {% if card_link != '#' %}
+                <a class="news-and-press-card__media-link" href="{{ card_link }}"{% if card_open_in_new_tab %} target="_blank" rel="noopener noreferrer"{% endif %}>
+              {% endif %}
+                <div class="news-and-press-card__media{% if card_image == blank %} news-and-press-card__media--placeholder{% endif %}">
+                  {% if card_image != blank %}
+                    {{
+                      card_image
+                      | image_url: width: 1200
+                      | image_tag: alt: card_image_alt, class: 'news-and-press-card__image', loading: 'lazy'
+                    }}
+                  {% else %}
+                    {{ 'blog-apparel-1' | placeholder_svg_tag: 'news-and-press-card__image-placeholder-icon' }}
+                  {% endif %}
+                </div>
+              {% if card_link != '#' %}
+                </a>
+              {% endif %}
+
+              <div class="news-and-press-card__content">
+                {% if card_category != blank or card_source != blank or card_date != blank or card_author != blank %}
+                  <div class="news-and-press-card__meta">
+                    {% if card_category != blank %}
+                      <span class="news-and-press-card__meta-item news-and-press-card__meta-item--category">{{ card_category }}</span>
+                    {% endif %}
+                    {% if card_source != blank %}
+                      <span class="news-and-press-card__meta-item">{{ card_source }}</span>
+                    {% endif %}
+                    {% if card_date != blank %}
+                      <span class="news-and-press-card__meta-item">{{ card_date }}</span>
+                    {% endif %}
+                    {% if card_author != blank %}
+                      <span class="news-and-press-card__meta-item">{{ card_author }}</span>
+                    {% endif %}
+                  </div>
+                {% endif %}
+                <h3 class="news-and-press-card__headline">{{ card_title }}</h3>
+                <p class="news-and-press-card__excerpt">{{ card_excerpt }}</p>
+                {% if card_link != '#' and card_cta_label != blank %}
+                  <a
+                    class="news-and-press-card__card-cta"
+                    href="{{ card_link }}"
+                    {% if card_open_in_new_tab %}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    {% endif %}
+                  >
+                    {{ card_cta_label }}
+                  </a>
+                {% endif %}
+              </div>
+            </div>
+          </article>
+        {% else %}
+          <article class="resource-list__item news-and-press__item">
+            <div class="news-and-press-card news-and-press-card--placeholder" data-placeholder="true">
+              <div class="news-and-press-card__media news-and-press-card__media--placeholder" role="presentation" aria-hidden="true">
+                {{ 'blog-apparel-1' | placeholder_svg_tag: 'news-and-press-card__image-placeholder-icon' }}
+              </div>
+              <div class="news-and-press-card__content">
+                <h3 class="news-and-press-card__headline">News story title</h3>
+                <p class="news-and-press-card__excerpt">Add a short summary to help readers understand why this piece is worth opening.</p>
+              </div>
+            </div>
+          </article>
+        {% endif %}
+
+        {% unless forloop.last %}
+          <!--@list/split-->
+        {% endunless %}
+      {% endfor %}
+    {% endif %}
+  {% endcapture %}
+
+  {% assign list_items_array = list_items | strip | split: '<!--@list/split-->' %}
+
+  {% render 'resource-list',
+    list_items: list_items,
+    list_items_array: list_items_array,
+    settings: section.settings,
+    slide_count: max_items,
+    content_type: 'articles',
+    test_id: 'news-and-press'
+  %}
+</div>
+
+{% stylesheet %}
+  .news-and-press {
+    --news-and-press-grid-columns: 4;
+    --news-and-press-card-gap: var(--gap-md, 1rem);
+    --news-and-press-media-ratio: 16 / 9;
+  }
+
+  .news-and-press__header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-s, 0.75rem);
+    align-items: flex-start;
+  }
+
+  .news-and-press__eyebrow {
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: var(--font-size-sm, 0.875rem);
+    font-weight: 600;
+    color: var(--color-foreground-subtle);
+  }
+
+  .news-and-press__title {
+    margin: 0;
+  }
+
+  .news-and-press__intro {
+    margin: 0;
+    max-width: 72ch;
+    color: var(--color-foreground-secondary, var(--color-foreground));
+  }
+
+  .news-and-press__cta {
+    margin-top: 0.2rem;
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+
+  .news-and-press__cta:hover {
+    text-decoration: underline;
+  }
+
+  .news-and-press__item {
+    min-width: 0;
+  }
+
+  .news-and-press-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--news-and-press-card-gap);
+    min-height: 100%;
+  }
+
+  .news-and-press-card__media-link,
+  .news-and-press-card__media-link:focus-visible {
+    display: block;
+    text-decoration: none;
+  }
+
+  .news-and-press-card__media {
+    border: 1px solid rgb(0 0 0 / 12%);
+    aspect-ratio: var(--news-and-press-media-ratio);
+    border-radius: var(--border-radius-base, 0);
+    background: var(--color-input-background);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 0;
+  }
+
+  .news-and-press-card__media :is(img, picture, video) {
+    width: 100%;
+    aspect-ratio: var(--news-and-press-media-ratio);
+    object-fit: cover;
+  }
+
+  .news-and-press-card__image-placeholder-icon {
+    width: 44px;
+    height: 44px;
+    opacity: 0.35;
+  }
+
+  .news-and-press-card__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-xs, 0.375rem);
+    min-width: 0;
+  }
+
+  .news-and-press-card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    font-size: 0.78rem;
+    color: var(--color-foreground-muted);
+  }
+
+  .news-and-press-card__meta-item::after {
+    content: '|';
+    margin-inline-start: 0.45rem;
+  }
+
+  .news-and-press-card__meta-item:last-child::after {
+    content: none;
+  }
+
+  .news-and-press-card__meta-item {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+  }
+
+  .news-and-press-card__headline {
+    margin: 0;
+  }
+
+  .news-and-press-card__excerpt {
+    margin: 0;
+    color: var(--color-foreground-secondary, var(--color-foreground));
+  }
+
+  .news-and-press-card__card-cta {
+    margin-top: 0.25rem;
+    width: fit-content;
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+
+  .news-and-press-card__card-cta:hover {
+    text-decoration: underline;
+  }
+
+  .news-and-press-card--placeholder .news-and-press-card__card-cta {
+    display: none;
+  }
+
+  @media screen and (max-width: 749px) {
+    .news-and-press {
+      --news-and-press-grid-columns: 1;
+      --news-and-press-card-gap: var(--gap-sm, 0.75rem);
+    }
+
+    .news-and-press-card__media {
+      aspect-ratio: 16 / 9;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "News & Press",
+  "tag": "section",
+  "class": "news-and-press-section",
+  "max_blocks": 10,
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "blocks": [
+    {
+      "type": "news_press_card",
+      "name": "News & Press card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "card_category",
+          "label": "Card category"
+        },
+        {
+          "type": "text",
+          "id": "card_source",
+          "label": "Card source"
+        },
+        {
+          "type": "text",
+          "id": "card_date",
+          "label": "Card date",
+          "default": "Date"
+        },
+        {
+          "type": "text",
+          "id": "card_author",
+          "label": "Card author"
+        },
+        {
+          "type": "text",
+          "id": "card_title",
+          "label": "Card title",
+          "default": "News title"
+        },
+        {
+          "type": "image_picker",
+          "id": "card_image",
+          "label": "Card image"
+        },
+        {
+          "type": "text",
+          "id": "card_image_alt",
+          "label": "Image alt text"
+        },
+        {
+          "type": "textarea",
+          "id": "card_excerpt",
+          "label": "Card excerpt",
+          "default": "News summary"
+        },
+        {
+          "type": "url",
+          "id": "card_link",
+          "label": "Card link"
+        },
+        {
+          "type": "text",
+          "id": "card_cta_label",
+          "label": "CTA label",
+          "default": "Read more"
+        },
+        {
+          "type": "checkbox",
+          "id": "open_in_new_tab",
+          "label": "Open link in new tab",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "select",
+      "id": "content_mode",
+      "label": "Content mode",
+      "options": [
+        {
+          "value": "manual",
+          "label": "Manual"
+        },
+        {
+          "value": "blog",
+          "label": "Blog"
+        }
+      ],
+      "default": "manual"
+    },
+    {
+      "type": "text",
+      "id": "section_eyebrow",
+      "label": "Section eyebrow",
+      "default": "News & Press"
+    },
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section title",
+      "default": "News & Press"
+    },
+    {
+      "type": "textarea",
+      "id": "section_intro",
+      "label": "Section intro",
+      "default": "Recent announcements, field updates, and coverage that show how Artly is scaling reliable coffee and service robotics."
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Section CTA label",
+      "default": "More Resources"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Section CTA link"
+    },
+    {
+      "type": "select",
+      "id": "layout_type",
+      "label": "Layout type",
+      "options": [
+        {
+          "value": "grid",
+          "label": "Grid"
+        }
+      ],
+      "default": "grid"
+    },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Desktop columns",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "select",
+      "id": "mobile_columns",
+      "label": "Mobile columns",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "range",
+      "id": "columns_gap",
+      "label": "Horizontal gap",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "rows_gap",
+      "label": "Vertical gap",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page"
+        },
+        {
+          "value": "full-width",
+          "label": "Full"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Blog"
+    },
+    {
+      "type": "range",
+      "id": "post_limit",
+      "label": "Post limit",
+      "min": 1,
+      "max": 8,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 44
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 44
+    }
+  ],
+  "presets": [
+    {
+      "name": "News & Press",
+      "category": "Storytelling",
+      "settings": {
+        "content_mode": "manual",
+        "section_eyebrow": "News & Press",
+      "section_title": "News & Press",
+        "section_intro": "Recent announcements, field updates, and coverage that show how Artly is scaling reliable coffee and service robotics.",
+        "cta_label": "More Resources",
+        "cta_link": "/blogs/news",
+        "layout_type": "grid",
+        "columns": "4",
+        "mobile_columns": "1",
+        "columns_gap": 12,
+        "rows_gap": 20,
+        "section_width": "page-width",
+        "color_scheme": "scheme-1",
+        "post_limit": 4,
+        "padding-block-start": 44,
+        "padding-block-end": 44
+      },
+      "blocks": {
+        "press_card_1": {
+          "type": "news_press_card",
+          "name": "News & Press card",
+          "settings": {
+            "card_category": "Announcement",
+            "card_source": "Artly",
+            "card_date": "May 14, 2026",
+            "card_author": "Artly Team",
+            "card_title": "What customers told us after the first large-site pilot",
+            "card_excerpt": "Deployment insights from the first wave of long-term operations and what changed in uptime, workflow, and consistency.",
+            "card_cta_label": "Read more"
+          }
+        },
+        "press_card_2": {
+          "type": "news_press_card",
+          "name": "News & Press card",
+          "settings": {
+            "card_category": "Field update",
+            "card_source": "Field Operations",
+            "card_date": "May 22, 2026",
+            "card_author": "Operations Team",
+            "card_title": "Service reliability updates from current fleets",
+            "card_excerpt": "A practical update on support loops, remote monitoring, and consistency checks that keep commercial service stable through busy shifts.",
+            "card_cta_label": "Read more"
+          }
+        },
+        "press_card_3": {
+          "type": "news_press_card",
+          "name": "News & Press card",
+          "settings": {
+            "card_category": "Coverage",
+            "card_source": "Trade Review",
+            "card_date": "June 1, 2026",
+            "card_author": "Byline Desk",
+            "card_title": "Press coverage: reliable coffee delivery becomes operationally practical",
+            "card_excerpt": "A look at how service teams are now treating service robotics as part of operations design rather than a side experiment.",
+            "card_cta_label": "Read more"
+          }
+        },
+        "press_card_4": {
+          "type": "news_press_card",
+          "name": "News & Press card",
+          "settings": {
+            "card_category": "Research",
+            "card_source": "Field Notes",
+            "card_date": "June 2, 2026",
+            "card_author": "Operations Team",
+            "card_title": "How teams reduced startup friction with guided deployment",
+            "card_excerpt": "Operational checklists and rollout patterns that make first-time deployment predictable and easier to reproduce across sites.",
+            "card_cta_label": "Read more"
+          }
+        }
+      },
+      "block_order": [
+        "press_card_1",
+        "press_card_2",
+        "press_card_3",
+        "press_card_4"
+      ]
+    },
+    {
+      "name": "News & Press from blog",
+      "category": "Storytelling",
+      "settings": {
+        "content_mode": "blog",
+        "section_eyebrow": "News & Press",
+        "section_title": "News & Press",
+        "section_intro": "Recent announcements, field updates, and coverage that show how Artly is scaling reliable coffee and service robotics.",
+        "cta_label": "More Resources",
+        "cta_link": "/blogs/news",
+        "layout_type": "grid",
+        "columns": "4",
+        "mobile_columns": "1",
+        "columns_gap": 12,
+        "rows_gap": 20,
+        "section_width": "page-width",
+        "color_scheme": "scheme-1",
+        "post_limit": 4,
+        "padding-block-start": 44,
+        "padding-block-end": 44
+      }
+    }
+  ]
+}
+{% endschema %}
+

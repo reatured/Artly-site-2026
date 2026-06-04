@@ -1,0 +1,212 @@
+{% liquid
+  assign tile_settings = block.settings
+%}
+
+{% assign has_media = false %}
+{% if tile_settings.icon != 'none' or tile_settings.image != blank %}
+  {% assign has_media = true %}
+{% endif %}
+
+{% if tile_settings.link_url != blank and tile_settings.link_label != blank %}
+  <a
+    href="{{ tile_settings.link_url }}"
+    class="closing-audience-resource-tile closing-audience-resource-tile--link"
+    {% if tile_settings.open_in_new_tab %}
+      target="_blank"
+      rel="noopener noreferrer"
+    {% endif %}
+    {{ block.shopify_attributes }}
+  >
+{% else %}
+  <article class="closing-audience-resource-tile" {{ block.shopify_attributes }}>
+{% endif %}
+
+  {% if has_media %}
+    <div class="closing-audience-resource-tile__media">
+      {% render 'icon-or-image',
+        icon: tile_settings.icon,
+        image_upload: tile_settings.image,
+        width: section.settings.icon_size,
+        class_name: 'closing-audience-resource-tile__icon',
+        attributes: 'aria-hidden="true"'
+      %}
+    </div>
+  {% endif %}
+
+  <div class="closing-audience-resource-tile__content">
+    <h3 class="closing-audience-resource-tile__heading">{{ tile_settings.heading }}</h3>
+
+    {% if tile_settings.body != blank %}
+      <div class="closing-audience-resource-tile__body rte">
+        {{ tile_settings.body }}
+      </div>
+    {% endif %}
+
+    {% if tile_settings.link_url != blank and tile_settings.link_label != blank %}
+      <span class="closing-audience-resource-tile__link-label">{{ tile_settings.link_label }}</span>
+    {% endif %}
+  </div>
+
+{% if tile_settings.link_url != blank and tile_settings.link_label != blank %}
+  </a>
+{% else %}
+  </article>
+{% endif %}
+
+{% stylesheet %}
+  .closing-audience-resource-tile {
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 18px;
+    min-height: 100%;
+    display: grid;
+    gap: 14px;
+    color: var(--color-foreground);
+    text-decoration: none;
+  }
+
+  .closing-audience-resource-tile--link {
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    min-height: 44px;
+  }
+
+  .closing-audience-resource-tile--link:focus-visible {
+    outline: 2px solid var(--color-foreground);
+    outline-offset: 2px;
+    text-decoration: none;
+  }
+
+  .closing-audience-resource-tile--link:hover {
+    border-color: var(--color-foreground-muted);
+    box-shadow: 0 8px 20px rgb(0 0 0 / 0.05);
+  }
+
+  .closing-audience-resource-tile__media {
+    display: flex;
+    align-items: center;
+    min-height: calc(var(--closing-audience-resource-icon-size, 40px) + 4px);
+  }
+
+  .closing-audience-resource-tile__icon {
+    width: var(--closing-audience-resource-icon-size, 40px);
+    height: var(--closing-audience-resource-icon-size, 40px);
+    color: var(--color-foreground);
+    fill: currentColor;
+    display: block;
+  }
+
+  .closing-audience-resource-tile__content {
+    display: grid;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .closing-audience-resource-tile__heading {
+    margin: 0;
+    font-size: var(--font-h6--size);
+    line-height: var(--font-h6--line-height);
+    min-height: 0;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .closing-audience-resource-tile__body {
+    margin: 0;
+    color: var(--color-foreground-muted);
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .closing-audience-resource-tile__body p {
+    margin: 0;
+  }
+
+  .closing-audience-resource-tile__link-label {
+    display: inline-flex;
+    align-items: center;
+    color: var(--color-foreground);
+    font-weight: 600;
+    font-size: var(--font-paragraph--size);
+    line-height: 1.3;
+    min-height: 44px;
+    margin-top: auto;
+  }
+
+  .closing-audience-resource-tile__link-label::after {
+    content: '\2192';
+    margin-left: 0.45rem;
+    line-height: 1;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Audience Tile",
+  "class": "closing-audience-resource-tile-block",
+  "settings": [
+    {
+      "type": "select",
+      "id": "icon",
+      "label": "Icon",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "lightning_bolt",
+          "label": "Lightning"
+        },
+        {
+          "value": "serving_dish",
+          "label": "Serving dish"
+        },
+        {
+          "value": "question_mark",
+          "label": "Question"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image (optional)"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Tile heading",
+      "default": "Audience resource"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "body",
+      "label": "Tile body",
+      "default": "Describe the next step for this audience in one practical sentence."
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "Link label",
+      "default": "Learn More"
+    },
+    {
+      "type": "url",
+      "id": "link_url",
+      "label": "Link url"
+    },
+    {
+      "type": "checkbox",
+      "id": "open_in_new_tab",
+      "label": "Open link in new tab",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Closing audience / resource tile"
+    }
+  ]
+}
+{% endschema %}

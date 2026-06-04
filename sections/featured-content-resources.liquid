@@ -1,0 +1,752 @@
+{% liquid
+  assign content_mode = section.settings.content_mode
+  assign max_items = section.settings.post_limit
+  assign section_title = section.settings.section_title | default: 'Blogs & Resources'
+  assign section_intro = section.settings.section_intro | default: 'Read practical notes, how-tos, and updates from the Artly newsroom.'
+  assign section_eyebrow = section.settings.section_eyebrow | default: 'Featured Content'
+  assign default_cta_label = section.settings.cta_label_default | default: 'Read more'
+%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+
+<div
+  class="
+    section
+    section--{{ section.settings.section_width }}
+    color-{{ section.settings.color_scheme }}
+    section-resource-list
+    featured-content-resources
+    spacing-style
+    gap-style
+  "
+  style="
+    {% render 'spacing-style', settings: section.settings %}
+    {% render 'gap-style', value: section.settings.gap %}
+  "
+>
+  <div class="featured-content-resources__header section-resource-list__header">
+    <p class="featured-content-resources__eyebrow">{{ section_eyebrow }}</p>
+    <h2 class="featured-content-resources__title">{{ section_title }}</h2>
+    <p class="featured-content-resources__intro">{{ section_intro }}</p>
+  </div>
+
+  {% if section.settings.blog != blank and section.settings.blog.articles_count > 0 %}
+    {% assign section_articles = section.settings.blog.articles %}
+  {% else %}
+    {% assign section_articles = null %}
+  {% endif %}
+
+  {% capture list_items %}
+    {% if content_mode == 'manual' %}
+      {% for block in section.blocks limit: max_items %}
+        {% assign card_title = block.settings.card_title %}
+        {% assign card_excerpt = block.settings.card_excerpt %}
+        {% assign card_image = block.settings.card_image %}
+        {% assign card_image_alt = block.settings.card_image_alt %}
+        {% assign card_link = block.settings.card_link %}
+        {% assign card_cta_label = block.settings.card_cta_label | default: default_cta_label %}
+        {% assign card_open_new_tab = block.settings.open_new_tab %}
+        {% assign is_placeholder = false %}
+
+        {% unless card_title != blank %}
+          {% assign card_title = 'Resource title' %}
+          {% assign is_placeholder = true %}
+        {% endunless %}
+        {% unless card_excerpt != blank %}
+          {% assign card_excerpt = 'Add a short summary to help readers understand why this link is worth opening.' %}
+          {% assign is_placeholder = true %}
+        {% endunless %}
+        {% unless card_link != blank %}
+          {% assign card_link = '#' %}
+          {% assign is_placeholder = true %}
+        {% endunless %}
+        {% unless card_image_alt != blank %}
+          {% assign card_image_alt = card_title %}
+        {% endunless %}
+
+        <article class="resource-list__item featured-content-resources__card-item" {{ block.shopify_attributes }}>
+          <div class="featured-content-resources-card{% if is_placeholder %} featured-content-resources-card--placeholder{% endif %}" data-placeholder="{{ is_placeholder }}">
+            {% if card_link != '#' %}
+              <a
+                class="featured-content-resources-card__media-link"
+                href="{{ card_link }}"
+                {% if card_open_new_tab %}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                {% endif %}
+              >
+            {% endif %}
+              {% if card_image != blank %}
+                {{ card_image | image_url: width: 1200 | image_tag: alt: card_image_alt, class: 'featured-content-resources-card__image', loading: 'lazy' }}
+              {% else %}
+                <div class="featured-content-resources-card__placeholder" role="presentation" aria-hidden="true">
+                  {{ 'blog-apparel-1' | placeholder_svg_tag: 'featured-content-resources-card__placeholder-icon' }}
+                </div>
+              {% endif %}
+            {% if card_link != '#' %}
+              </a>
+            {% endif %}
+
+            <div class="featured-content-resources-card__content">
+              <h3 class="featured-content-resources-card__card-title">{{ card_title }}</h3>
+              <p class="featured-content-resources-card__excerpt">{{ card_excerpt }}</p>
+
+              {% if card_link != '#' and card_cta_label != blank %}
+                <a
+                  class="featured-content-resources-card__cta"
+                  href="{{ card_link }}"
+                  {% if card_open_new_tab %}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  {% endif %}
+                >
+                  {{ card_cta_label }}
+                </a>
+              {% endif %}
+            </div>
+          </div>
+        </article>
+        {% unless forloop.last %}
+          <!--@list/split-->
+        {% endunless %}
+      {% endfor %}
+
+      {% if max_items > section.blocks.size %}
+        {% assign remaining_items = max_items | minus: section.blocks.size %}
+        {% for i in (1..remaining_items) %}
+          <article class="resource-list__item featured-content-resources__card-item">
+            <div class="featured-content-resources-card featured-content-resources-card--placeholder" data-placeholder="true">
+              <div class="featured-content-resources-card__placeholder" role="presentation" aria-hidden="true">
+                {{ 'blog-apparel-1' | placeholder_svg_tag: 'featured-content-resources-card__placeholder-icon' }}
+              </div>
+              <div class="featured-content-resources-card__content">
+                <h3 class="featured-content-resources-card__card-title">Resource title</h3>
+                <p class="featured-content-resources-card__excerpt">Add a short summary to help readers understand why this link is worth opening.</p>
+              </div>
+            </div>
+          </article>
+          {% unless forloop.last %}
+            <!--@list/split-->
+          {% endunless %}
+        {% endfor %}
+      {% endif %}
+    {% else %}
+      {% if section_articles != blank %}
+        {% for article in section_articles limit: max_items %}
+          {% assign card_title = article.title %}
+          {% assign card_excerpt = article.excerpt_or_content | strip_html | truncate: 132 %}
+          {% assign card_image = article.image %}
+          {% assign card_image_alt = article.image.alt | default: card_title %}
+          {% assign card_link = article.url %}
+          {% assign card_cta_label = default_cta_label %}
+          {% assign is_placeholder = false %}
+
+          {% unless card_excerpt != blank %}
+            {% assign card_excerpt = 'Read the latest details and practical takeaways from this article.' %}
+          {% endunless %}
+
+          <article class="resource-list__item featured-content-resources__card-item">
+            <div class="featured-content-resources-card">
+              <a
+                class="featured-content-resources-card__media-link"
+                href="{{ card_link }}"
+              >
+                {% if card_image != blank %}
+                  {{ card_image | image_url: width: 1200 | image_tag: alt: card_image_alt, class: 'featured-content-resources-card__image', loading: 'lazy' }}
+                {% else %}
+                  <div class="featured-content-resources-card__placeholder" role="presentation" aria-hidden="true">
+                    {{ 'blog-apparel-1' | placeholder_svg_tag: 'featured-content-resources-card__placeholder-icon' }}
+                  </div>
+                {% endif %}
+              </a>
+              <div class="featured-content-resources-card__content">
+                <h3 class="featured-content-resources-card__card-title">{{ card_title }}</h3>
+                <p class="featured-content-resources-card__excerpt">{{ card_excerpt }}</p>
+                <a
+                  class="featured-content-resources-card__cta"
+                  href="{{ card_link }}"
+                >
+                  {{ card_cta_label }}
+                </a>
+              </div>
+            </div>
+            {% unless forloop.last %}
+              <!--@list/split-->
+            {% endunless %}
+          </article>
+        {% endfor %}
+      {% else %}
+        {% for i in (1..max_items) %}
+          <article class="resource-list__item featured-content-resources__card-item">
+            <div class="featured-content-resources-card featured-content-resources-card--placeholder" data-placeholder="true">
+              <div class="featured-content-resources-card__placeholder" role="presentation" aria-hidden="true">
+                {{ 'blog-apparel-1' | placeholder_svg_tag: 'featured-content-resources-card__placeholder-icon' }}
+              </div>
+              <div class="featured-content-resources-card__content">
+                <h3 class="featured-content-resources-card__card-title">Resource title</h3>
+                <p class="featured-content-resources-card__excerpt">Add a short summary to help readers understand why this link is worth opening.</p>
+              </div>
+            </div>
+            {% unless forloop.last %}
+              <!--@list/split-->
+            {% endunless %}
+          </article>
+        {% endfor %}
+      {% endif %}
+    {% endif %}
+  {% endcapture %}
+
+  {% liquid
+    assign list_items_array = list_items | strip | split: '<!--@list/split-->'
+  %}
+
+  {% render 'resource-list',
+    list_items: list_items,
+    list_items_array: list_items_array,
+    settings: section.settings,
+    carousel_ref: 'featuredResource',
+    slide_count: max_items,
+    content_type: 'articles',
+    test_id: 'featured-content-resources'
+  %}
+</div>
+
+{% stylesheet %}
+  .featured-content-resources {
+    --resource-card-gap: var(--gap-m, 1rem);
+  }
+
+  .featured-content-resources__header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-s, 0.75rem);
+  }
+
+  .featured-content-resources__eyebrow {
+    font-size: var(--body-small-size, 0.875rem);
+    font-weight: var(--font-semibold, 600);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-foreground-subtle);
+  }
+
+  .featured-content-resources__title {
+    margin: 0;
+  }
+
+  .featured-content-resources__intro {
+    margin: 0;
+    max-width: 64ch;
+    color: var(--color-foreground-secondary, var(--color-foreground));
+  }
+
+  .featured-content-resources__card-item {
+    min-width: 0;
+  }
+
+  .featured-content-resources-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--resource-card-gap);
+    height: 100%;
+    min-height: 100%;
+  }
+
+  .featured-content-resources-card__media-link,
+  .featured-content-resources-card__media-link:focus-visible {
+    display: block;
+    text-decoration: none;
+  }
+
+  .featured-content-resources-card__media-link + .featured-content-resources-card__content,
+  .featured-content-resources-card__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-xs, 0.375rem);
+  }
+
+  .featured-content-resources-card__image {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: var(--border-radius-base, 0);
+  }
+
+  .featured-content-resources-card__placeholder,
+  .featured-content-resources-card__image {
+    border: 1px solid rgb(0 0 0 / 12%);
+  }
+
+  .featured-content-resources-card__placeholder {
+    aspect-ratio: 16 / 9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .featured-content-resources-card__placeholder-icon {
+    width: 44px;
+    height: 44px;
+    opacity: 0.35;
+  }
+
+  .featured-content-resources-card__card-title {
+    margin: 0;
+  }
+
+  .featured-content-resources-card__excerpt {
+    margin: 0;
+    color: var(--color-foreground-secondary, var(--color-foreground));
+  }
+
+  .featured-content-resources-card__cta {
+    margin-top: auto;
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    text-decoration: none;
+    color: var(--color-primary);
+  }
+
+  .featured-content-resources-card__cta:hover {
+    text-decoration: underline;
+  }
+
+  .featured-content-resources-card--placeholder .featured-content-resources-card__cta {
+    display: none;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Featured resources",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "class": "featured-content-resources",
+  "max_blocks": 10,
+  "blocks": [
+    {
+      "type": "featured-resource-card",
+      "name": "Resource card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "card_title",
+          "label": "Card title",
+          "default": "Resource title"
+        },
+        {
+          "type": "image_picker",
+          "id": "card_image",
+          "label": "Card image"
+        },
+        {
+          "type": "text",
+          "id": "card_image_alt",
+          "label": "Image alt text",
+          "default": "Resource image"
+        },
+        {
+          "type": "textarea",
+          "id": "card_excerpt",
+          "label": "Card excerpt",
+          "default": "Resource summary"
+        },
+        {
+          "type": "url",
+          "id": "card_link",
+          "label": "Card link"
+        },
+        {
+          "type": "text",
+          "id": "card_cta_label",
+          "label": "CTA label",
+          "default": "Read more"
+        },
+        {
+          "type": "checkbox",
+          "id": "open_new_tab",
+          "label": "Open in new tab",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "select",
+      "id": "content_mode",
+      "label": "Content mode",
+      "options": [
+        {
+          "value": "blog",
+          "label": "Blog"
+        },
+        {
+          "value": "manual",
+          "label": "Manual"
+        }
+      ],
+      "default": "manual"
+    },
+    {
+      "type": "text",
+      "id": "section_eyebrow",
+      "label": "Section eyebrow",
+      "default": "Featured Content"
+    },
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section title",
+      "default": "Blogs & Resources"
+    },
+    {
+      "type": "textarea",
+      "id": "section_intro",
+      "label": "Section intro",
+      "default": "Read practical notes, how-tos, and updates from the Artly newsroom."
+    },
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Blog"
+    },
+    {
+      "type": "text",
+      "id": "cta_label_default",
+      "label": "Default CTA label",
+      "default": "Read more"
+    },
+    {
+      "type": "range",
+      "id": "post_limit",
+      "label": "Post limit",
+      "min": 1,
+      "max": 12,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Content layout"
+    },
+    {
+      "type": "select",
+      "id": "layout_type",
+      "label": "Layout type",
+      "options": [
+        {
+          "value": "grid",
+          "label": "Grid"
+        },
+        {
+          "value": "carousel",
+          "label": "Carousel"
+        }
+      ],
+      "default": "grid"
+    },
+    {
+      "type": "checkbox",
+      "id": "carousel_on_mobile",
+      "label": "Carousel on mobile",
+      "default": true,
+      "visible_if": "{{ section.settings.layout_type != 'carousel' }}"
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Desktop columns",
+      "min": 1,
+      "max": 8,
+      "step": 1,
+      "default": 4,
+      "visible_if": "{{ section.settings.layout_type == 'grid' or section.settings.layout_type == 'carousel' }}"
+    },
+    {
+      "type": "select",
+      "id": "mobile_columns",
+      "label": "Mobile columns",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ],
+      "default": "1",
+      "visible_if": "{{ section.settings.layout_type == 'grid' and section.settings.carousel_on_mobile == false }}"
+    },
+    {
+      "type": "select",
+      "id": "mobile_card_size",
+      "label": "Mobile card width",
+      "options": [
+        {
+          "value": "60cqw",
+          "label": "One column"
+        },
+        {
+          "value": "44cqw",
+          "label": "Two columns"
+        }
+      ],
+      "default": "60cqw",
+      "visible_if": "{{ section.settings.layout_type == 'carousel' or section.settings.carousel_on_mobile == true }}"
+    },
+    {
+      "type": "range",
+      "id": "columns_gap",
+      "label": "Horizontal gap",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 12,
+      "visible_if": "{{ section.settings.layout_type == 'grid' or section.settings.layout_type == 'carousel' }}"
+    },
+    {
+      "type": "range",
+      "id": "rows_gap",
+      "label": "Vertical gap",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 12,
+      "visible_if": "{{ section.settings.layout_type == 'grid' }}"
+    },
+    {
+      "type": "header",
+      "content": "Carousel controls",
+      "visible_if": "{{ section.settings.layout_type == 'carousel' or section.settings.carousel_on_mobile == true }}"
+    },
+    {
+      "type": "select",
+      "id": "icons_style",
+      "label": "Icon style",
+      "options": [
+        {
+          "value": "arrow",
+          "label": "Arrow"
+        },
+        {
+          "value": "chevron",
+          "label": "Chevron"
+        },
+        {
+          "value": "arrows_large",
+          "label": "Large arrow"
+        },
+        {
+          "value": "chevron_large",
+          "label": "Large chevron"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
+      ],
+      "default": "arrow",
+      "visible_if": "{{ section.settings.layout_type == 'carousel' or section.settings.carousel_on_mobile == true }}"
+    },
+    {
+      "type": "select",
+      "id": "icons_shape",
+      "label": "Icon background",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "circle",
+          "label": "Circle"
+        },
+        {
+          "value": "square",
+          "label": "Square"
+        }
+      ],
+      "default": "none",
+      "visible_if": "{{ section.settings.icons_style != 'none' and section.settings.layout_type == 'carousel' or section.settings.carousel_on_mobile == true }}"
+    },
+    {
+      "type": "header",
+      "content": "Section layout"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page"
+        },
+        {
+          "value": "full-width",
+          "label": "Full"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Section gap",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Section spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top spacing",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom spacing",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 48
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured content / blogs & resources",
+      "category": "Storytelling",
+      "settings": {
+        "content_mode": "manual",
+        "section_eyebrow": "Featured Content",
+        "section_title": "Blogs & Resources",
+        "section_intro": "Read practical notes, how-tos, and updates from the Artly newsroom.",
+        "cta_label_default": "Read more",
+        "post_limit": 4,
+        "layout_type": "grid",
+        "carousel_on_mobile": true,
+        "columns": 4,
+        "mobile_columns": "1",
+        "mobile_card_size": "60cqw",
+        "columns_gap": 12,
+        "rows_gap": 12,
+        "icons_style": "arrow",
+        "icons_shape": "none",
+        "section_width": "page-width",
+        "gap": 12,
+        "color_scheme": "scheme-1",
+        "padding-block-start": 48,
+        "padding-block-end": 48
+      },
+      "blocks": {
+        "resource_card_1": {
+          "type": "featured-resource-card",
+          "name": "Resource card",
+          "settings": {
+            "card_title": "A practical introduction to physical AI",
+            "card_image_alt": "Robot operating with human supervision",
+            "card_excerpt": "A practical walkthrough of how specialized robots get better at real-world tasks through field feedback and human expertise.",
+            "card_link": "/blogs/news/physical-ai",
+            "card_cta_label": "Read more",
+            "open_new_tab": false
+          }
+        },
+        "resource_card_2": {
+          "type": "featured-resource-card",
+          "name": "Resource card",
+          "settings": {
+            "card_title": "Deployment notes: improving reliability",
+            "card_image_alt": "Robot arm inspecting equipment in a warehouse",
+            "card_excerpt": "Why deployment quality matters as much as model quality, and what teams can do differently to get stable outcomes quickly.",
+            "card_link": "/blogs/news/deployment-reliability",
+            "card_cta_label": "Read more",
+            "open_new_tab": false
+          }
+        },
+        "resource_card_3": {
+          "type": "featured-resource-card",
+          "name": "Resource card",
+          "settings": {
+            "card_title": "Operator workflow design for service teams",
+            "card_image_alt": "Technician reviewing a service robot dashboard",
+            "card_excerpt": "A short guide on training and operating service robots with a clear handoff between operators, sensors, and learning loops.",
+            "card_link": "/blogs/news/operator-workflow",
+            "card_cta_label": "Read more",
+            "open_new_tab": false
+          }
+        },
+        "resource_card_4": {
+          "type": "featured-resource-card",
+          "name": "Resource card",
+          "settings": {
+            "card_title": "Press notes: what to watch next",
+            "card_image_alt": "Robot deployment timeline graphic with milestones",
+            "card_excerpt": "A concise view of recent advances in physical AI and what they mean for early teams exploring automation investments.",
+            "card_link": "/blogs/news/press-notes",
+            "card_cta_label": "Read more",
+            "open_new_tab": false
+          }
+        }
+      },
+      "block_order": [
+        "resource_card_1",
+        "resource_card_2",
+        "resource_card_3",
+        "resource_card_4"
+      ]
+    },
+    {
+      "name": "Blogs from a source",
+      "category": "Storytelling",
+      "settings": {
+        "content_mode": "blog",
+        "section_eyebrow": "Featured Content",
+        "section_title": "Blogs & Resources",
+        "section_intro": "Read practical notes, how-tos, and updates from the Artly newsroom.",
+        "cta_label_default": "Read article",
+        "post_limit": 4,
+        "layout_type": "grid",
+        "carousel_on_mobile": false,
+        "columns": 4,
+        "mobile_columns": "1",
+        "mobile_card_size": "60cqw",
+        "columns_gap": 12,
+        "rows_gap": 12,
+        "icons_style": "arrow",
+        "icons_shape": "none",
+        "section_width": "page-width",
+        "gap": 12,
+        "color_scheme": "scheme-1",
+        "padding-block-start": 48,
+        "padding-block-end": 48
+      }
+    }
+  ]
+}
+{% endschema %}

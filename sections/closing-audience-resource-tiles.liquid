@@ -1,0 +1,248 @@
+{% liquid
+  assign tile_columns = section.settings.columns | default: 3
+%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div
+  class="section section--{{ section.settings.section_width }} spacing-style color-{{ section.settings.color_scheme }} closing-audience-resource-tiles"
+  style="
+    {% render 'spacing-style', settings: section.settings %}
+    --closing-audience-resource-columns: {{ tile_columns }};
+    --closing-audience-resource-icon-size: {{ section.settings.icon_size }}px;
+    {% render 'gap-style', value: section.settings.gap, name: 'closing-audience-resource-tile-gap' %}
+  "
+  {{ section.shopify_attributes }}
+>
+  <div class="closing-audience-resource-tiles__content">
+    {% if section.settings.section_heading != blank or section.settings.section_body != blank %}
+      <div class="closing-audience-resource-tiles__intro">
+        {% if section.settings.section_heading != blank %}
+          <h2 class="closing-audience-resource-tiles__heading">{{ section.settings.section_heading }}</h2>
+        {% endif %}
+        {% if section.settings.section_body != blank %}
+          <div class="closing-audience-resource-tiles__body rte">
+            {{ section.settings.section_body }}
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {% if section.blocks.size > 0 %}
+      <div class="closing-audience-resource-tiles__grid">
+        {% content_for 'blocks' %}
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .closing-audience-resource-tiles {
+    --closing-audience-resource-columns: 3;
+    --closing-audience-resource-gap: var(--closing-audience-resource-tile-gap, 20px);
+    --closing-audience-resource-icon-size: 44px;
+  }
+
+  .closing-audience-resource-tiles__content {
+    display: grid;
+    gap: clamp(18px, var(--closing-audience-resource-gap), 34px);
+    width: 100%;
+  }
+
+  .closing-audience-resource-tiles__heading {
+    margin: 0;
+  }
+
+  .closing-audience-resource-tiles__body {
+    margin: 0;
+    color: var(--color-foreground-muted);
+  }
+
+  .closing-audience-resource-tiles__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--closing-audience-resource-gap);
+    min-width: 0;
+    width: 100%;
+  }
+
+  .closing-audience-resource-tiles__grid > * {
+    min-width: 0;
+  }
+
+  @media screen and (min-width: 750px) {
+    .closing-audience-resource-tiles__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media screen and (min-width: 1000px) {
+    .closing-audience-resource-tiles__grid {
+      grid-template-columns: repeat(var(--closing-audience-resource-columns), minmax(0, 1fr));
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Audience Resource Tiles",
+  "tag": "section",
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer"
+    ]
+  },
+  "max_blocks": 3,
+  "class": "closing-audience-resource-tiles-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "section_heading",
+      "label": "Section heading",
+      "default": "The platform that learns as it scales."
+    },
+    {
+      "type": "inline_richtext",
+      "id": "section_body",
+      "label": "Section body",
+      "default": "Every deployment makes our platform stronger. See how our unique training methodology, specialized learning models, and proprietary hardware work together."
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Columns (desktop)",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Gap",
+      "min": 12,
+      "max": 64,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "label": "Icon size",
+      "min": 24,
+      "max": 72,
+      "step": 4,
+      "unit": "px",
+      "default": 44
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page width"
+        },
+        {
+          "value": "full-width",
+          "label": "Full width"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 40
+    }
+  ],
+  "blocks": [
+    {
+      "type": "closing-audience-resource-tile"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Closing audience",
+      "category": "Layout",
+      "settings": {
+        "section_heading": "The platform that learns as it scales.",
+        "section_body": "Every deployment makes our platform stronger. See how our unique training methodology, specialized learning models, and proprietary hardware work together.",
+        "columns": 3,
+        "gap": 24,
+        "icon_size": 44,
+        "color_scheme": "scheme-1",
+        "section_width": "page-width",
+        "padding-block-start": 40,
+        "padding-block-end": 40
+      },
+      "blocks": {
+        "audience_tile_artly_ai": {
+          "type": "closing-audience-resource-tile",
+          "settings": {
+            "icon": "lightning_bolt",
+            "image": "",
+            "heading": "Artly AI",
+            "body": "The AI platform built on expert input and real-world data. With over 1.2 million actions collected from the field, our models are built to thrive in real environments.",
+            "link_label": "Learn More",
+            "link_url": "/pages/platform",
+            "open_in_new_tab": false
+          }
+        },
+        "audience_tile_barista_bot": {
+          "type": "closing-audience-resource-tile",
+          "settings": {
+            "icon": "serving_dish",
+            "image": "",
+            "heading": "Barista Bot",
+            "body": "The first-ever champion-trained robotic barista. Barista Bot autonomously delivers a full specialty café program, production-ready at commercial scale.",
+            "link_label": "Learn More",
+            "link_url": "/pages/barista-bot",
+            "open_in_new_tab": false
+          }
+        },
+        "audience_tile_invest": {
+          "type": "closing-audience-resource-tile",
+          "settings": {
+            "icon": "question_mark",
+            "image": "",
+            "heading": "Invest",
+            "body": "The defining company in robotics won't just build hardware — it will own the intelligence layer. If that's a thesis you believe in, we'd love to connect.",
+            "link_label": "Learn More",
+            "link_url": "/pages/investors",
+            "open_in_new_tab": false
+          }
+        }
+      },
+      "block_order": [
+        "audience_tile_artly_ai",
+        "audience_tile_barista_bot",
+        "audience_tile_invest"
+      ]
+    }
+  ]
+}
+{% endschema %}

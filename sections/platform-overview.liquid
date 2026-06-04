@@ -1,0 +1,605 @@
+{% liquid
+  assign media_type = section.settings.media_type
+  assign media_width = section.settings.media_width
+  assign media_height_mobile = 'auto'
+
+  case section.settings.media_height
+    when '50svh'
+      assign media_height_mobile = '30svh'
+    when '60svh'
+      assign media_height_mobile = '50svh'
+    when '80svh'
+      assign media_height_mobile = '70svh'
+    when '100svh'
+      assign media_height_mobile = '100svh'
+    else
+      assign media_height_mobile = 'auto'
+  endcase
+
+  assign has_video = false
+  assign has_image = false
+  assign media_image = section.settings.media_fallback_image
+
+  if media_type == 'video' and section.settings.media_video != blank
+    assign has_video = true
+  elsif media_type == 'image' and section.settings.media_image != blank
+    assign has_image = true
+    assign media_image = section.settings.media_image
+  elsif section.settings.media_video != blank
+    # If the editor changed media_type but left the prior video selected.
+    assign has_video = true
+  elsif section.settings.media_image != blank
+    # If the editor changed media_type but kept an image asset.
+    assign has_image = true
+    assign media_image = section.settings.media_image
+  elsif section.settings.media_fallback_image != blank
+    # Video-first flow keeps a fallback image usable.
+    assign has_image = true
+  endif
+
+  assign media_alt_text = section.settings.media_alt_text
+
+  if has_video
+    assign media_poster = section.settings.media_fallback_image
+    if media_poster == blank
+      assign media_poster = section.settings.media_video.preview_image
+    endif
+    assign media_alt_text = media_alt_text | default: section.settings.media_video.alt
+    assign media_tag = section.settings.media_video
+  endif
+
+  if has_image
+    assign media_alt_text = media_alt_text | default: media_image.alt
+  endif
+%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div
+  class="section section--{{ section.settings.section_width }} platform-overview color-{{ section.settings.color_scheme }} spacing-style platform-overview--{{ section.settings.media_position }} platform-overview--{{ media_width }}"
+  style="
+    {%- render 'spacing-style', settings: section.settings -%}
+    --platform-overview-media-height: {{ section.settings.media_height }};
+    --platform-overview-media-height-mobile: {{ media_height_mobile }};
+    --platform-overview-media-column: 3.5fr;
+    --platform-overview-content-column: 2.5fr;
+  "
+>
+  <div class="platform-overview__media-wrap" role="img"{% if media_alt_text != blank %} aria-label="{{ media_alt_text | escape }}"{% endif %}>
+    {% if has_video %}
+      {{
+        media_tag
+        | video_tag:
+          autoplay: section.settings.video_autoplay,
+          loop: section.settings.video_loop,
+          muted: section.settings.video_autoplay,
+          controls: true,
+          poster: media_poster,
+          class: 'platform-overview__media'
+      }}
+    {% elsif has_image %}
+      {{
+        media_image
+        | image_url: width: 2400
+        | image_tag:
+          width: media_image.width,
+          widths: '416, 600, 768, 1024, 1440, 1920, 2400',
+          height: media_image.height,
+          alt: media_alt_text,
+          loading: 'lazy',
+          class: 'platform-overview__media'
+      }}
+    {% else %}
+      <div class="platform-overview__media platform-overview__media--placeholder">
+        {{ 'hero-apparel-1' | placeholder_svg_tag }}
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="platform-overview__content">
+    {% if section.settings.eyebrow != blank %}
+      <p class="platform-overview__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+    {% endif %}
+
+    {% if section.settings.heading != blank %}
+      <h2 class="platform-overview__heading">{{ section.settings.heading | escape }}</h2>
+    {% endif %}
+
+    {% if section.settings.body_line_1 != blank %}
+      <p class="platform-overview__body">{{ section.settings.body_line_1 | escape }}</p>
+    {% endif %}
+
+    {% if section.settings.body_line_2 != blank %}
+      <p class="platform-overview__body">{{ section.settings.body_line_2 | escape }}</p>
+    {% endif %}
+
+    {% if section.settings.proof_microcopy != blank %}
+      <p class="platform-overview__proof">{{ section.settings.proof_microcopy | escape }}</p>
+    {% endif %}
+
+    <div class="platform-overview__actions">
+      {% if section.settings.primary_cta_label != blank %}
+        <a
+          class="size-style {{ section.settings.primary_cta_style }}"
+          {% if section.settings.primary_cta_link == blank %}
+            role="link"
+            aria-disabled="true"
+          {% else %}
+            href="{{ section.settings.primary_cta_link }}"
+            {% if section.settings.primary_cta_open_in_new_tab %}
+              target="_blank"
+              rel="noopener noreferrer"
+            {% endif %}
+          {% endif %}
+        >
+          {{ section.settings.primary_cta_label | escape }}
+        </a>
+      {% endif %}
+
+      {% if section.settings.secondary_cta_label != blank %}
+        <a
+          class="size-style {{ section.settings.secondary_cta_style }}"
+          {% if section.settings.secondary_cta_link == blank %}
+            role="link"
+            aria-disabled="true"
+          {% else %}
+            href="{{ section.settings.secondary_cta_link }}"
+            {% if section.settings.secondary_cta_open_in_new_tab %}
+              target="_blank"
+              rel="noopener noreferrer"
+            {% endif %}
+          {% endif %}
+        >
+          {{ section.settings.secondary_cta_label | escape }}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .platform-overview {
+    --platform-overview-media-column: 3.5fr;
+    --platform-overview-content-column: 2.5fr;
+    display: grid;
+    gap: var(--spacer-lg, 2rem);
+    grid-template-areas:
+      'media'
+      'content';
+    align-items: start;
+  }
+
+  .platform-overview--wide {
+    --platform-overview-media-column: 3.5fr;
+    --platform-overview-content-column: 2.5fr;
+  }
+
+  .platform-overview--medium {
+    --platform-overview-media-column: 1fr;
+    --platform-overview-content-column: 1fr;
+  }
+
+  .platform-overview--narrow {
+    --platform-overview-media-column: 2fr;
+    --platform-overview-content-column: 4fr;
+  }
+
+  @media screen and (min-width: 750px) {
+    .platform-overview {
+      grid-template-columns: var(--platform-overview-media-column) var(--platform-overview-content-column);
+      grid-template-areas:
+        'media content';
+    }
+
+    .platform-overview--media-right {
+      grid-template-areas:
+        'content media';
+    }
+  }
+
+  .platform-overview__media-wrap {
+    grid-area: media;
+    min-width: 0;
+    min-height: var(--platform-overview-media-height);
+  }
+
+  .platform-overview__content {
+    grid-area: content;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-block: clamp(0.125rem, 0.35vw, 0.5rem);
+    max-width: 54ch;
+  }
+
+  .platform-overview__media,
+  .platform-overview__media--placeholder {
+    display: block;
+    width: 100%;
+    height: var(--platform-overview-media-height);
+    min-height: var(--platform-overview-media-height);
+    object-fit: cover;
+    border-radius: 8px;
+  }
+
+  .platform-overview__media--placeholder svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .platform-overview__media--placeholder {
+    display: grid;
+    place-items: center;
+  }
+
+  .platform-overview__eyebrow {
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    font-size: 0.8rem;
+    color: var(--color-foreground);
+    opacity: 0.8;
+    margin-block-end: 0.5rem;
+  }
+
+  .platform-overview__heading {
+    margin: 0;
+    margin-block-start: 0;
+    margin-block-end: 0.35rem;
+    font-family: var(--font-heading--family, var(--font-body--family));
+    font-size: clamp(1.9rem, 2.6vw, 2.8rem);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    max-width: 16ch;
+  }
+
+  .platform-overview__body {
+    margin: 0;
+    color: rgb(var(--color-foreground-rgb) / var(--opacity-75, 0.75));
+    max-width: 64ch;
+    line-height: 1.72;
+  }
+
+  .platform-overview__proof {
+    margin: 0.35rem 0 0;
+    font-size: 0.9rem;
+    color: rgb(var(--color-foreground-rgb) / var(--opacity-65, 0.65));
+  }
+
+  .platform-overview__actions {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 0.95rem;
+    margin-block-start: 0.5rem;
+  }
+
+  @media screen and (max-width: 749px) {
+    .platform-overview--media-left,
+    .platform-overview--media-right {
+      --platform-overview-media-height: var(--platform-overview-media-height-mobile);
+    }
+
+    .platform-overview__actions {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .platform-overview__actions > .size-style {
+      width: fit-content;
+      max-width: 100%;
+    }
+  }
+
+  .platform-overview__actions > .size-style {
+    max-width: 100%;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Platform overview",
+  "tag": "section",
+  "class": "platform-overview-section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "The Artly Ecosystem"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Automation built for the real world."
+    },
+    {
+      "type": "text",
+      "id": "body_line_1",
+      "label": "Body line 1",
+      "default": "At Artly, we believe the future belongs to everyone, and everyone belongs in it. We’re on a mission to give everyone, regardless of technical background, the ability to teach, deploy, and benefit from the next generation of intelligent technology."
+    },
+    {
+      "type": "text",
+      "id": "body_line_2",
+      "label": "Body line 2",
+      "default": "Our patented physical AI platform combines proprietary hardware, deep learning + Vision-Language-Action models, and a real-world deployment feedback loop to deliver custom specialized robots at commercial scale — without the steep learning curve."
+    },
+    {
+      "type": "text",
+      "id": "proof_microcopy",
+      "label": "Proof microcopy (optional)",
+      "default": "Evidence markers: Expert-taught tasks | Real-world deployment feedback | Deployable hardware stack"
+    },
+    {
+      "type": "text",
+      "id": "primary_cta_label",
+      "label": "Primary CTA label",
+      "default": "Talk to an Expert"
+    },
+    {
+      "type": "url",
+      "id": "primary_cta_link",
+      "label": "Primary CTA link"
+    },
+    {
+      "type": "checkbox",
+      "id": "primary_cta_open_in_new_tab",
+      "label": "Open primary CTA in new tab",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "primary_cta_style",
+      "label": "Primary CTA style",
+      "options": [
+        {
+          "value": "button",
+          "label": "Primary"
+        },
+        {
+          "value": "button-secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "link",
+          "label": "Text link"
+        }
+      ],
+      "default": "button"
+    },
+    {
+      "type": "text",
+      "id": "secondary_cta_label",
+      "label": "Secondary CTA label",
+      "default": "Learn More"
+    },
+    {
+      "type": "url",
+      "id": "secondary_cta_link",
+      "label": "Secondary CTA link"
+    },
+    {
+      "type": "checkbox",
+      "id": "secondary_cta_open_in_new_tab",
+      "label": "Open secondary CTA in new tab",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "secondary_cta_style",
+      "label": "Secondary CTA style",
+      "options": [
+        {
+          "value": "button",
+          "label": "Primary"
+        },
+        {
+          "value": "button-secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "link",
+          "label": "Text link"
+        }
+      ],
+      "default": "link"
+    },
+    {
+      "type": "header",
+      "content": "Media"
+    },
+    {
+      "type": "select",
+      "id": "media_type",
+      "label": "Media type",
+      "options": [
+        {
+          "value": "image",
+          "label": "Image"
+        },
+        {
+          "value": "video",
+          "label": "Video"
+        }
+      ],
+      "default": "video"
+    },
+    {
+      "type": "image_picker",
+      "id": "media_image",
+      "label": "Image",
+      "visible_if": "{{ section.settings.media_type == 'image' }}"
+    },
+    {
+      "type": "video",
+      "id": "media_video",
+      "label": "Video",
+      "visible_if": "{{ section.settings.media_type == 'video' }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "media_fallback_image",
+      "label": "Video poster / fallback image",
+      "visible_if": "{{ section.settings.media_type == 'video' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "video_autoplay",
+      "label": "Video autoplay",
+      "default": false,
+      "visible_if": "{{ section.settings.media_type == 'video' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "video_loop",
+      "label": "Video loop",
+      "default": true,
+      "visible_if": "{{ section.settings.media_type == 'video' }}"
+    },
+    {
+      "type": "text",
+      "id": "media_alt_text",
+      "label": "Media alt text",
+      "default": "Artly robotic workcell demonstrating service automation on a commercial counter"
+    },
+    {
+      "type": "select",
+      "id": "media_position",
+      "label": "Media position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "media_width",
+      "label": "Media width",
+      "options": [
+        {
+          "value": "narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "wide",
+          "label": "Wide"
+        }
+      ],
+      "default": "wide"
+    },
+    {
+      "type": "select",
+      "id": "media_height",
+      "label": "Media height",
+      "options": [
+        {
+          "value": "auto",
+          "label": "Auto"
+        },
+        {
+          "value": "50svh",
+          "label": "50svh"
+        },
+        {
+          "value": "60svh",
+          "label": "60svh"
+        },
+        {
+          "value": "80svh",
+          "label": "80svh"
+        },
+        {
+          "value": "100svh",
+          "label": "100svh"
+        }
+      ],
+      "default": "60svh"
+    },
+    {
+      "type": "header",
+      "content": "Layout & tone"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page width"
+        },
+        {
+          "value": "full-width",
+          "label": "Full width"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 32
+    }
+  ],
+  "presets": [
+    {
+      "name": "Platform overview",
+      "category": "Storytelling",
+      "settings": {
+        "media_type": "video",
+        "media_position": "left",
+        "media_width": "wide",
+        "media_height": "60svh",
+        "section_width": "page-width",
+        "color_scheme": "scheme-1",
+        "padding-block-start": 32,
+        "padding-block-end": 32
+      }
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,763 @@
+{% liquid
+  assign has_video = false
+  assign has_image = false
+  assign media_alt = section.settings.media_alt_text
+
+  if section.settings.media_type == 'video' and section.settings.media_video != blank
+    assign has_video = true
+    assign media_tag = section.settings.media_video
+    assign media_alt = media_alt | default: media_tag.alt
+  elsif section.settings.media_type == 'image' and section.settings.media_image != blank
+    assign has_image = true
+    assign media_tag = section.settings.media_image
+    assign media_alt = media_alt | default: media_tag.alt
+  elsif section.settings.media_video != blank
+    # Fallback if editor toggled the media type while saving a value in the opposite picker.
+    assign has_video = true
+    assign media_tag = section.settings.media_video
+    assign media_alt = media_alt | default: media_tag.alt
+  elsif section.settings.media_image != blank
+    # Fallback if editor toggled the media type while keeping an image value.
+    assign has_image = true
+    assign media_tag = section.settings.media_image
+    assign media_alt = media_alt | default: media_tag.alt
+  elsif section.settings.media_fallback_image != blank
+    # Fallback image for video-first workflows.
+    assign has_image = true
+    assign media_tag = section.settings.media_fallback_image
+    assign media_alt = media_alt | default: media_tag.alt
+  endif
+
+  if has_video
+    assign media_fallback = section.settings.media_fallback_image
+    if media_fallback == blank and media_tag.preview_image != blank
+      assign media_fallback = media_tag.preview_image
+    endif
+  endif
+
+  assign media_height_mobile = 'auto'
+  case section.settings.media_height
+    when '50svh'
+      assign media_height_mobile = '30svh'
+    when '60svh'
+      assign media_height_mobile = '45svh'
+    when '80svh'
+      assign media_height_mobile = '70svh'
+    when '100svh'
+      assign media_height_mobile = '100svh'
+    else
+      assign media_height_mobile = 'auto'
+  endcase
+
+  assign overview_media_shape = 'overview-media--shape-' | append: section.settings.media_shape
+%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+
+<section
+  class="section section--{{ section.settings.section_width }} overview-media color-{{ section.settings.color_scheme }} spacing-style {{ overview_media_shape }} overview-media--{{ section.settings.media_position }} overview-media--{{ section.settings.media_width }}"
+>
+  <div class="overview-media__media">
+    <div
+      class="overview-media__media-wrap"
+      style="
+        {% render 'spacing-style', settings: section.settings %}
+        --overview-media-height: {{ section.settings.media_height }};
+        --overview-media-height-mobile: {{ media_height_mobile }};
+        --overview-media-shape-radius: {{ section.settings.media_corner_radius }}px;
+      "
+    >
+      {% if section.settings.toggle_overlay %}
+        {% render 'overlay', settings: section.settings, layer: 'var(--layer-raised)' %}
+      {% endif %}
+
+      {% if has_video %}
+        {{
+          media_tag
+          | video_tag:
+            autoplay: section.settings.video_autoplay,
+            loop: section.settings.video_loop,
+            muted: section.settings.video_autoplay,
+            controls: section.settings.video_controls,
+            poster: media_fallback,
+            class: 'overview-media__media-asset'
+        }}
+      {% elsif has_image %}
+        {{
+          media_tag
+          | image_url: width: 2400
+          | image_tag:
+            width: media_tag.width,
+            widths: '416, 600, 768, 1024, 1440, 1920, 2400',
+            height: media_tag.height,
+            alt: media_alt,
+            loading: 'lazy',
+            class: 'overview-media__media-asset'
+        }}
+      {% else %}
+        <div class="overview-media__media-asset overview-media__media-placeholder" role="img" {% if media_alt != blank %}aria-label="{{ media_alt | escape }}"{% endif %}>
+          {{ 'hero-apparel-1' | placeholder_svg_tag: 'overview-media__media-placeholder-svg' }}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="overview-media__content">
+    {% if section.settings.eyebrow != blank %}
+      <p class="overview-media__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+    {% endif %}
+
+    {% if section.settings.heading != blank %}
+      <h2 class="overview-media__heading">{{ section.settings.heading | escape }}</h2>
+    {% endif %}
+
+    {% if section.settings.body_line_1 != blank %}
+      <p class="overview-media__body">{{ section.settings.body_line_1 | escape }}</p>
+    {% endif %}
+
+    {% if section.settings.body_line_2 != blank %}
+      <p class="overview-media__body">{{ section.settings.body_line_2 | escape }}</p>
+    {% endif %}
+
+    {% if section.settings.microcopy != blank %}
+      <p class="overview-media__microcopy">{{ section.settings.microcopy | escape }}</p>
+    {% endif %}
+
+    <div class="overview-media__actions">
+      {% if section.settings.primary_cta_label != blank %}
+        <a
+          class="button {{ section.settings.primary_cta_style }}"
+          {% if section.settings.primary_cta_link == blank %}
+            role="link"
+            aria-disabled="true"
+          {% else %}
+            href="{{ section.settings.primary_cta_link }}"
+            {% if section.settings.primary_cta_open_in_new_tab %}
+              target="_blank"
+              rel="noopener noreferrer"
+            {% endif %}
+          {% endif %}
+        >
+          {{ section.settings.primary_cta_label | escape }}
+        </a>
+      {% endif %}
+
+      {% if section.settings.secondary_cta_label != blank %}
+        <a
+          class="button {{ section.settings.secondary_cta_style }}"
+          {% if section.settings.secondary_cta_link == blank %}
+            role="link"
+            aria-disabled="true"
+          {% else %}
+            href="{{ section.settings.secondary_cta_link }}"
+            {% if section.settings.secondary_cta_open_in_new_tab %}
+              target="_blank"
+              rel="noopener noreferrer"
+            {% endif %}
+          {% endif %}
+        >
+          {{ section.settings.secondary_cta_label | escape }}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .overview-media {
+    --overview-media-grid-large: 3.5fr 2.5fr;
+    --overview-media-grid-large-reverse: 2.5fr 3.5fr;
+    display: grid;
+    gap: var(--spacer-lg, 2rem);
+    grid-template-areas:
+      'media'
+      'content';
+    position: relative;
+    overflow: hidden;
+  }
+
+  .overview-media--wide {
+    --overview-media-grid-large: 3.5fr 2.5fr;
+    --overview-media-grid-large-reverse: 2.5fr 3.5fr;
+  }
+
+  .overview-media--medium {
+    --overview-media-grid-large: 1fr 1fr;
+    --overview-media-grid-large-reverse: 1fr 1fr;
+  }
+
+  .overview-media--narrow {
+    --overview-media-grid-large: 2fr 4fr;
+    --overview-media-grid-large-reverse: 4fr 2fr;
+  }
+
+  @media screen and (min-width: 750px) {
+    .overview-media {
+      grid-template-columns: var(--overview-media-grid-large);
+      grid-template-areas: 'media content';
+    }
+
+    .overview-media--media-right {
+      grid-template-columns: var(--overview-media-grid-large-reverse);
+      grid-template-areas: 'content media';
+    }
+  }
+
+  .overview-media__media {
+    grid-area: media;
+    min-width: 0;
+  }
+
+  .overview-media__content {
+    grid-area: content;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    justify-content: center;
+  }
+
+  .overview-media__media-wrap {
+    position: relative;
+    min-height: var(--overview-media-height);
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    --overview-media-overflow: hidden;
+  }
+
+  .overview-media--shape-square .overview-media__media-wrap,
+  .overview-media--shape-circle .overview-media__media-wrap,
+  .overview-media--shape-rounded .overview-media__media-wrap {
+    border-radius: 0;
+    clip-path: none;
+  }
+
+  .overview-media--shape-rounded .overview-media__media-wrap {
+    border-radius: clamp(0px, var(--overview-media-shape-radius), 8px);
+  }
+
+  .overview-media--shape-circle .overview-media__media-wrap {
+    border-radius: 50%;
+    clip-path: circle(50% at 50% 50%);
+  }
+
+  .overview-media__media-wrap .overlay {
+    border-radius: inherit;
+  }
+
+  .overview-media__media-wrap .overlay--circle {
+    border-radius: 50%;
+    clip-path: circle(50% at 50% 50%);
+  }
+
+  .overview-media__media-asset,
+  .overview-media__media-placeholder,
+  .overview-media__media-placeholder svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+
+  .overview-media__media-placeholder {
+    background-color: rgb(var(--color-background-rgb) / 0.08);
+    border-radius: inherit;
+  }
+
+  .overview-media__media-placeholder svg {
+    min-height: var(--overview-media-height);
+    background: transparent;
+  }
+
+  .overview-media__media-wrap > :is(video, img, .overview-media__media-placeholder) {
+    width: 100%;
+    height: var(--overview-media-height);
+    border-radius: inherit;
+    object-fit: cover;
+  }
+
+  @media screen and (min-width: 750px) {
+    .overview-media__media-wrap {
+      min-height: var(--overview-media-height);
+      height: var(--overview-media-height);
+    }
+
+    .overview-media__media-wrap > :is(video, img, .overview-media__media-placeholder),
+    .overview-media__media-wrap > .overview-media__media-asset {
+      height: var(--overview-media-height);
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .overview-media__media-wrap {
+      min-height: var(--overview-media-height-mobile);
+      height: var(--overview-media-height-mobile);
+    }
+
+    .overview-media__media-wrap > :is(video, img, .overview-media__media-placeholder),
+    .overview-media__media-wrap > .overview-media__media-asset {
+      height: var(--overview-media-height-mobile);
+    }
+  }
+
+  .overview-media__eyebrow {
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.8rem;
+    color: var(--color-foreground-muted);
+  }
+
+  .overview-media__heading {
+    margin: 0;
+    font-family: var(--font-heading--family, var(--font-body--family));
+    line-height: 1.15;
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+    letter-spacing: -0.01em;
+  }
+
+  .overview-media__body {
+    margin: 0;
+    color: rgb(var(--color-foreground-rgb) / var(--opacity-75, 0.75));
+    max-width: 62ch;
+    line-height: 1.7;
+  }
+
+  .overview-media__microcopy {
+    margin: 0.15rem 0 0;
+    font-size: 0.9rem;
+    color: rgb(var(--color-foreground-rgb) / var(--opacity-65, 0.65));
+  }
+
+  .overview-media__actions {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0.7rem 0.9rem;
+    padding-block-start: 0.25rem;
+  }
+
+  .overview-media__actions .button {
+    width: auto;
+    min-width: 0;
+  }
+
+  .overview-media--shape-circle .overview-media__media-asset,
+  .overview-media--shape-circle .overview-media__media-placeholder {
+    object-position: center;
+  }
+
+  @media screen and (max-width: 749px) {
+    .overview-media__actions {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .overview-media__actions .button {
+      width: fit-content;
+      max-width: 100%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .overview-media__media-wrap,
+    .overview-media__media-asset,
+    .overview-media__actions .button {
+      animation: none;
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Overview media",
+  "tag": "section",
+  "class": "overview-media-section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Text"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Proof from deployment"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "See the workflow as it runs"
+    },
+    {
+      "type": "text",
+      "id": "body_line_1",
+      "label": "Body line 1",
+      "default": "Watch a live deployment sequence from setup to execution and see how our workflow performs in real conditions."
+    },
+    {
+      "type": "text",
+      "id": "body_line_2",
+      "label": "Body line 2",
+      "default": "This proof media captures real calibration, handoff, and quality checks across real-world operations."
+    },
+    {
+      "type": "text",
+      "id": "microcopy",
+      "label": "Microcopy (optional)",
+      "default": "Proof clips are refreshed from active field deployments to keep expectations grounded in live outcomes."
+    },
+    {
+      "type": "header",
+      "content": "Primary CTA"
+    },
+    {
+      "type": "text",
+      "id": "primary_cta_label",
+      "label": "Primary CTA label",
+      "default": "Watch full proof clip"
+    },
+    {
+      "type": "url",
+      "id": "primary_cta_link",
+      "label": "Primary CTA link"
+    },
+    {
+      "type": "select",
+      "id": "primary_cta_style",
+      "label": "Primary CTA style",
+      "options": [
+        {
+          "value": "button",
+          "label": "Primary button"
+        },
+        {
+          "value": "button-secondary",
+          "label": "Secondary button"
+        },
+        {
+          "value": "link",
+          "label": "Text link"
+        }
+      ],
+      "default": "button"
+    },
+    {
+      "type": "checkbox",
+      "id": "primary_cta_open_in_new_tab",
+      "label": "Open primary CTA in new tab",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Secondary CTA"
+    },
+    {
+      "type": "text",
+      "id": "secondary_cta_label",
+      "label": "Secondary CTA label",
+      "default": "Book a Demo"
+    },
+    {
+      "type": "url",
+      "id": "secondary_cta_link",
+      "label": "Secondary CTA link"
+    },
+    {
+      "type": "select",
+      "id": "secondary_cta_style",
+      "label": "Secondary CTA style",
+      "options": [
+        {
+          "value": "button",
+          "label": "Primary button"
+        },
+        {
+          "value": "button-secondary",
+          "label": "Secondary button"
+        },
+        {
+          "value": "link",
+          "label": "Text link"
+        }
+      ],
+      "default": "button"
+    },
+    {
+      "type": "checkbox",
+      "id": "secondary_cta_open_in_new_tab",
+      "label": "Open secondary CTA in new tab",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Media"
+    },
+    {
+      "type": "select",
+      "id": "media_type",
+      "label": "Media type",
+      "options": [
+        {
+          "value": "image",
+          "label": "Image"
+        },
+        {
+          "value": "video",
+          "label": "Video"
+        }
+      ],
+      "default": "video"
+    },
+    {
+      "type": "video",
+      "id": "media_video",
+      "label": "Video",
+      "visible_if": "{{ section.settings.media_type == 'video' }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "media_image",
+      "label": "Image",
+      "visible_if": "{{ section.settings.media_type == 'image' }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "media_fallback_image",
+      "label": "Fallback image"
+    },
+    {
+      "type": "text",
+      "id": "media_alt_text",
+      "label": "Media alt text"
+    },
+    {
+      "type": "checkbox",
+      "id": "video_autoplay",
+      "label": "Autoplay video",
+      "default": false,
+      "visible_if": "{{ section.settings.media_type == 'video' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "video_loop",
+      "label": "Loop video",
+      "default": true,
+      "visible_if": "{{ section.settings.media_type == 'video' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "video_controls",
+      "label": "Show video controls",
+      "default": false,
+      "info": "Controls may be hidden by browser autoplay policy when autoplay is enabled.",
+      "visible_if": "{{ section.settings.media_type == 'video' }}"
+    },
+    {
+      "type": "header",
+      "content": "Overlay"
+    },
+    {
+      "type": "checkbox",
+      "id": "toggle_overlay",
+      "label": "Enable media overlay"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay color",
+      "alpha": true,
+      "default": "#00000026",
+      "visible_if": "{{ section.settings.toggle_overlay }}"
+    },
+    {
+      "type": "select",
+      "id": "overlay_style",
+      "label": "Overlay style",
+      "options": [
+        {
+          "value": "solid",
+          "label": "Solid"
+        },
+        {
+          "value": "gradient",
+          "label": "Gradient"
+        }
+      ],
+      "default": "solid",
+      "visible_if": "{{ section.settings.toggle_overlay }}"
+    },
+    {
+      "type": "select",
+      "id": "gradient_direction",
+      "label": "Gradient direction",
+      "options": [
+        {
+          "value": "to top",
+          "label": "Up"
+        },
+        {
+          "value": "to bottom",
+          "label": "Down"
+        }
+      ],
+      "default": "to top",
+      "visible_if": "{{ section.settings.toggle_overlay and section.settings.overlay_style == 'gradient' }}"
+    },
+    {
+      "type": "header",
+      "content": "Shape and layout"
+    },
+    {
+      "type": "select",
+      "id": "media_shape",
+      "label": "Media shape",
+      "options": [
+        {
+          "value": "square",
+          "label": "Square"
+        },
+        {
+          "value": "rounded",
+          "label": "Rounded"
+        },
+        {
+          "value": "circle",
+          "label": "Circle"
+        }
+      ],
+      "default": "rounded"
+    },
+    {
+      "type": "range",
+      "id": "media_corner_radius",
+      "label": "Corner radius (px)",
+      "min": 0,
+      "max": 8,
+      "step": 1,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "select",
+      "id": "media_position",
+      "label": "Media position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "media_width",
+      "label": "Media width",
+      "options": [
+        {
+          "value": "wide",
+          "label": "Wide"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "narrow",
+          "label": "Narrow"
+        }
+      ],
+      "default": "wide"
+    },
+    {
+      "type": "select",
+      "id": "media_height",
+      "label": "Media height",
+      "options": [
+        {
+          "value": "auto",
+          "label": "Auto"
+        },
+        {
+          "value": "50svh",
+          "label": "50svh"
+        },
+        {
+          "value": "60svh",
+          "label": "60svh"
+        },
+        {
+          "value": "80svh",
+          "label": "80svh"
+        },
+        {
+          "value": "100svh",
+          "label": "100svh"
+        }
+      ],
+      "default": "60svh"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page width"
+        },
+        {
+          "value": "full-width",
+          "label": "Full width"
+        }
+      ],
+      "default": "full-width"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-3"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 32
+    }
+  ],
+  "presets": [
+    {
+      "name": "Overview media"
+    }
+  ]
+}
+{% endschema %}

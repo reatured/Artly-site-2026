@@ -1,0 +1,274 @@
+{% liquid
+  assign tile_columns = section.settings.columns | default: 4
+%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div
+  class="section section--{{ section.settings.section_width }} spacing-style color-{{ section.settings.color_scheme }} capability-proof-tiles"
+  style="
+    {% render 'spacing-style', settings: section.settings %}
+    --capability-proof-columns: {{ tile_columns }};
+    --capability-proof-icon-size: {{ section.settings.icon_size }}px;
+    {% render 'gap-style', value: section.settings.gap, name: 'capability-proof-tile-gap' %}
+  "
+  {{ section.shopify_attributes }}
+>
+  <div class="capability-proof-tiles__content">
+    {% if section.settings.section_heading != blank or section.settings.section_body != blank %}
+      <div class="capability-proof-tiles__intro">
+        {% if section.settings.section_heading != blank %}
+          <h2 class="capability-proof-tiles__heading">{{ section.settings.section_heading }}</h2>
+        {% endif %}
+        {% if section.settings.section_body != blank %}
+          <div class="capability-proof-tiles__body rte">
+            {{ section.settings.section_body }}
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {% if section.blocks.size > 0 %}
+      <div class="capability-proof-tiles__grid">
+        {% content_for 'blocks' %}
+      </div>
+    {% endif %}
+
+    {% if section.settings.section_notes != blank %}
+      <p class="capability-proof-tiles__notes">
+        {{ section.settings.section_notes }}
+      </p>
+    {% endif %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .capability-proof-tiles {
+    --capability-proof-columns: 4;
+    --capability-proof-gap: var(--capability-proof-tile-gap, 24px);
+    --capability-proof-icon-size: 40px;
+  }
+
+  .capability-proof-tiles__content {
+    display: grid;
+    gap: clamp(16px, var(--capability-proof-gap), 32px);
+    width: 100%;
+  }
+
+  .capability-proof-tiles__heading {
+    margin: 0;
+  }
+
+  .capability-proof-tiles__body {
+    margin: 0;
+    color: var(--color-foreground-muted);
+  }
+
+  .capability-proof-tiles__grid {
+    display: grid;
+    gap: var(--capability-proof-gap);
+    grid-template-columns: 1fr;
+  }
+
+  .capability-proof-tiles__notes {
+    margin: 0;
+    color: var(--color-foreground-muted);
+    font-size: var(--font-paragraph--size);
+    line-height: 1.5;
+  }
+
+  @media screen and (min-width: 750px) {
+    .capability-proof-tiles__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media screen and (min-width: 1000px) {
+    .capability-proof-tiles__grid {
+      grid-template-columns: repeat(var(--capability-proof-columns), minmax(0, 1fr));
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Capability / proof tiles",
+  "tag": "section",
+  "max_blocks": 4,
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer"
+    ]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "section_heading",
+      "label": "Section heading",
+      "default": "Capability and proof"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "section_body",
+      "label": "Section body",
+      "default": "Proven building blocks for reliable robotics deployment."
+    },
+    {
+      "type": "inline_richtext",
+      "id": "section_notes",
+      "label": "Section notes",
+      "default": "Update numbers and links as proof assets are approved."
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Columns (desktop)",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Gap",
+      "min": 12,
+      "max": 64,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "label": "Icon size",
+      "min": 24,
+      "max": 72,
+      "step": 4,
+      "unit": "px",
+      "default": 44
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-2"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page width"
+        },
+        {
+          "value": "full-width",
+          "label": "Full width"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 28
+    }
+  ],
+  "blocks": [
+    {
+      "type": "capability-proof-tile"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Capability / proof tiles",
+      "category": "Layout",
+      "settings": {
+        "section_heading": "Built to prove capability, fast",
+        "section_body": "These are the core proof points for dependable robot deployment.",
+        "columns": 4,
+        "gap": 24,
+        "icon_size": 44,
+        "color_scheme": "scheme-2",
+        "section_width": "page-width",
+        "padding-block-start": 28,
+        "padding-block-end": 28,
+        "section_notes": "Update numbers and links as proof assets are approved."
+      },
+      "block_order": [
+        "tile-training",
+        "tile-ecosystem",
+        "tile-actions",
+        "tile-learning"
+      ],
+      "blocks": {
+        "tile-training": {
+          "type": "capability-proof-tile",
+          "settings": {
+            "icon": "stopwatch",
+            "heading": "Real-World Readiness",
+            "body": "Unlike robots trained in labs or on simulations, our robots are trained exclusively on data from live deployments, making them ready to perform in unpredictable environments from day one.",
+            "stat_value": "30",
+            "stat_label": "minute setup",
+            "link": ""
+          }
+        },
+        "tile-ecosystem": {
+          "type": "capability-proof-tile",
+          "settings": {
+            "icon": "recycle",
+            "heading": "Self-Improving Ecosystem",
+            "body": "Every deployment generates real-world data that feeds back into the system, continuously improving robot knowledge, perception, control, and prompt understanding over time.",
+            "stat_value": "Closed-loop",
+            "stat_label": "learning cycle",
+            "link": ""
+          }
+        },
+        "tile-actions": {
+          "type": "capability-proof-tile",
+          "settings": {
+            "icon": "truck",
+            "heading": "Adaptive Intelligence",
+            "body": "Our sensing rigs capture environmental data that allows robots to truly understand tasks — not just mimic them — by perceiving changes in their environment and responding in real time.",
+            "stat_value": "1.2M+",
+            "stat_label": "logged actions",
+            "link": ""
+          }
+        },
+        "tile-learning": {
+          "type": "capability-proof-tile",
+          "settings": {
+            "icon": "plant",
+            "heading": "Human-Style Learning",
+            "body": "Our imitation learning methodology captures the precision and process knowledge of domain experts, resulting in craft-level accuracy and shorter training cycles.",
+            "stat_value": "Human-guided",
+            "stat_label": "knowledge transfer",
+            "link": ""
+          }
+        }
+      }
+    }
+  ]
+}
+{% endschema %}

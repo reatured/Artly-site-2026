@@ -14,9 +14,9 @@
     "footer": {
       "type": "footer",
       "blocks": {
-        "group_wErUQf": {
+        "footer_brand_newsletter": {
           "type": "group",
-          "name": "Join our email list",
+          "name": "Newsletter",
           "settings": {
             "link": "",
             "open_in_new_tab": false,
@@ -54,11 +54,16 @@
             "padding-inline-end": 0
           },
           "blocks": {
-            "text_pF6rVi": {
+            "logo_a1b2c3": {
+              "type": "logo",
+              "name": "Logo",
+              "settings": {}
+            },
+            "text_newsletter_heading": {
               "type": "text",
               "name": "Heading",
               "settings": {
-                "text": "<h2>Join our email list</h2>",
+                "text": "<h2>Stay in the loop on real deployments</h2>",
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "left",
@@ -80,11 +85,11 @@
               },
               "blocks": {}
             },
-            "text_HafH7P": {
+            "text_newsletter_body": {
               "type": "text",
               "name": "Text",
               "settings": {
-                "text": "<p>Get exclusive deals and early access to new products.</p>",
+                "text": "<p>Get practical updates on Artly deployments, operations, and field learning--no generic updates, just what helps teams ship reliably.</p>",
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "left",
@@ -106,25 +111,28 @@
               },
               "blocks": {}
             },
-            "email-signup_HafH7P": {
+            "email_signup_task12": {
               "type": "email-signup",
               "name": "Email Signup",
               "settings": {
-                "width": "fill"
+                "width": "fill",
+                "display_type": "text",
+                "label": "Get Updates"
               }
             }
           },
           "block_order": [
-            "text_pF6rVi",
-            "text_HafH7P",
-            "email-signup_HafH7P"
+            "logo_a1b2c3",
+            "text_newsletter_heading",
+            "text_newsletter_body",
+            "email_signup_task12"
           ]
         },
-        "menu_footer": {
+        "menu_company": {
           "type": "menu",
           "settings": {
-            "menu": "footer",
-            "heading": "",
+            "menu": "footer-company",
+            "heading": "Company",
             "menu_spacing": 12,
             "show_as_accordion": false,
             "accordion_icon": "plus",
@@ -138,11 +146,29 @@
             "padding-inline-end": 0
           }
         },
-        "menu_main": {
+        "menu_solutions": {
           "type": "menu",
           "settings": {
-            "menu": "main-menu",
-            "heading": "",
+            "menu": "footer-solutions",
+            "heading": "Solutions",
+            "menu_spacing": 12,
+            "show_as_accordion": false,
+            "accordion_icon": "plus",
+            "accordion_dividers": false,
+            "inherit_color_scheme": true,
+            "heading_preset": "paragraph",
+            "link_preset": "paragraph",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          }
+        },
+        "menu_resources": {
+          "type": "menu",
+          "settings": {
+            "menu": "footer-resources",
+            "heading": "Resources",
             "menu_spacing": 12,
             "show_as_accordion": false,
             "accordion_icon": "plus",
@@ -158,9 +184,10 @@
         }
       },
       "block_order": [
-        "group_wErUQf",
-        "menu_footer",
-        "menu_main"
+        "footer_brand_newsletter",
+        "menu_company",
+        "menu_solutions",
+        "menu_resources"
       ],
       "name": "t:names.footer",
       "settings": {
@@ -185,7 +212,7 @@
         "copyright": {
           "type": "footer-copyright",
           "settings": {
-            "show_powered_by": true,
+            "show_powered_by": false,
             "font_size": "0.75rem",
             "case": "none"
           }
