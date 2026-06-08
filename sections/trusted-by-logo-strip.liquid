@@ -110,7 +110,7 @@
   }
 
   @media screen and (max-width: 749px) {
-    .trusted-by-logo-strip__list {
+    .trusted-by-logo-strip--scroll .trusted-by-logo-strip__list {
       flex-wrap: nowrap;
       justify-content: flex-start;
       overflow-x: auto;
@@ -121,12 +121,15 @@
       -webkit-overflow-scrolling: touch;
     }
 
-    .trusted-by-logo-strip__list::-webkit-scrollbar {
+    .trusted-by-logo-strip--scroll .trusted-by-logo-strip__list::-webkit-scrollbar {
       display: none;
     }
 
     .trusted-by-logo-strip--static .trusted-by-logo-strip__list {
-      justify-content: flex-start;
+      flex-wrap: wrap;
+      justify-content: var(--trusted-by-logo-alignment, flex-start);
+      overflow-x: visible;
+      scroll-snap-type: none;
     }
 
     .trusted-by-logo-strip__item {

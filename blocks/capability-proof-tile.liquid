@@ -64,17 +64,18 @@
 
 {% stylesheet %}
   .capability-proof-tile {
-    border: 1px solid var(--color-border);
-    border-radius: 8px;
+    border: var(--artly-home-card-border, 1px solid var(--color-border));
+    border-radius: var(--artly-radius, 8px);
     overflow: hidden;
-    padding: 18px;
+    padding: var(--artly-home-card-padding, 20px);
     min-height: 100%;
-    display: grid;
-    grid-template-rows: auto auto 1fr auto;
-    gap: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--artly-home-card-gap, 16px);
+    background: var(--artly-home-card-bg, transparent);
     color: var(--color-foreground);
     text-decoration: none;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    transition: border-color 0.2s ease;
   }
 
   .capability-proof-tile--link:focus-visible {
@@ -85,7 +86,6 @@
 
   .capability-proof-tile--link:hover {
     border-color: var(--color-foreground-muted);
-    box-shadow: 0 8px 20px rgb(0 0 0 / 0.05);
   }
 
   .capability-proof-tile__media {
@@ -106,12 +106,15 @@
   .capability-proof-tile__content {
     display: grid;
     gap: 12px;
+    min-width: 0;
+    height: 100%;
   }
 
   .capability-proof-tile__title {
     margin: 0;
-    font-size: var(--font-h6--size);
-    line-height: var(--font-h6--line-height);
+    font-size: clamp(1.02rem, 1.4vw, 1.16rem);
+    line-height: 1.22;
+    letter-spacing: 0;
   }
 
   .capability-proof-tile__body {
@@ -125,6 +128,7 @@
 
   .capability-proof-tile__stat {
     margin-top: auto;
+    padding-top: 4px;
   }
 
   .capability-proof-tile__stat-value {

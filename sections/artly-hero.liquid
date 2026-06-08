@@ -2,6 +2,8 @@
   assign has_video = false
   assign has_image = false
   assign media_alt = section.settings.media_alt_text
+  assign media_blur_amount = section.settings.media_blur_amount | default: 12 | at_least: 0 | at_most: 24
+  assign media_blur_scale = media_blur_amount | times: 4 | divided_by: 1000.0 | plus: 1
 
   if section.settings.media_type == 'video' and section.settings.media_video != blank
     assign has_video = true
@@ -38,7 +40,8 @@
 <section
   class="section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }} spacing-style artly-system artly-hero"
   aria-labelledby="ArtlyHeroTitle-{{ section.id }}"
-  style="{% render 'spacing-style', settings: section.settings %}"
+  style="--artly-hero-media-blur: {{ media_blur_amount }}px; --artly-hero-media-scale: {{ media_blur_scale }}; {% render 'spacing-style', settings: section.settings %}"
+  {{ section.shopify_attributes }}
 >
   <div class="artly-hero__media-wrap" role="group" aria-label="{{ section.settings.media_panel_label | escape }}">
     <div class="artly-hero__media-frame">
@@ -266,6 +269,16 @@
       "id": "media_alt_text",
       "label": "Media alt text",
       "default": "Artly robotic coffee workcell in a commercial service setting"
+    },
+    {
+      "type": "range",
+      "id": "media_blur_amount",
+      "label": "Media blur",
+      "min": 0,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 12
     },
     {
       "type": "checkbox",

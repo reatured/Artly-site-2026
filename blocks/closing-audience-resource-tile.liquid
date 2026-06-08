@@ -55,18 +55,20 @@
 
 {% stylesheet %}
   .closing-audience-resource-tile {
-    border: 1px solid var(--color-border);
-    border-radius: 8px;
-    padding: 18px;
+    border: var(--artly-home-card-border, 1px solid var(--color-border));
+    border-radius: var(--artly-radius, 8px);
+    padding: var(--artly-home-card-padding, 20px);
     min-height: 100%;
-    display: grid;
-    gap: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--artly-home-card-gap, 16px);
+    background: var(--artly-home-card-bg, transparent);
     color: var(--color-foreground);
     text-decoration: none;
   }
 
   .closing-audience-resource-tile--link {
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    transition: border-color 0.2s ease;
     min-height: 44px;
   }
 
@@ -78,7 +80,6 @@
 
   .closing-audience-resource-tile--link:hover {
     border-color: var(--color-foreground-muted);
-    box-shadow: 0 8px 20px rgb(0 0 0 / 0.05);
   }
 
   .closing-audience-resource-tile__media {
@@ -103,8 +104,9 @@
 
   .closing-audience-resource-tile__heading {
     margin: 0;
-    font-size: var(--font-h6--size);
-    line-height: var(--font-h6--line-height);
+    font-size: clamp(1.02rem, 1.4vw, 1.16rem);
+    line-height: 1.22;
+    letter-spacing: 0;
     min-height: 0;
     overflow-wrap: anywhere;
     word-break: break-word;

@@ -28,6 +28,7 @@
     {% render 'spacing-style', settings: section.settings %}
     --news-and-press-columns: {{ section.settings.columns | default: 4 }};
   "
+  {{ section.shopify_attributes }}
 >
   <div class="section-resource-list__header news-and-press__header">
     <p class="news-and-press__eyebrow">{{ section_eyebrow }}</p>
@@ -286,17 +287,13 @@
   .news-and-press__header {
     display: flex;
     flex-direction: column;
-    gap: var(--gap-s, 0.75rem);
+    gap: 12px;
     align-items: flex-start;
   }
 
   .news-and-press__eyebrow {
     margin: 0;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-size: var(--font-size-sm, 0.875rem);
-    font-weight: 600;
-    color: var(--color-foreground-subtle);
   }
 
   .news-and-press__title {
@@ -326,8 +323,12 @@
   .news-and-press-card {
     display: flex;
     flex-direction: column;
-    gap: var(--news-and-press-card-gap);
+    gap: var(--artly-home-card-gap, var(--news-and-press-card-gap));
     min-height: 100%;
+    padding: var(--artly-home-card-padding, 20px);
+    border: var(--artly-home-card-border, 1px solid rgb(0 0 0 / 12%));
+    border-radius: var(--artly-radius, 8px);
+    background: var(--artly-home-card-bg, transparent);
   }
 
   .news-and-press-card__media-link,
@@ -337,10 +338,12 @@
   }
 
   .news-and-press-card__media {
-    border: 1px solid rgb(0 0 0 / 12%);
+    border: 1px solid rgba(106, 118, 128, 0.18);
     aspect-ratio: var(--news-and-press-media-ratio);
-    border-radius: var(--border-radius-base, 0);
-    background: var(--color-input-background);
+    border-radius: var(--artly-radius, 8px);
+    background:
+      linear-gradient(135deg, rgba(185, 220, 229, 0.28), rgba(239, 229, 216, 0.38)),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.3));
     overflow: hidden;
     display: flex;
     align-items: center;
@@ -356,9 +359,7 @@
   }
 
   .news-and-press-card__image-placeholder-icon {
-    width: 44px;
-    height: 44px;
-    opacity: 0.35;
+    display: none;
   }
 
   .news-and-press-card__content {
@@ -393,6 +394,9 @@
 
   .news-and-press-card__headline {
     margin: 0;
+    font-size: clamp(1.02rem, 1.35vw, 1.16rem);
+    line-height: 1.24;
+    letter-spacing: 0;
   }
 
   .news-and-press-card__excerpt {
@@ -403,7 +407,8 @@
   .news-and-press-card__card-cta {
     margin-top: 0.25rem;
     width: fit-content;
-    color: var(--color-primary);
+    color: var(--artly-signal-dark, var(--color-primary));
+    font-weight: 700;
     text-decoration: none;
   }
 

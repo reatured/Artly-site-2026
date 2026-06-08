@@ -57,12 +57,13 @@
 <section
   class="section section--{{ section.settings.section_width }} overview-media color-{{ section.settings.color_scheme }} spacing-style {{ overview_media_shape }} overview-media--{{ section.settings.media_position }} overview-media--{{ section.settings.media_width }}"
   data-testid="overview-media"
+  style="{% render 'spacing-style', settings: section.settings %}"
+  {{ section.shopify_attributes }}
 >
   <div class="overview-media__media">
     <div
       class="overview-media__media-shell"
       style="
-        {% render 'spacing-style', settings: section.settings %}
         {% render 'border-override', settings: section.settings %}
         --overview-media-height: {{ section.settings.media_height }};
         --overview-media-height-mobile: {{ media_height_mobile }};
@@ -172,8 +173,9 @@
     --overview-media-media-column: 3.5fr;
     --overview-media-content-column: 2.5fr;
     display: grid;
-    gap: var(--spacer-lg, 2rem);
+    gap: var(--artly-home-gap, var(--spacer-lg, 2rem));
     align-items: start;
+    grid-template-columns: minmax(0, 1fr);
     grid-template-areas:
       'media'
       'content';
@@ -221,19 +223,19 @@
     gap: 0.9rem;
     justify-content: flex-start;
     padding-block-start: 0.15rem;
-    max-width: 60ch;
+    max-width: min(var(--artly-home-copy-max, 60ch), 100%);
   }
 
   .overview-media__media-shell {
-    --overview-media-panel-border: var(--style-border-width, 1px) solid var(--color-border);
-    --overview-media-panel-radius: 12px;
+    --overview-media-panel-border: 1px solid rgba(106, 118, 128, 0.2);
+    --overview-media-panel-radius: var(--artly-home-media-radius, 8px);
     position: relative;
     min-height: var(--overview-media-height);
     display: grid;
     overflow: hidden;
     border: var(--overview-media-panel-border);
     border-radius: var(--overview-media-panel-radius);
-    background: rgb(var(--color-background-rgb));
+    background: #05070a;
     color: var(--color-background);
   }
 
@@ -245,7 +247,7 @@
   }
 
   .overview-media--shape-rounded .overview-media__media-shell {
-    --overview-media-panel-radius: clamp(0px, var(--overview-media-shape-radius), 12px);
+    --overview-media-panel-radius: clamp(0px, var(--overview-media-shape-radius), var(--artly-home-media-radius, 8px));
   }
 
   .overview-media--shape-circle .overview-media__media-shell {
@@ -376,6 +378,11 @@
   }
 
   @media screen and (max-width: 749px) {
+    .overview-media__media,
+    .overview-media__content {
+      width: 100%;
+    }
+
     .overview-media__actions {
       flex-direction: column;
       width: 100%;

@@ -13,8 +13,8 @@
       "type": "artly-hero",
       "name": "Artly hero",
       "settings": {
-        "heading": "Powering the Next Generation of Intelligent Robots",
-        "body": "<p>Artly is bringing physical AI out of the lab and into reality with the world’s first commercialized robot training platform.</p>",
+        "heading": "Specialty coffee service, run by Artly robots",
+        "body": "<p>Artly builds autonomous robotic coffee systems for commercial spaces that need consistent craft drinks without adding operational complexity.</p>",
         "primary_cta_label": "Book a Demo",
         "primary_cta_link": "shopify://pages/contact",
         "primary_cta_open_in_new_tab": false,
@@ -30,8 +30,8 @@
         "video_controls": false,
         "section_width": "full-width",
         "color_scheme": "scheme-1",
-        "padding-block-start": 40,
-        "padding-block-end": 28
+        "padding-block-start": 0,
+        "padding-block-end": 0
       }
     },
     "announcement_bar_top": {
@@ -40,7 +40,7 @@
         "announcement_1": {
           "type": "_announcement",
           "settings": {
-            "text": "New: Barista Bot is now available for commercial deployment. <a href=\"/pages/contact\">Book a demo →</a>",
+            "text": "New: Barista Bot is now available for commercial deployment.&nbsp;<a href=\"/pages/contact\">Book a demo →</a>",
             "link": "",
             "enable_countdown": false,
             "countdown_end_date": "",
@@ -73,19 +73,20 @@
       "type": "platform-overview",
       "settings": {
         "eyebrow": "The Artly Ecosystem",
-        "heading": "Automation built for the real world.",
-        "body_line_1": "At Artly, we believe the future belongs to everyone, and everyone belongs in it. We’re on a mission to give everyone, regardless of technical background, the ability to teach, deploy, and benefit from the next generation of intelligent technology.",
-        "body_line_2": "Our patented physical AI platform combines proprietary hardware, deep learning + Vision-Language-Action models, and a real-world deployment feedback loop to deliver custom specialized robots at commercial scale — without the steep learning curve.",
-        "proof_microcopy": "Evidence markers: Expert-taught tasks | Real-world deployment feedback | Deployable hardware stack",
+        "heading": "Automation that fits real service environments.",
+        "body_line_1": "Artly combines robotic coffee hardware, field-tested workflows, and operator support into a deployable service system for offices, campuses, hospitality spaces, and high-traffic venues.",
+        "body_line_2": "The platform is built around real deployment feedback, so the experience keeps improving across drink quality, reliability, and day-to-day operations.",
+        "proof_microcopy": "Designed for commercial service, operator handoff, and repeatable drink quality.",
         "primary_cta_label": "Talk to an Expert",
-        "primary_cta_link": "",
+        "primary_cta_link": "shopify://pages/contact",
         "primary_cta_open_in_new_tab": false,
         "primary_cta_style": "button",
         "secondary_cta_label": "Learn More",
-        "secondary_cta_link": "",
+        "secondary_cta_link": "shopify://pages/platform",
         "secondary_cta_open_in_new_tab": false,
         "secondary_cta_style": "link",
-        "media_type": "video_url",
+        "media_type": "image",
+        "media_image": "shopify://shop_images/blog-banner.jpg",
         "media_video_url": "https://www.youtube.com/watch?v=gZD3YzRf7HA",
         "video_autoplay": false,
         "video_loop": true,
@@ -95,8 +96,8 @@
         "media_height": "60svh",
         "section_width": "page-width",
         "color_scheme": "scheme-1",
-        "padding-block-start": 0,
-        "padding-block-end": 0
+        "padding-block-start": 72,
+        "padding-block-end": 72
       }
     },
     "capability_proof_tiles": {
@@ -162,34 +163,35 @@
         "tile-learning"
       ],
       "settings": {
-        "section_heading": "Built to prove capability, fast",
-        "section_body": "These are the core proof points for dependable robot deployment.",
-        "section_notes": "Update numbers and links as proof assets are approved.",
+        "section_heading": "",
+        "section_body": "",
+        "section_notes": "",
         "gap": 24,
         "icon_size": 44,
         "color_scheme": "scheme-2",
         "section_width": "page-width",
-        "padding-block-start": 28,
-        "padding-block-end": 28
+        "padding-block-start": 56,
+        "padding-block-end": 56
       }
     },
     "overview_media": {
       "type": "overview-media",
       "settings": {
         "eyebrow": "Proof from deployment",
-        "heading": "See the workflow as it runs",
-        "body_line_1": "Watch a live deployment sequence from setup to execution and see how our workflow performs in real conditions.",
-        "body_line_2": "This proof media captures real calibration, handoff, and quality checks across real-world operations.",
+        "heading": "See the service workflow clearly.",
+        "body_line_1": "The customer experience is simple: order, robotic preparation, quality control, and handoff in a compact commercial footprint.",
+        "body_line_2": "For operators, the system is designed around guided setup, repeatable workflows, and practical visibility into daily service.",
         "microcopy": "Proof clips are refreshed from active field deployments to keep expectations grounded in live outcomes.",
-        "primary_cta_label": "Watch full proof clip",
-        "primary_cta_link": "",
+        "primary_cta_label": "Book a Demo",
+        "primary_cta_link": "shopify://pages/contact",
         "primary_cta_style": "button",
         "primary_cta_open_in_new_tab": false,
-        "secondary_cta_label": "Book a Demo",
-        "secondary_cta_link": "",
+        "secondary_cta_label": "Explore the Platform",
+        "secondary_cta_link": "shopify://pages/platform",
         "secondary_cta_style": "button",
         "secondary_cta_open_in_new_tab": false,
-        "media_type": "video",
+        "media_type": "image",
+        "media_image": "shopify://shop_images/blog-banner.jpg",
         "media_alt_text": "Robot deployment workflow capture",
         "video_autoplay": false,
         "video_loop": true,
@@ -205,8 +207,8 @@
         "media_height": "60svh",
         "section_width": "page-width",
         "color_scheme": "scheme-1",
-        "padding-block-start": 28,
-        "padding-block-end": 28
+        "padding-block-start": 72,
+        "padding-block-end": 72
       }
     },
     "barista_bot_feature": {
@@ -216,14 +218,15 @@
         "heading": "Specialty coffee, designed around you.",
         "body": "Meet the AI-trained robotic barista built for autonomous operation. Barista Bot’s 4x5 footprint, self-cleaning components, and automatic calibration make a quality café experience possible in even the most demanding environments.",
         "primary_cta_label": "Book a Demo",
-        "primary_cta_link": "",
+        "primary_cta_link": "shopify://pages/contact",
         "primary_cta_open_in_new_tab": false,
         "primary_cta_style": "button",
         "secondary_cta_label": "Learn More",
-        "secondary_cta_link": "",
+        "secondary_cta_link": "shopify://pages/barista-bot",
         "secondary_cta_open_in_new_tab": false,
         "secondary_cta_style": "link",
-        "media_type": "video",
+        "media_type": "image",
+        "media_image": "shopify://shop_images/blog-banner.jpg",
         "media_alt_text": "Artly Barista Bot in a compact 4x5 workcell producing specialty coffee",
         "video_autoplay": false,
         "video_loop": true,
@@ -232,8 +235,8 @@
         "media_height": "60svh",
         "section_width": "page-width",
         "color_scheme": "scheme-1",
-        "padding-block-start": 32,
-        "padding-block-end": 32
+        "padding-block-start": 72,
+        "padding-block-end": 72
       }
     },
     "trusted_by_logo_strip": {
@@ -441,14 +444,14 @@
         "show_heading": true,
         "heading": "Trusted By",
         "alignment": "center",
-        "strip_mode": "scroll",
+        "strip_mode": "static",
         "logo_height": 32,
         "logo_gap": 22,
         "open_in_new_tab": false,
         "section_width": "page-width",
         "color_scheme": "scheme-1",
-        "padding-block-start": 28,
-        "padding-block-end": 28,
+        "padding-block-start": 40,
+        "padding-block-end": 40,
         "padding-inline-start": 0,
         "padding-inline-end": 0
       }
@@ -520,19 +523,19 @@
         "cta_label_default": "Read more",
         "post_limit": 4,
         "layout_type": "grid",
-        "carousel_on_mobile": true,
+        "carousel_on_mobile": false,
         "columns": 4,
         "mobile_columns": "1",
         "mobile_card_size": "60cqw",
-        "columns_gap": 12,
-        "rows_gap": 12,
+        "columns_gap": 24,
+        "rows_gap": 24,
         "icons_style": "arrow",
         "icons_shape": "none",
         "section_width": "page-width",
-        "gap": 12,
+        "gap": 24,
         "color_scheme": "scheme-1",
-        "padding-block-start": 48,
-        "padding-block-end": 48
+        "padding-block-start": 64,
+        "padding-block-end": 64
       }
     },
     "news_and_press": {
@@ -549,7 +552,7 @@
             "card_title": "What customers told us after the first large-site pilot",
             "card_image_alt": "",
             "card_excerpt": "Deployment insights from the first wave of long-term operations and what changed in uptime, workflow, and consistency.",
-            "card_link": "",
+            "card_link": "/blogs/news",
             "card_cta_label": "Read more",
             "open_in_new_tab": false
           }
@@ -565,7 +568,7 @@
             "card_title": "Service reliability updates from current fleets",
             "card_image_alt": "",
             "card_excerpt": "A practical update on support loops, remote monitoring, and consistency checks that keep commercial service stable through busy shifts.",
-            "card_link": "",
+            "card_link": "/blogs/news",
             "card_cta_label": "Read more",
             "open_in_new_tab": false
           }
@@ -581,7 +584,7 @@
             "card_title": "Press coverage: reliable coffee delivery becomes operationally practical",
             "card_image_alt": "",
             "card_excerpt": "A look at how service teams are now treating service robotics as part of operations design rather than a side experiment.",
-            "card_link": "",
+            "card_link": "/blogs/news",
             "card_cta_label": "Read more",
             "open_in_new_tab": false
           }
@@ -597,7 +600,7 @@
             "card_title": "How teams reduced startup friction with guided deployment",
             "card_image_alt": "",
             "card_excerpt": "Operational checklists and rollout patterns that make first-time deployment predictable and easier to reproduce across sites.",
-            "card_link": "",
+            "card_link": "/blogs/news",
             "card_cta_label": "Read more",
             "open_in_new_tab": false
           }
@@ -619,14 +622,14 @@
         "layout_type": "grid",
         "columns": "4",
         "mobile_columns": "1",
-        "columns_gap": 12,
+        "columns_gap": 24,
         "rows_gap": 20,
         "section_width": "page-width",
         "color_scheme": "scheme-1",
         "blog": "",
         "post_limit": 4,
-        "padding-block-start": 44,
-        "padding-block-end": 44
+        "padding-block-start": 64,
+        "padding-block-end": 64
       }
     },
     "closing_audience_resource_tiles": {
@@ -682,14 +685,14 @@
         "icon_size": 44,
         "color_scheme": "scheme-1",
         "section_width": "page-width",
-        "padding-block-start": 40,
-        "padding-block-end": 40
+        "padding-block-start": 64,
+        "padding-block-end": 72
       }
     }
   },
   "order": [
-    "hero_jVaWmY",
     "announcement_bar_top",
+    "hero_jVaWmY",
     "platform_overview",
     "capability_proof_tiles",
     "overview_media",

@@ -72,13 +72,8 @@
     --platform-overview-media-height: {{ section.settings.media_height }};
     --platform-overview-media-height-mobile: {{ media_height_mobile }};
     --section-top-offset: 0px;
-    padding-block: 0 !important;
-    margin-block: 0 !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
   "
+  {{ section.shopify_attributes }}
 >
   <div class="platform-overview__media-wrap" role="img"{% if media_alt_text != blank %} aria-label="{{ media_alt_text | escape }}"{% endif %}>
     {% if has_external_video %}
@@ -189,7 +184,8 @@
     --platform-overview-media-column: 3.8fr;
     --platform-overview-content-column: 2.2fr;
     display: grid;
-    gap: clamp(1.5rem, 4vw, 4.5rem);
+    gap: var(--artly-home-gap, clamp(1.5rem, 4vw, 4.5rem));
+    grid-template-columns: minmax(0, 1fr);
     grid-template-areas:
       'media'
       'content';
@@ -198,7 +194,7 @@
   }
 
   .platform-overview.section--page-width {
-    width: min(var(--page-content-width), calc(100% - (var(--page-margin) * 2)));
+    width: var(--artly-home-content-width, min(var(--page-content-width), calc(100% - (var(--page-margin) * 2))));
     margin-inline: auto;
   }
 
@@ -247,8 +243,9 @@
     aspect-ratio: 16 / 9;
     align-self: center;
     background: #05070a;
-    border-radius: 12px;
-    box-shadow: 0 22px 54px rgb(0 0 0 / 0.16);
+    border: 1px solid rgba(106, 118, 128, 0.2);
+    border-radius: var(--artly-home-media-radius, 8px);
+    box-shadow: none;
     overflow: hidden;
   }
 
@@ -257,10 +254,10 @@
     min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: 0.95rem;
+    gap: 1rem;
     justify-self: start;
-    max-width: min(var(--normal-content-width), 100%);
-    padding-block: clamp(2.5rem, 5vw, 4.5rem);
+    max-width: min(var(--artly-home-copy-max, var(--normal-content-width)), 100%);
+    padding-block: clamp(1rem, 3vw, 2.25rem);
   }
 
   .platform-overview__media,
@@ -308,7 +305,6 @@
     letter-spacing: 0;
     font-size: 0.8rem;
     color: var(--color-foreground);
-    opacity: 0.68;
     margin-block-end: 0.25rem;
   }
 
@@ -317,10 +313,7 @@
     margin-block-start: 0;
     margin-block-end: 0.45rem;
     font-family: var(--font-heading--family, var(--font-body--family));
-    font-size: 2.55rem;
-    line-height: 1.08;
-    letter-spacing: 0;
-    max-width: 13ch;
+    max-width: 16ch;
   }
 
   .platform-overview__body {
@@ -368,17 +361,23 @@
     }
 
     .platform-overview {
-      width: min(var(--page-content-width), calc(100% - (var(--page-margin) * 2)));
+      width: var(--artly-home-content-width, min(var(--page-content-width), calc(100% - (var(--page-margin) * 2))));
+      margin-inline: auto;
     }
 
     .platform-overview__content {
+      width: 100%;
       max-width: min(var(--normal-content-width), 100%);
       padding-block: 0 0.5rem;
     }
 
+    .platform-overview__media-wrap {
+      width: 100%;
+    }
+
     .platform-overview__heading {
       font-size: 2rem;
-      max-width: 14ch;
+      max-width: min(100%, 16ch);
     }
 
     .platform-overview__actions {

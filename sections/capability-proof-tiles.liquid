@@ -42,14 +42,19 @@
     --capability-proof-columns: 2;
     --capability-proof-gap: var(--capability-proof-tile-gap, 24px);
     --capability-proof-icon-size: 40px;
-    --capability-proof-content-width: min(1210px, calc(100% - (var(--page-margin, 40px) * 2)));
+    --capability-proof-content-width: var(--artly-home-content-width, min(100%, 1180px));
   }
 
   .capability-proof-tiles__content {
     display: grid;
-    gap: clamp(16px, var(--capability-proof-gap), 32px);
+    gap: clamp(20px, var(--capability-proof-gap), 32px);
     width: var(--capability-proof-content-width);
     margin-inline: auto;
+  }
+
+  .capability-proof-tiles__intro {
+    display: grid;
+    gap: 12px;
   }
 
   .capability-proof-tiles__heading {
@@ -65,6 +70,7 @@
     display: grid;
     gap: var(--capability-proof-gap);
     grid-template-columns: 1fr;
+    align-items: stretch;
   }
 
   .capability-proof-tiles__notes {

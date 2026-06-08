@@ -1,5 +1,43 @@
 # Agent Registry
 
+### Visual Standards Audit Worker
+
+| Property | Value |
+| --- | --- |
+| Vault ID | PV-W-20260608-001 |
+| Tool agent ID | 019ea94b-f8ed-7021-bec2-877154f0147e |
+| Nickname | Nietzsche |
+| Role/type | Worker - read-only visual standards audit |
+| Spawned by | Leader Agent |
+| Date spawned | 2026-06-08 |
+| Mission | Audit homepage/theme files and TEAM-WORK design docs for production homepage standards around widths, spacing, typography, cards, media, and hierarchy. |
+| Skills/knowledge provided | Frontend visual QA, design systems, Shopify homepage review, spacing/width consistency. |
+| Files or domains touched | Read-only review of `templates/index.json`, `assets/artly-style-system.css`, homepage sections, and TEAM-WORK design docs. |
+| Status | Complete |
+| Outputs | Identified eight production standards, likely change targets, docs to preserve, and risks to avoid. |
+| Quality score | 4/5 |
+| Reuse recommendation | Reuse for future visual standard audits before production homepage releases. |
+| Notes/lessons | Correctly flagged one content rail, spacing tiers, card grammar, placeholder media, unsupported claims, and CTA consistency as primary risks. |
+
+### Homepage Section Inventory Worker
+
+| Property | Value |
+| --- | --- |
+| Vault ID | PV-W-20260608-002 |
+| Tool agent ID | 019ea94c-3231-7331-a2ca-e81b65dd67ae |
+| Nickname | Huygens |
+| Role/type | Worker - read-only section inventory and validation audit |
+| Spawned by | Leader Agent |
+| Date spawned | 2026-06-08 |
+| Mission | Inspect active homepage section order, layout files, spacing/media controls, and structural issues blocking production readiness. |
+| Skills/knowledge provided | Shopify theme structure, template section mapping, Liquid/CSS issue spotting, theme validation. |
+| Files or domains touched | Read-only review of `templates/index.json`, homepage sections/blocks, resource-list helpers, and theme check output. |
+| Status | Complete |
+| Outputs | Active homepage section order, exact edit targets, missing media/link risks, `overview-media` spacing bug, missing theme editor attributes, and Theme Check warning context. |
+| Quality score | 4/5 |
+| Reuse recommendation | Reuse for section inventory before major homepage integration work. |
+| Notes/lessons | The audit caught the `overview-media` root spacing bug and disabled/placeholder media risks that were fixed during the production pass. |
+
 ### Progress Tracker Builder (Worker)
 
 | Property | Value |
