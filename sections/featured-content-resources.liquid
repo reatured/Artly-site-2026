@@ -31,11 +31,18 @@
     <p class="featured-content-resources__intro">{{ section_intro }}</p>
   </div>
 
-  {% if section.settings.blog != blank and section.settings.blog.articles_count > 0 %}
-    {% assign section_articles = section.settings.blog.articles %}
-  {% else %}
-    {% assign section_articles = null %}
-  {% endif %}
+  {% liquid
+    assign source_blog = section.settings.blog
+    if source_blog == blank or source_blog.articles_count == blank or source_blog.articles_count == 0
+      assign source_blog = blogs['articles-1']
+    endif
+
+    if source_blog != blank and source_blog.articles_count > 0
+      assign section_articles = source_blog.articles
+    else
+      assign section_articles = null
+    endif
+  %}
 
   {% capture list_items %}
     {% if content_mode == 'manual' %}

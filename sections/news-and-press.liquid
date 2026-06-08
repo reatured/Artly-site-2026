@@ -6,11 +6,10 @@
   assign section_cta_label = section.settings.cta_label | default: 'More Resources'
   assign section_cta_link = section.settings.cta_link
 
-  assign max_items = section.settings.post_limit | default: 4
-  if max_items < 4
-    assign max_items = 4
-  elsif max_items > 4
-    assign max_items = 4
+  assign max_items = section.settings.post_limit | default: 4 | at_least: 1 | at_most: 8
+  assign source_blog = section.settings.blog
+  if source_blog == blank or source_blog.articles_count == blank or source_blog.articles_count == 0
+    assign source_blog = blogs['articles-1']
   endif
 %}
 
@@ -45,8 +44,8 @@
 
   {% liquid
     assign news_items = blank
-    if content_mode == 'blog' and section.settings.blog != blank and section.settings.blog.articles_count > 0
-      paginate section.settings.blog.articles by max_items
+    if content_mode == 'blog' and source_blog != blank and source_blog.articles_count > 0
+      paginate source_blog.articles by max_items
         assign news_items = paginate.items
       endpaginate
     endif
@@ -133,26 +132,6 @@
           <!--@list/split-->
         {% endunless %}
       {% endfor %}
-
-      {% if max_items > news_items.size %}
-        {% assign remaining_news_cards = max_items | minus: news_items.size %}
-        {% for i in (1..remaining_news_cards) %}
-          <article class="resource-list__item news-and-press__item">
-            <div class="news-and-press-card news-and-press-card--placeholder" data-placeholder="true">
-              <div class="news-and-press-card__media news-and-press-card__media--placeholder" role="presentation" aria-hidden="true">
-                {{ 'blog-apparel-1' | placeholder_svg_tag: 'news-and-press-card__image-placeholder-icon' }}
-              </div>
-              <div class="news-and-press-card__content">
-                <h3 class="news-and-press-card__headline">News story title</h3>
-                <p class="news-and-press-card__excerpt">Add a short summary to help readers understand why this piece is worth opening.</p>
-              </div>
-            </div>
-          </article>
-          {% unless forloop.last %}
-            <!--@list/split-->
-          {% endunless %}
-        {% endfor %}
-      {% endif %}
 
     {% else %}
       {% for i in (1..max_items) %}
