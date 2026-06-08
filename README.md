@@ -1,92 +1,89 @@
-# Horizon
+# Artly Shopify Theme
 
-[Getting started](#getting-started) |
-[Staying up to date with Horizon changes](#staying-up-to-date-with-horizon-changes) |
-[Developer tools](#developer-tools) |
-[Contributing](#contributing) |
-[License](#license)
+This repo contains the local Shopify theme for the Artly site. It is based on Shopify Horizon, but this project is now Artly-specific: the homepage and custom sections position Artly as a commercial physical-AI robotics company with Barista Bot as the concrete specialty-coffee proof point.
 
-Horizon is the flagship of a new generation of first party Shopify themes. It incorporates the latest Liquid Storefronts features, including [theme blocks](https://shopify.dev/docs/storefronts/themes/architecture/blocks/theme-blocks/quick-start?framework=liquid).
+The current site work is primarily brand, inquiry, demo, resource, and deployment storytelling. Commerce templates and Shopify product/cart infrastructure still exist in the theme for future use, but visible homepage work should stay focused on Artly, Barista Bot, resources, and contact/demo paths unless Richard approves a commerce launch.
 
-- **Web-native in its purest form:** Themes run on the [evergreen web](https://www.w3.org/2001/tag/doc/evergreen-web/). We leverage the latest web browsers to their fullest, while maintaining support for the older ones through progressive enhancement—not polyfills.
-- **Lean, fast, and reliable:** Functionality and design defaults to "no" until it meets this requirement. Code ships on quality. Themes must be built with purpose. They shouldn't support each and every feature in Shopify.
-- **Server-rendered:** HTML must be rendered by Shopify servers using Liquid. Business logic and platform primitives such as translations and money formatting don't belong on the client. Async and on-demand rendering of parts of the page is OK, but we do it sparingly as a progressive enhancement.
-- **Functional, not pixel-perfect:** The Web doesn't require each page to be rendered pixel-perfect by each browser engine. Using semantic markup, progressive enhancement, and clever design, we ensure that themes remain functional regardless of the browser.
+## Local Shopify Preview
 
-## Getting started
+Run commands from the repo root:
 
-We recommend using the Skeleton Theme as a starting point for a theme development project. [Learn more on Shopify.dev](https://shopify.dev/themes/getting-started/create).
-
-To create a new theme project based on Horizon:
-
-```sh
-git clone https://github.com/Shopify/horizon.git
+```powershell
+cd C:\Artly\Artly-site-2026
 ```
 
-Install the [Shopify CLI](https://shopify.dev/docs/storefronts/themes/tools/cli) to connect your local project to a Shopify store. Learn about the [theme developer tools](https://shopify.dev/docs/storefronts/themes/tools) available, and the suggested [developer tools](#developer-tools) below.
+Authenticate if needed:
 
-Please note that the `main` branch may include code for features not yet released. You may encounter Liquid API properties that are not publicly documented, but will be when the feature is officially rolled out.
-
-### Shopify Theme Store development
-
-If you're building a theme for the Shopify Theme Store, then do not use Horizon as a starting point. Themes based on, derived from, or incorporating Horizon are not eligible for submission to to the Shopify Theme Store. Use the [Skeleton Theme](https://github.com/Shopify/skeleton-theme) instead.
-
-## Staying up to date with Horizon changes
-
-Say you're building a new theme off Horizon but you still want to be able to pull in the latest changes, you can add a remote `upstream` pointing to this Horizon repository.
-
-1. Navigate to your local theme folder.
-2. Verify the list of remotes and validate that you have both an `origin` and `upstream`:
-
-```sh
-git remote -v
+```powershell
+shopify auth login
 ```
 
-3. If you don't see an `upstream`, you can add one that points to Shopify's Horizon repository:
+Check the configured theme environment:
 
-```sh
-git remote add upstream https://github.com/Shopify/horizon.git
+```powershell
+shopify theme info --path . --environment default
 ```
 
-4. Pull in the latest Horizon changes into your repository:
+Start the local development preview:
 
-```sh
-git fetch upstream
-git pull upstream main
+```powershell
+shopify theme dev --path . --environment default --port 9292 --open
 ```
 
-## Developer tools
+Local preview URL:
 
-There are a number of really useful tools that the Shopify Themes team uses during development. Horizon is already set up to work with these tools.
-
-### Shopify CLI
-
-[Shopify CLI](https://shopify.dev/docs/storefronts/themes/tools/cli) helps you build Shopify themes faster and is used to automate and enhance your local development workflow. It comes bundled with a suite of commands for developing Shopify themes—everything from working with themes on a Shopify store (e.g. creating, publishing, deleting themes) or launching a development server for local theme development.
-
-You can follow this [quick start guide for theme developers](https://shopify.dev/docs/themes/tools/cli) to get started.
-
-### Theme Check
-
-We recommend using [Theme Check](https://github.com/shopify/theme-check) as a way to validate and lint your Shopify themes.
-
-We've added Theme Check to Horizon's [list of VS Code extensions](/.vscode/extensions.json) so if you're using Visual Studio Code as your code editor of choice, you'll be prompted to install the [Theme Check VS Code](https://marketplace.visualstudio.com/items?itemName=Shopify.theme-check-vscode) extension upon opening VS Code after you've forked and cloned Horizon.
-
-You can also run it from a terminal with the following Shopify CLI command:
-
-```bash
-shopify theme check
+```text
+http://127.0.0.1:9292/
 ```
 
-You can follow the [theme check documentation](https://shopify.dev/docs/storefronts/themes/tools/theme-check) for more details.
+Open the current development theme or editor after a dev theme exists:
 
-#### Shopify/theme-check-action
+```powershell
+shopify theme open --development --path .
+shopify theme open --development --editor --path .
+```
 
-Horizon runs [Theme Check](#Theme-Check) on every commit via [Shopify/theme-check-action](https://github.com/Shopify/theme-check-action).
+## Useful Theme Commands
 
-## Contributing
+Validate Liquid, schema, and theme rules:
 
-We are not accepting contributions to Horizon at this time.
+```powershell
+shopify theme check --path .
+```
 
-## License
+List remote themes connected to the configured store:
 
-Copyright (c) 2025-present Shopify Inc. See [LICENSE](/LICENSE.md) for further details.
+```powershell
+shopify theme list --path . --environment default
+```
+
+Conservative manual upload to the development theme:
+
+```powershell
+shopify theme push --development --path . --nodelete
+```
+
+Use `git status --short` before and after theme work. `shopify theme dev` uploads the local folder to a remote development theme and hot-reloads local changes while it is running. Avoid `--publish`, `--live`, `--allow-live`, destructive theme commands, and token/password flags unless Richard explicitly approves the action.
+
+Do not commit Admin API tokens, Theme Access passwords, private preview links, customer data, or Shopify account credentials.
+
+## Art Direction Reference
+
+Primary source: [DESIGN_PRINCIPLES.md](DESIGN_PRINCIPLES.md). Supporting homepage planning: [docs/artly-homepage-design-principles-and-plan.md](docs/artly-homepage-design-principles-and-plan.md).
+
+Artly's direction is **Precision Hospitality**: advanced robotics made warm, useful, and commercially credible. The site should feel like a real service business powered by robotics, not a generic AI startup, consumer gadget page, or dark sci-fi robot brand.
+
+Use real-world deployment credibility, specialty coffee robotics, clean commercial UI, product-first headlines, restrained motion, and proof near major claims. Favor warm hospitality neutrals, coffee tones, stainless steel gray, soft black, and one precise technology accent. Avoid purple AI gradients, beige-heavy lifestyle styling, decorative blobs/orbs, generic SaaS blue, unsupported "revolutionary" claims, and overly futuristic visuals.
+
+Typography standard: Work Sans is the body/UI font; Space Grotesk is the heading, display, and accent font. The Shopify theme should express this through theme font settings rather than local hardcoded CSS where possible.
+
+Key homepage files to inspect when matching the current direction:
+
+- `templates/index.json`
+- `sections/platform-overview.liquid`
+- `sections/barista-bot-feature.liquid`
+- `sections/capability-proof-tiles.liquid`
+- `sections/overview-media.liquid`
+- `sections/featured-content-resources.liquid`
+- `sections/news-and-press.liquid`
+- `sections/closing-audience-resource-tiles.liquid`

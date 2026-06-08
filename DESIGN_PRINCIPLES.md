@@ -26,7 +26,7 @@ The first impression should show the Artly robot in a real service context. Real
 
 ## Typography
 
-Use a modern, premium sans-serif. Headlines should be large, clear, and product-first. Avoid futuristic fonts.
+Use Work Sans for body copy, UI text, forms, navigation, and dense operational content. Use Space Grotesk for headings, display moments, and accent typography. Headlines should be large, clear, and product-first. Avoid futuristic fonts.
 
 Use short technical labels sparingly for system details.
 
@@ -96,4 +96,3 @@ Use restrained, premium motion only:
 Within five seconds, a first-time visitor should understand:
 
 **Artly is a real robotic coffee system for commercial spaces, and it can be deployed, supported, and trusted.**
-

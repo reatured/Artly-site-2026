@@ -4,8 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Artly Homepage Design Principles and Plan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Work+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
+      --font-body: "Work Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, Helvetica, sans-serif;
+      --font-display: "Space Grotesk", "Work Sans", ui-sans-serif, system-ui, sans-serif;
       --bg: #f7fafb;
       --paper: #ffffff;
       --ink: #18212a;
@@ -37,7 +42,7 @@
     body {
       margin: 0;
       color: var(--ink);
-      font-family: Arial, Helvetica, sans-serif;
+      font-family: var(--font-body);
       font-size: 16px;
       line-height: 1.58;
     }
@@ -66,6 +71,7 @@
     h2,
     h3 {
       color: var(--ink);
+      font-family: var(--font-display);
       line-height: 1.18;
       letter-spacing: 0;
     }

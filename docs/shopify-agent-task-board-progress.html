@@ -1,0 +1,1323 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shopify Frontend Progress + Taskboard (Self-Contained)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Work+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --font-body: "Work Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, Helvetica, sans-serif;
+        --font-display: "Space Grotesk", "Work Sans", ui-sans-serif, system-ui, sans-serif;
+        --page-bg: #dfe4ee;
+        --text: #1d263f;
+        --line: #ccd5df;
+        --muted: #5a6480;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background:
+          radial-gradient(circle at 0 0, #f8fbff 0%, transparent 35%),
+          radial-gradient(circle at 100% 0, #f5f2ff 0%, transparent 25%),
+          var(--page-bg);
+        color: var(--text);
+        font-family: var(--font-body);
+      }
+
+      .wrapper {
+        width: min(1660px, calc(100vw - 26px));
+        margin: 22px auto 40px;
+      }
+
+      .overview {
+        margin-bottom: 16px;
+      }
+
+      .overview h1 {
+        margin: 0;
+        font-family: var(--font-display);
+        font-size: clamp(1.45rem, 2.6vw, 2rem);
+      }
+
+      .overview p {
+        margin: 8px 0 0;
+        color: var(--muted);
+      }
+
+      .combined-section {
+        margin-bottom: 16px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        overflow: hidden;
+        background: #ffffff;
+        box-shadow: 0 16px 28px rgba(34, 42, 67, 0.08);
+      }
+
+      .combined-section h2 {
+        margin: 0;
+        padding: 12px 14px;
+        border-bottom: 1px solid var(--line);
+        color: #1f2f4f;
+        background: #fbfdff;
+        font-family: var(--font-display);
+        font-size: 1.05rem;
+      }
+
+      .host-slot {
+        background: #fff;
+        min-height: 180px;
+      }
+
+      .source-note {
+        margin: 0;
+        padding: 10px 14px 14px;
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 0.8rem;
+        line-height: 1.45;
+      }
+
+      .source-note a {
+        color: inherit;
+      }
+
+      @media (max-width: 800px) {
+        .wrapper {
+          width: calc(100vw - 16px);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="wrapper" aria-label="Combined dashboard">
+      <header class="overview">
+        <h1>Shopify Frontend Progress + Taskboard</h1>
+        <p>
+          Self-contained merged dashboard built from both HTML sources in a single file. Styling and content from each source is
+          included inline and isolated, so the page no longer depends on loading the source documents at runtime.
+        </p>
+      </header>
+
+      <section class="combined-section" aria-labelledby="tracker-label">
+        <h2 id="tracker-label">Homepage Wireframe Progress Tracker</h2>
+        <div id="tracker-host" class="host-slot" aria-label="Homepage wireframe progress tracker"></div>
+        <p class="source-note">
+          Source included inline: <a href="shopify-frontend-component-progress.html">docs/shopify-frontend-component-progress.html</a>
+          (kept unchanged on disk).
+        </p>
+      </section>
+
+      <section class="combined-section" aria-labelledby="taskboard-label">
+        <h2 id="taskboard-label">RC Shopify Taskboard</h2>
+        <div id="board-host" class="host-slot" aria-label="RC Shopify taskboard"></div>
+        <p class="source-note">
+          Source included inline: <a href="agent-task-board.html">docs/agent-task-board.html</a>
+          (kept unchanged on disk).
+        </p>
+      </section>
+    </main>
+
+    <template id="tracker-template">
+      <style>
+
+      :host {
+        --font-body: "Work Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, Helvetica, sans-serif;
+        --font-display: "Space Grotesk", "Work Sans", ui-sans-serif, system-ui, sans-serif;
+        --bg: #f4f7fb;
+        --card: #ffffff;
+        --line: #d8e1ea;
+        --text: #16233a;
+        --muted: #5e6b84;
+        --status-completed: #0f9d58;
+        --status-not-started: #7a869e;
+        --status-in-progress: #2f67ff;
+        --status-blocked: #d84343;
+        --status-postponed: #6f5f8f;
+        --shadow: 0 8px 24px rgba(18, 38, 74, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+:host {
+        margin: 0;
+        font-family: var(--font-body);
+        color: var(--text);
+        background: var(--bg);
+      }
+
+      .page {
+        width: min(1100px, 96vw);
+        margin: 28px auto 40px;
+      }
+
+      header {
+        margin-bottom: 18px;
+      }
+
+      h1 {
+        margin: 0;
+        font-family: var(--font-display);
+        font-size: 1.75rem;
+      }
+
+      p.subtle {
+        margin: 10px 0 0;
+        color: var(--muted);
+      }
+
+      .summary {
+        display: grid;
+        gap: 12px;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        margin: 16px 0 22px;
+      }
+
+      .card {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 14px 16px;
+        box-shadow: var(--shadow);
+      }
+
+      .card h2 {
+        font-family: var(--font-display);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        margin: 0 0 10px;
+        color: var(--muted);
+        font-weight: 600;
+      }
+
+      .card p {
+        margin: 0;
+        font-size: 1.35rem;
+        font-weight: 700;
+      }
+
+      .container {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 16px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+
+      .intro {
+        border-left: 4px solid #2f67ff;
+        padding-left: 12px;
+        margin: 0 0 12px;
+        color: var(--muted);
+      }
+
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        min-width: 780px;
+      }
+
+      thead th {
+        text-align: left;
+        font-size: 0.82rem;
+        color: var(--muted);
+        border-bottom: 2px solid var(--line);
+        padding: 10px 8px;
+      }
+
+      td {
+        padding: 12px 8px;
+        border-bottom: 1px solid var(--line);
+        vertical-align: top;
+      }
+
+      tbody tr:nth-child(even) {
+        background: #f9fbff;
+      }
+
+      .status-pill {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        padding: 5px 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #fff;
+      }
+
+      .status-completed,
+      .status-not-started,
+      .status-in-progress,
+      .status-blocked,
+      .status-postponed {
+        --status-color: var(--muted);
+      }
+
+      .status-completed {
+        --status-color: var(--status-completed);
+      }
+
+      .status-not-started {
+        --status-color: var(--status-not-started);
+      }
+
+      .status-in-progress {
+        --status-color: var(--status-in-progress);
+      }
+
+      .status-blocked {
+        --status-color: var(--status-blocked);
+      }
+
+      .status-postponed {
+        --status-color: var(--status-postponed);
+      }
+
+      .status-pill,
+      .swatch {
+        background: var(--status-color);
+      }
+
+      .subcomponents {
+        white-space: normal;
+        line-height: 1.35;
+      }
+
+      .note {
+        color: var(--muted);
+        max-width: 270px;
+      }
+
+      .legend {
+        margin-top: 12px;
+        color: var(--muted);
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+        font-size: 0.9rem;
+      }
+
+      .legend span {
+        display: inline-flex;
+        gap: 6px;
+        align-items: center;
+      }
+
+      .swatch {
+        width: 11px;
+        height: 11px;
+        border-radius: 999px;
+      }
+
+      .small-note {
+        margin: 14px 0 0;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      @media (max-width: 900px) {
+        .summary {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .container {
+          overflow-x: auto;
+        }
+      }
+    
+      </style>
+
+    <main class="page">
+      <header>
+        <h1>Homepage Wireframe Progress Tracker</h1>
+        <p class="subtle">Generated/updated: <strong>June 3, 2026</strong></p>
+      </header>
+
+      <section class="summary" aria-label="Progress summary">
+        <article class="card">
+          <h2>Total sections</h2>
+          <p id="total-count">12</p>
+        </article>
+        <article class="card">
+          <h2>Completed</h2>
+          <p id="completed-count">1</p>
+        </article>
+        <article class="card">
+          <h2>In progress</h2>
+          <p id="inprogress-count">0</p>
+        </article>
+        <article class="card">
+          <h2>Postponed</h2>
+          <p id="postponed-count">0</p>
+        </article>
+        <article class="card">
+          <h2>Not started</h2>
+          <p id="notstarted-count">11</p>
+        </article>
+      </section>
+
+      <section class="container">
+        <p class="intro">
+          This tracker is derived from the Homepage wireframe and keeps the active list top-to-bottom by visible section order.
+        </p>
+
+        <table id="tracker-table">
+          <thead>
+            <tr>
+              <th style="width: 55px;">Order</th>
+              <th>Homepage Section</th>
+              <th style="width: 180px;">Status</th>
+              <th style="width: 100px;">Priority</th>
+              <th>Details / Subcomponents</th>
+              <th>Notes / Next Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Header / Navigation</td>
+              <td><span class="status-pill status-completed">Completed</span></td>
+              <td>High</td>
+              <td class="subcomponents">logo, navigation links, utility controls</td>
+              <td class="note">Header is tracked as done per current implementation baseline.</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Homepage Hero</td>
+              <td><span class="status-pill status-not-started">Not started</span></td>
+              <td>High</td>
+              <td class="subcomponents">main hero media, headline stack, CTA links, visual hierarchy</td>
+              <td class="note">Prepare hero content and responsive copy structure.</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>Homepage Callout Bar</td>
+              <td><span class="status-pill status-not-started">Not started</span></td>
+              <td>Medium</td>
+              <td class="subcomponents">message band below hero, optional CTA</td>
+              <td class="note">Use the wireframe band behavior and spacing rhythm.</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>Platform Overview Section</td>
+              <td><span class="status-pill status-not-started">Not started</span></td>
+              <td>Medium</td>
+              <td class="subcomponents">overview messaging, value blocks, spacing rhythm</td>
+              <td class="note">Align with approved homepage narrative and tone.</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>Capability / Proof Tiles</td>
+              <td><span class="status-pill status-not-started">Not started</span></td>
+              <td>Medium</td>
+              <td class="subcomponents">tile cards, proof points, iconography, supporting links</td>
+              <td class="note">Keep proof-language concise and section-scoped.</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td>Overview Media Section</td>
+              <td><span class="status-pill status-not-started">Not started</span></td>
+              <td>Medium</td>
+              <td class="subcomponents">feature media area, supporting text, transition behavior</td>
+              <td class="note">Confirm final media source and loading behavior.</td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td>Barista Bot Feature Section</td>
+              <td><span class="status-pill status-not-started">Not started</span></td>
+              <td>High</td>
+              <td class="subcomponents">feature explanation, interface mock, action prompt, proof text</td>
+              <td class="note">Use wireframe order as the final sequence source.</td>
+            </tr>
+            <tr>
+              <td>8</td>
+              <td>Trusted By Logo Strip</td>
+              <td><span class="status-pill status-not-started">Not started</span></td>
+              <td>Low</td>
+              <td class="subcomponents">logo treatments, equal spacing, accessible labeling</td>
+              <td class="note">Keep section lightweight and readable across breakpoints.</td>
+            </tr>
+            <tr>
+              <td>9</td>
+              <td>Featured Content / Blogs &amp; Resources</td>
+              <td><span class="status-pill status-not-started">Not started</span></td>
+              <td>Medium</td>
+              <td class="subcomponents">article cards, section intro, reading links</td>
+              <td class="note">Use editorial snippets for discovery and educational utility.</td>
+            </tr>
+            <tr>
+              <td>10</td>
+              <td>News &amp; Press Section</td>
+              <td><span class="status-pill status-not-started">Not started</span></td>
+              <td>Medium</td>
+              <td class="subcomponents">news cards, publication references, concise source context</td>
+              <td class="note">Keep factual and clear, without transaction-first phrasing.</td>
+            </tr>
+            <tr>
+              <td>11</td>
+              <td>Closing Audience / Resource Tiles</td>
+              <td><span class="status-pill status-not-started">Not started</span></td>
+              <td>Medium</td>
+              <td class="subcomponents">audience pathways, resource cards, final CTA links</td>
+              <td class="note">Concentrate this block on audience-level next steps.</td>
+            </tr>
+            <tr>
+              <td>12</td>
+              <td>Footer with Newsletter Signup</td>
+              <td><span class="status-pill status-not-started">Not started</span></td>
+              <td>Medium</td>
+              <td class="subcomponents">footer links, legal/resource list, newsletter signup module</td>
+              <td class="note">Implement as final section in the homepage stack.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="legend" aria-label="Status legend">
+          <span><span class="swatch status-completed"></span>Completed</span>
+          <span><span class="swatch status-not-started"></span>Not started</span>
+          <span><span class="swatch status-in-progress"></span>In progress</span>
+          <span><span class="swatch status-blocked"></span>Blocked</span>
+          <span><span class="swatch status-postponed"></span>Postponed</span>
+        </div>
+
+        <p class="small-note">
+          This file is intentionally wireframe-only with no deferred or out-of-wireframe tracker items.
+        </p>
+      </section>
+    </main>
+  
+    </template>
+
+    <template id="taskboard-template">
+      <style>
+
+      :host {
+        --font-body: "Work Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, Helvetica, sans-serif;
+        --font-display: "Space Grotesk", "Work Sans", ui-sans-serif, system-ui, sans-serif;
+        --bg: #f6f4ee;
+        --surface: #fffef9;
+        --lane: #ebe7dc;
+        --card: #fffdf6;
+        --ink: #1d1c19;
+        --muted: #666158;
+        --soft: #8a8478;
+        --line: #d7d0c2;
+        --shadow: 0 14px 28px rgba(39, 35, 27, 0.1);
+        --small-shadow: 0 7px 16px rgba(39, 35, 27, 0.09);
+        --todo: #717883;
+        --claimed: #2d5f7d;
+        --review: #9a6517;
+        --done: #2e6c4e;
+        --blocked: #9f3f37;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+:host {
+        margin: 0;
+        min-width: 320px;
+        color: var(--ink);
+        background:
+          linear-gradient(rgba(29, 28, 25, 0.035) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(29, 28, 25, 0.035) 1px, transparent 1px),
+          var(--bg);
+        background-size: 28px 28px;
+        font-family: var(--font-body);
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .page {
+        width: min(1540px, calc(100vw - 32px));
+        margin: 0 auto;
+        padding: 26px 0 40px;
+      }
+
+      .topbar {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: end;
+        gap: 18px;
+        margin-bottom: 18px;
+      }
+
+      .eyebrow {
+        margin: 0 0 8px;
+        color: var(--muted);
+        font-family: var(--font-display);
+        font-size: 0.76rem;
+        font-weight: 760;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 0;
+        font-family: var(--font-display);
+        font-size: clamp(1.7rem, 3vw, 2.7rem);
+        line-height: 1;
+        letter-spacing: 0;
+      }
+
+      .command-strip {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: min(760px, 100%);
+        margin-top: 12px;
+        padding: 9px 11px;
+        overflow-x: auto;
+        border: 1px solid var(--line);
+        border-radius: 7px;
+        background: #1f1f1c;
+        color: #f7f4eb;
+        box-shadow: var(--small-shadow);
+      }
+
+      .command-label {
+        flex: 0 0 auto;
+        color: #bdb7aa;
+        font-size: 0.68rem;
+        font-weight: 800;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+      }
+
+      .command-strip code {
+        flex: 0 0 auto;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: inherit;
+        font-size: 0.82rem;
+        white-space: nowrap;
+      }
+
+      .meta-stack {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .meta-chip,
+      .lane-count {
+        display: inline-flex;
+        align-items: center;
+        width: fit-content;
+        min-height: 24px;
+        border-radius: 999px;
+        border: 1px solid rgba(29, 28, 25, 0.12);
+        font-size: 0.72rem;
+        font-weight: 750;
+        line-height: 1;
+        white-space: nowrap;
+      }
+
+      .meta-chip {
+        padding: 7px 10px;
+        background: rgba(255, 254, 249, 0.8);
+        color: var(--muted);
+      }
+
+      .notice {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        gap: 10px;
+        align-items: start;
+        margin: 0 0 18px;
+        padding: 12px 14px;
+        border: 1px solid var(--line);
+        border-left: 4px solid var(--claimed);
+        border-radius: 8px;
+        background: rgba(255, 254, 249, 0.78);
+        box-shadow: var(--small-shadow);
+      }
+
+      .notice strong {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+      }
+
+      .notice p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.45;
+        font-size: 0.92rem;
+      }
+
+      .board-shell {
+        overflow-x: auto;
+        padding-bottom: 12px;
+      }
+
+      .board {
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: minmax(285px, 1fr);
+        gap: 12px;
+        align-items: start;
+        min-width: 1280px;
+      }
+
+      .lane {
+        min-height: 620px;
+        padding: 10px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(235, 231, 220, 0.92);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+      }
+
+      .lane-header {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 10px;
+        padding: 4px 2px 8px;
+        background: linear-gradient(var(--lane), var(--lane));
+      }
+
+      .lane-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-width: 0;
+      }
+
+      .lane-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--lane-color);
+        box-shadow: 0 0 0 3px rgba(255, 254, 249, 0.7);
+      }
+
+      .lane h2 {
+        margin: 0;
+        font-size: 0.9rem;
+        line-height: 1.2;
+      }
+
+      .lane-count {
+        flex: 0 0 auto;
+        padding: 5px 8px;
+        background: var(--surface);
+        color: var(--muted);
+      }
+
+      .card {
+        position: relative;
+        margin: 0 0 10px;
+        padding: 11px;
+        border: 1px solid rgba(29, 28, 25, 0.13);
+        border-left: 5px solid var(--lane-color);
+        border-radius: 7px;
+        background: var(--card);
+        box-shadow: var(--small-shadow);
+      }
+
+      .card::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto;
+        height: 4px;
+        border-radius: 7px 7px 0 0;
+        background: rgba(255, 255, 255, 0.65);
+        pointer-events: none;
+      }
+
+      .card h3 {
+        margin: 0 0 9px;
+        font-family: var(--font-display);
+        font-size: 0.98rem;
+        line-height: 1.25;
+        letter-spacing: 0;
+      }
+
+      .description {
+        margin: 0 0 9px;
+        color: var(--muted);
+        font-size: 0.82rem;
+        line-height: 1.42;
+      }
+
+      .details {
+        display: grid;
+        gap: 6px;
+        margin: 9px 0;
+        padding: 9px 0;
+        border-top: 1px solid rgba(29, 28, 25, 0.1);
+        border-bottom: 1px solid rgba(29, 28, 25, 0.1);
+      }
+
+      .detail {
+        display: grid;
+        grid-template-columns: 74px minmax(0, 1fr);
+        gap: 8px;
+        font-size: 0.76rem;
+        line-height: 1.35;
+      }
+
+      .details.compact {
+        margin-top: 8px;
+        padding: 8px 0;
+      }
+
+      .detail b {
+        color: var(--soft);
+        font-size: 0.68rem;
+        text-transform: uppercase;
+      }
+
+      code {
+        padding: 1px 4px;
+        border: 1px solid rgba(29, 28, 25, 0.1);
+        border-radius: 4px;
+        background: #f3f0e8;
+        font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+        font-size: 0.74em;
+      }
+
+      .acceptance {
+        margin: 8px 0 0;
+        padding-left: 18px;
+        color: var(--muted);
+        font-size: 0.78rem;
+        line-height: 1.36;
+      }
+
+      .acceptance li + li {
+        margin-top: 3px;
+      }
+
+      .latest {
+        margin: 10px 0 0;
+        padding: 9px;
+        border-radius: 6px;
+        background: rgba(29, 28, 25, 0.045);
+        color: var(--muted);
+        font-size: 0.78rem;
+        line-height: 1.38;
+      }
+
+      .empty-lane {
+        margin: 10px 2px 0;
+        padding: 10px;
+        border: 1px dashed rgba(29, 28, 25, 0.18);
+        border-radius: 7px;
+        background: rgba(255, 254, 249, 0.45);
+        color: var(--muted);
+        font-size: 0.82rem;
+        line-height: 1.4;
+      }
+
+      .lane.todo {
+        --lane-color: var(--todo);
+      }
+
+      .lane.claimed {
+        --lane-color: var(--claimed);
+      }
+
+      .lane.review {
+        --lane-color: var(--review);
+      }
+
+      .lane.done {
+        --lane-color: var(--done);
+      }
+
+      .lane.blocked {
+        --lane-color: var(--blocked);
+      }
+
+      .info-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 14px;
+        margin-top: 18px;
+      }
+
+      .panel {
+        padding: 15px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(255, 254, 249, 0.86);
+        box-shadow: var(--small-shadow);
+      }
+
+      .panel h2 {
+        margin: 0 0 10px;
+        font-size: 1rem;
+      }
+
+      .panel p,
+      .panel li {
+        color: var(--muted);
+        font-size: 0.9rem;
+        line-height: 1.45;
+      }
+
+      .panel p {
+        margin: 0;
+      }
+
+      .panel ol,
+      .panel ul {
+        margin: 0;
+        padding-left: 20px;
+      }
+
+      .panel li + li {
+        margin-top: 6px;
+      }
+
+      .legend-flow {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin: 10px 0 0;
+      }
+
+      .flow-step {
+        padding: 7px 9px;
+        border: 1px solid var(--line);
+        border-radius: 7px;
+        background: #fffdf6;
+        color: var(--ink);
+        font-size: 0.78rem;
+        font-weight: 800;
+      }
+
+      .arrow {
+        color: var(--soft);
+        font-weight: 900;
+      }
+
+      footer {
+        margin-top: 18px;
+        color: var(--muted);
+        font-size: 0.82rem;
+      }
+
+      @media (max-width: 920px) {
+        .topbar {
+          grid-template-columns: 1fr;
+          align-items: start;
+        }
+
+        .meta-stack {
+          justify-content: flex-start;
+        }
+
+        .board {
+          min-width: 0;
+          grid-auto-columns: minmax(278px, 86vw);
+        }
+
+        .lane {
+          min-height: 560px;
+        }
+
+        .info-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 520px) {
+        .page {
+          width: min(100vw - 20px, 1540px);
+          padding-top: 18px;
+        }
+
+        .detail {
+          grid-template-columns: 1fr;
+          gap: 2px;
+        }
+
+        .notice {
+          grid-template-columns: 1fr;
+        }
+      }
+    
+      </style>
+
+    <main class="page">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Artly command center</p>
+          <h1>RC Shopify Taskboard</h1>
+          <div class="command-strip" aria-label="Local Shopify storefront command">
+            <span class="command-label">Local deploy</span>
+            <code>shopify theme dev --path . --environment default --port 9292 --open</code>
+          </div>
+        </div>
+        <div class="meta-stack" aria-label="Board metadata">
+          <span class="meta-chip">Local/static</span>
+          <span class="meta-chip">Updated 2026-06-08</span>
+          <span class="meta-chip">Source: docs/agent-task-board.md</span>
+        </div>
+      </header>
+
+      <section class="notice" aria-label="Workflow note">
+        <strong>Workflow</strong>
+        <p>
+          Conceptually drag cards left to right: To Do, Pending / Claimed, Review, then Done.
+          Move sideways into Blocked when approval, information, or runtime access is missing.
+          The Leader reviews before any card is marked Done.
+        </p>
+      </section>
+
+      <section class="board-shell" aria-label="Trello-style local board lanes">
+        <div class="board">
+          <section class="lane todo" aria-labelledby="todo-title">
+            <div class="lane-header">
+              <div class="lane-title">
+                <span class="lane-dot" aria-hidden="true"></span>
+                <h2 id="todo-title">To Do</h2>
+              </div>
+              <span class="lane-count">5 cards</span>
+            </div>
+
+            <article class="card">
+              <h3>Redesign Homepage First View</h3>
+              <p class="description">Rebuild the first viewport around strong robot/coffee/service media, clear product-first headline, and premium commercial credibility.</p>
+              <div class="details compact">
+                <div class="detail">
+                  <b>Files</b>
+                  <span><code>templates/index.json</code>, hero/header sections, approved media assets</span>
+                </div>
+              </div>
+              <ul class="acceptance">
+                <li>First viewport passes the five-second test.</li>
+                <li>Visitors understand Artly is a real robotic coffee system for commercial spaces.</li>
+              </ul>
+              <p class="latest">Latest update: Current hero uses generic illustration art and does not immediately prove a real robotic coffee system.</p>
+            </article>
+
+            <article class="card">
+              <h3>Replace Placeholder Illustration With Real Artly Media</h3>
+              <p class="description">Swap generic illustrated scenery and tiny placeholder thumbnails for approved robot, coffee, deployment, or product media.</p>
+              <div class="details compact">
+                <div class="detail">
+                  <b>Files</b>
+                  <span>Shopify files/media, <code>templates/index.json</code>, homepage media settings</span>
+                </div>
+              </div>
+              <ul class="acceptance">
+                <li>Each major section uses real Artly media or a documented approved placeholder.</li>
+                <li>No generic AI art, scenic filler, or empty thumbnail boxes remain.</li>
+              </ul>
+              <p class="latest">Latest update: Browser inspection found no real image elements and multiple placeholder/illustration treatments carrying the page.</p>
+            </article>
+
+            <article class="card">
+              <h3>Redesign Capability Proof Cards</h3>
+              <p class="description">Rework the proof tiles into a credible robotics proof system instead of generic outlined cards with mismatched icons and unsupported stats.</p>
+              <div class="details compact">
+                <div class="detail">
+                  <b>Files</b>
+                  <span><code>sections/capability-proof-tiles.liquid</code>, <code>blocks/capability-proof-tile.liquid</code>, proof copy/assets</span>
+                </div>
+              </div>
+              <ul class="acceptance">
+                <li>Show concrete deployment evidence, consistent icon/media language, and substantiated metrics.</li>
+                <li>Cards have polished responsive spacing and hierarchy.</li>
+              </ul>
+              <p class="latest">Latest update: Live inspection shows generic card boxes, weak icon language, and stats that need evidence/context.</p>
+            </article>
+
+            <article class="card">
+              <h3>Redesign Trust, Resources, and Press Modules</h3>
+              <p class="description">Replace placeholder logos and generic article cards with a designed credibility system.</p>
+              <div class="details compact">
+                <div class="detail">
+                  <b>Files</b>
+                  <span><code>sections/trusted-by-logo-strip.liquid</code>, <code>sections/featured-content-resources.liquid</code>, <code>sections/news-and-press.liquid</code>, related blocks/assets</span>
+                </div>
+              </div>
+              <ul class="acceptance">
+                <li>Use approved logos, real thumbnails or intentional editorial layout, and consistent card sizing.</li>
+                <li>Press/resource metadata feels credible and readable.</li>
+              </ul>
+              <p class="latest">Latest update: Current view shows "Trusted Brand" placeholders, faint thumbnail boxes, and oversized text cards.</p>
+            </article>
+
+            <article class="card">
+              <h3>Redesign Footer and Lead Capture</h3>
+              <p class="description">Bring the footer into the new Artly style and make the newsletter/contact area feel intentional.</p>
+              <div class="details compact">
+                <div class="detail">
+                  <b>Files</b>
+                  <span><code>sections/footer-group.json</code>, footer sections/snippets, newsletter form settings</span>
+                </div>
+              </div>
+              <ul class="acceptance">
+                <li>Footer supports Company, Solutions, Resources, contact/demo paths, and clean newsletter styling.</li>
+                <li>No leftover starter-theme or commerce language remains.</li>
+              </ul>
+              <p class="latest">Latest update: Current footer is closer than the body but still reads like a large starter-theme block with weak navigation detail.</p>
+            </article>
+
+          </section>
+
+          <section class="lane claimed" aria-labelledby="claimed-title">
+            <div class="lane-header">
+              <div class="lane-title">
+                <span class="lane-dot" aria-hidden="true"></span>
+                <h2 id="claimed-title">Pending / Claimed</h2>
+              </div>
+              <span class="lane-count">0 cards</span>
+            </div>
+
+            <p class="empty-lane">No cards currently claimed.</p>
+          </section>
+
+          <section class="lane review" aria-labelledby="review-title">
+            <div class="lane-header">
+              <div class="lane-title">
+                <span class="lane-dot" aria-hidden="true"></span>
+                <h2 id="review-title">Review</h2>
+              </div>
+              <span class="lane-count">5 cards</span>
+            </div>
+
+            <article class="card">
+              <h3>Define New Artly Site Style System</h3>
+              <p class="description">Create a complete visual direction for the site instead of patching the current weak styling.</p>
+              <div class="details compact">
+                <div class="detail"><b>Owner</b><span>Artly Style System Worker</span></div>
+                <div class="detail">
+                  <b>Files</b>
+                  <span><code>docs/artly-site-style-system.md</code>, <code>DESIGN_PRINCIPLES.md</code>, <code>docs/artly-homepage-design-principles-and-plan.md</code>, homepage theme sections</span>
+                </div>
+              </div>
+              <ul class="acceptance">
+                <li>Define layout, color, typography, media style, component rules, and examples.</li>
+                <li>Use Precision Hospitality, real robot/coffee media, and premium commercial robotics cues.</li>
+              </ul>
+              <p class="latest">Latest update: Completed style system doc; ready for Leader/Richard review.</p>
+            </article>
+
+            <article class="card">
+              <h3>Create High-Fidelity Homepage Mockup</h3>
+              <p class="description">Produce a visual mockup before touching theme sections so the new site has an approved design target.</p>
+              <div class="details compact">
+                <div class="detail"><b>Owner</b><span>Homepage Mockup Worker</span></div>
+                <div class="detail">
+                  <b>Files</b>
+                  <span><code>docs/artly-homepage-redesign-mockup.html</code>, homepage screenshots, <code>DESIGN_PRINCIPLES.md</code></span>
+                </div>
+              </div>
+              <ul class="acceptance">
+                <li>Show desktop and mobile first view, section rhythm, header, CTAs, media treatment, trust/resources, and footer direction.</li>
+                <li>Use the mockup as the implementation target before Shopify section edits begin.</li>
+              </ul>
+              <p class="latest">Latest update: Completed standalone high-fidelity homepage mockup; ready for Leader/Richard review.</p>
+            </article>
+
+            <article class="card">
+              <h3>Rebuild Header and Navigation Chrome</h3>
+              <p class="description">Replace starter-theme chrome with a premium Artly header that supports the redesign and removes commerce/store noise.</p>
+              <div class="details compact">
+                <div class="detail"><b>Owner</b><span>Header Navigation Worker</span></div>
+                <div class="detail">
+                  <b>Files</b>
+                  <span><code>docs/header-navigation-redesign-plan.md</code>, <code>sections/header-group.json</code>, header snippets/sections</span>
+                </div>
+              </div>
+              <ul class="acceptance">
+                <li>Remove "Welcome to our store", cart/account affordances unless approved, duplicate brand rendering, and generic nav labels.</li>
+                <li>Final navigation matches Artly buyer paths.</li>
+              </ul>
+              <p class="latest">Latest update: Completed header/navigation redesign plan; ready for Leader/Richard review.</p>
+            </article>
+
+            <article class="card">
+              <h3>Collect Real Artly Visual Assets</h3>
+              <p class="description">Identify approved robot, coffee, deployment, logo, press, and resource imagery needed to make the redesign real.</p>
+              <div class="details compact">
+                <div class="detail"><b>Owner</b><span>Visual Asset Audit Worker</span></div>
+                <div class="detail">
+                  <b>Files</b>
+                  <span><code>docs/artly-visual-asset-inventory.md</code>, asset folders, Shopify files/media, homepage section settings</span>
+                </div>
+              </div>
+              <ul class="acceptance">
+                <li>Each major section has an approved visual asset or documented placeholder plan.</li>
+                <li>No generic AI imagery or decorative filler.</li>
+              </ul>
+              <p class="latest">Latest update: Completed visual asset inventory and request list; ready for Leader/Richard review.</p>
+            </article>
+
+            <article class="card">
+              <h3>Rebuild Homepage Section Design Language</h3>
+              <p class="description">Redesign the rest of the homepage so it feels like one coherent premium robotics/service site, not disconnected Shopify blocks.</p>
+              <div class="details compact">
+                <div class="detail"><b>Owner</b><span>Section Language Worker</span></div>
+                <div class="detail">
+                  <b>Files</b>
+                  <span><code>docs/homepage-section-redesign-plan.md</code>, <code>sections/platform-overview.liquid</code>, <code>sections/capability-proof-tiles.liquid</code>, <code>sections/barista-bot-feature.liquid</code>, <code>sections/featured-content-resources.liquid</code>, <code>sections/news-and-press.liquid</code>, <code>sections/closing-audience-resource-tiles.liquid</code></span>
+                </div>
+              </div>
+              <ul class="acceptance">
+                <li>Sections share a unified spacing system, visual rhythm, media treatment, CTA style, and responsive behavior.</li>
+                <li>Design avoids generic AI/SaaS styling and disconnected block composition.</li>
+              </ul>
+              <p class="latest">Latest update: Completed section-by-section redesign plan; ready for Leader/Richard review.</p>
+            </article>
+          </section>
+
+          <section class="lane done" aria-labelledby="done-title">
+            <div class="lane-header">
+              <div class="lane-title">
+                <span class="lane-dot" aria-hidden="true"></span>
+                <h2 id="done-title">Done</h2>
+              </div>
+              <span class="lane-count">3 cards</span>
+            </div>
+
+            <article class="card">
+              <h3>Create Trello-Style Local RC Shopify Taskboard</h3>
+              <p class="description">Built the static local board and simplified the visible cards for Richard's day-to-day use.</p>
+              <div class="details compact">
+                <div class="detail"><b>Owner</b><span>Task Board Visualizer Worker</span></div>
+                <div class="detail">
+                  <b>Files</b>
+                  <span><code>docs/agent-task-board.md</code>, <code>docs/agent-task-board.html</code>, <code>docs/agent-registry.md</code></span>
+                </div>
+              </div>
+              <ul class="acceptance">
+                <li>Five kanban lanes with counts and clean cards.</li>
+                <li>Static local page with inline CSS and no external dependencies.</li>
+                <li>Clear Trello-style workflow language without real Trello integration implied.</li>
+              </ul>
+              <p class="latest">Latest update: Leader reviewed the local Trello-style board; static validation passed and the board is ready for use.</p>
+            </article>
+
+            <article class="card">
+              <h3>README Store Docs Worker</h3>
+              <p class="description">Reworked the README into practical store/theme operator notes.</p>
+              <div class="details compact">
+                <div class="detail"><b>Owner</b><span>README Store Docs Worker</span></div>
+                <div class="detail">
+                  <b>Files</b>
+                  <span><code>README.md</code>, <code>docs/agent-registry.md</code></span>
+                </div>
+              </div>
+              <ul class="acceptance">
+                <li>README is practical for local Shopify theme operation.</li>
+                <li>Store credentials and live publish instructions are excluded.</li>
+              </ul>
+              <p class="latest">Latest update: Completed; registry quality score remains pending Leader review.</p>
+            </article>
+
+            <article class="card">
+              <h3>Recover Shopify Local Preview</h3>
+              <p class="description">Local storefront visual inspection is unblocked after connecting the project to the working Shopify store.</p>
+              <div class="details compact">
+                <div class="detail">
+                  <b>Files</b>
+                  <span><code>shopify.theme.toml</code>, <code>README.md</code>, <code>http://127.0.0.1:9292/</code></span>
+                </div>
+              </div>
+              <ul class="acceptance">
+                <li><code>shopify theme dev --path . --environment default --port 9292 --open</code> starts successfully and connects to <code>kpdtdw-1m.myshopify.com</code>.</li>
+                <li><code>http://127.0.0.1:9292/</code> returns HTTP 200 with a usable storefront page.</li>
+              </ul>
+              <p class="latest">Latest update: 2026-06-08: Connected project to kpdtdw-1m.myshopify.com; local preview is running at http://127.0.0.1:9292/ and returns HTTP 200.</p>
+            </article>
+          </section>
+
+          <section class="lane blocked" aria-labelledby="blocked-title">
+            <div class="lane-header">
+              <div class="lane-title">
+                <span class="lane-dot" aria-hidden="true"></span>
+                <h2 id="blocked-title">Blocked</h2>
+              </div>
+              <span class="lane-count">0 cards</span>
+            </div>
+
+            <p class="empty-lane">No cards currently blocked.</p>
+          </section>
+        </div>
+      </section>
+
+      <section class="info-grid" aria-label="Workflow details">
+        <div class="panel">
+          <h2>Board Legend</h2>
+          <p>
+            This is a Trello-style local board with lane counts, compact cards, brief owner lines
+            only when real agents are involved, and concise files/domains. Treat movement as a
+            manual drag-and-drop-like workflow.
+          </p>
+          <div class="legend-flow" aria-label="Card movement">
+            <span class="flow-step">To Do</span>
+            <span class="arrow">-&gt;</span>
+            <span class="flow-step">Pending / Claimed</span>
+            <span class="arrow">-&gt;</span>
+            <span class="flow-step">Review</span>
+            <span class="arrow">-&gt;</span>
+            <span class="flow-step">Done</span>
+            <span class="arrow">or</span>
+            <span class="flow-step">Blocked</span>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>How to Update This Board</h2>
+          <ol>
+            <li>Claim from To Do only after Leader assignment or clear authorization.</li>
+            <li>Move claimed work to Pending / Claimed and add a real owner/agent line plus compact files/domains.</li>
+            <li>Move completed work to Review with outputs and verification notes.</li>
+            <li>Leader moves reviewed work to Done; workers do not self-approve.</li>
+            <li>Use Blocked for missing approvals, source material, runtime access, or sensitive decisions.</li>
+          </ol>
+        </div>
+      </section>
+
+      <footer>
+        Static HTML. No external CDN dependencies. Source board:
+        <a href="agent-task-board.md">docs/agent-task-board.md</a>. Related historical tracker:
+        <a href="homepage-layout-delivery-whiteboard.md">homepage-layout-delivery-whiteboard.md</a>.
+      </footer>
+    </main>
+  
+    </template>
+
+    <script>
+      (function () {
+        const mount = (hostId, templateId) => {
+          const host = document.getElementById(hostId);
+          const template = document.getElementById(templateId);
+          if (!host || !template || !template.content) {
+            return;
+          }
+          const shadow = host.attachShadow({ mode: 'open' });
+          shadow.appendChild(template.content.cloneNode(true));
+        };
+
+        mount('tracker-host', 'tracker-template');
+        mount('board-host', 'taskboard-template');
+      })();
+    </script>
+  </body>
+</html>

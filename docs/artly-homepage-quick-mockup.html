@@ -4,8 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Artly Homepage Mockup - Physical AI for Commercial Robotics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Work+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
+      --font-body: "Work Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, Helvetica, sans-serif;
+      --font-display: "Space Grotesk", "Work Sans", ui-sans-serif, system-ui, sans-serif;
       --light-blue: #B9DCE5;
       --signal-cyan: #00A8B5;
       --alloy-yellow: #DCD06A;
@@ -29,7 +34,7 @@
     html {
       background: var(--off-white);
       color: var(--navy);
-      font-family: Arial, Helvetica, sans-serif;
+      font-family: var(--font-body);
       scroll-behavior: smooth;
     }
 
@@ -154,6 +159,7 @@
     h2,
     h3 {
       color: var(--navy);
+      font-family: var(--font-display);
       line-height: 1.05;
       letter-spacing: 0;
     }
@@ -184,6 +190,7 @@
       gap: 10px;
       margin: 0 0 18px;
       color: var(--circuit);
+      font-family: var(--font-display);
       font-size: 0.73rem;
       font-weight: 900;
       letter-spacing: 0.12em;
@@ -224,6 +231,7 @@
       padding: 13px 18px;
       color: var(--navy);
       background: var(--paper);
+      font-family: var(--font-display);
       font-weight: 900;
       line-height: 1.1;
       white-space: nowrap;
@@ -1166,11 +1174,11 @@
               <path d="M314 356h36" stroke="#3F6F8F" stroke-width="5" stroke-linecap="square"/>
               <path d="M144 350h392" stroke="#00A8B5" stroke-width="5" stroke-linecap="square"/>
               <rect x="82" y="78" width="112" height="34" rx="6" fill="#18212A" stroke="#B9DCE5" stroke-width="2"/>
-              <text x="138" y="101" text-anchor="middle" fill="#DDECEF" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="900">TASK LEARN</text>
+              <text x="138" y="101" text-anchor="middle" fill="#DDECEF" font-family="'Space Grotesk', 'Work Sans', Arial, sans-serif" font-size="13" font-weight="900">TASK LEARN</text>
               <rect x="500" y="374" width="80" height="22" rx="4" fill="#18212A"/>
               <rect x="510" y="381" width="46" height="8" rx="3" fill="#00A8B5"/>
               <path d="M92 438h496" stroke="#B9DCE5" stroke-width="2" stroke-dasharray="13 9"/>
-              <text x="340" y="476" text-anchor="middle" fill="#DDECEF" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="900">expert teaching + robot motion + service feedback</text>
+              <text x="340" y="476" text-anchor="middle" fill="#DDECEF" font-family="'Space Grotesk', 'Work Sans', Arial, sans-serif" font-size="15" font-weight="900">expert teaching + robot motion + service feedback</text>
             </svg>
           </div>
         </div>
@@ -1241,7 +1249,7 @@
               <rect x="218" y="396" width="94" height="28" rx="6" fill="#18212A"/>
               <rect x="332" y="396" width="94" height="28" rx="6" fill="#18212A"/>
               <rect x="446" y="396" width="94" height="28" rx="6" fill="#18212A"/>
-              <g fill="#DDECEF" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="900">
+              <g fill="#DDECEF" font-family="'Space Grotesk', 'Work Sans', Arial, sans-serif" font-size="11" font-weight="900">
                 <text x="151" y="415" text-anchor="middle">CLEAN</text>
                 <text x="265" y="415" text-anchor="middle">CALIBRATE</text>
                 <text x="379" y="415" text-anchor="middle">SERVE</text>
@@ -1276,21 +1284,21 @@
               <title id="loop-title">Expert input to model improvement loop</title>
               <desc id="loop-desc">A four-stage loop: expert input, robot training, deployment data, and model improvement.</desc>
               <rect x="188" y="160" width="244" height="180" rx="8" fill="#FFFFFF" stroke="#3F6F8F" stroke-width="3"/>
-              <text x="310" y="234" text-anchor="middle" fill="#18212A" font-family="Arial, Helvetica, sans-serif" font-size="27" font-weight="900">Artly AI</text>
-              <text x="310" y="264" text-anchor="middle" fill="#6A7680" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="800">physical training layer</text>
+              <text x="310" y="234" text-anchor="middle" fill="#18212A" font-family="'Space Grotesk', 'Work Sans', Arial, sans-serif" font-size="27" font-weight="900">Artly AI</text>
+              <text x="310" y="264" text-anchor="middle" fill="#6A7680" font-family="'Space Grotesk', 'Work Sans', Arial, sans-serif" font-size="14" font-weight="800">physical training layer</text>
               <g fill="#FFFFFF" stroke="#18212A" stroke-width="3">
                 <rect x="54" y="50" width="170" height="76" rx="8"/>
                 <rect x="396" y="50" width="170" height="76" rx="8"/>
                 <rect x="396" y="374" width="170" height="76" rx="8"/>
                 <rect x="54" y="374" width="170" height="76" rx="8"/>
               </g>
-              <g fill="#18212A" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="900">
+              <g fill="#18212A" font-family="'Space Grotesk', 'Work Sans', Arial, sans-serif" font-size="15" font-weight="900">
                 <text x="139" y="84" text-anchor="middle">Expert input</text>
                 <text x="481" y="84" text-anchor="middle">Robot training</text>
                 <text x="481" y="408" text-anchor="middle">Deployment data</text>
                 <text x="139" y="408" text-anchor="middle">Model improvement</text>
               </g>
-              <g fill="#6A7680" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700">
+              <g fill="#6A7680" font-family="'Space Grotesk', 'Work Sans', Arial, sans-serif" font-size="12" font-weight="700">
                 <text x="139" y="104" text-anchor="middle">task demonstration</text>
                 <text x="481" y="104" text-anchor="middle">sensing and control</text>
                 <text x="481" y="428" text-anchor="middle">field feedback</text>

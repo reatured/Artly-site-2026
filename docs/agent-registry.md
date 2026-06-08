@@ -1386,3 +1386,193 @@
 | Quality score | 4/5 - Passed Leader review; requested homepage copy and metadata were mapped and verified, with callout/resource placeholder copy intentionally left unchanged where no deployable replacement was supplied. |
 | Reuse recommendation | Reuse for narrow mechanical content implementation tasks that require Shopify template/section mapping and validation. |
 | Notes/lessons | Existing resource/news card contents, media assets, alt text, callout-bar text, and unsupported extra microcopy/stat fields were left in place where no concrete replacement copy was supplied. Existing unrelated working-tree changes were preserved. |
+
+### README Store Docs Worker
+
+| Property | Value |
+| --- | --- |
+| Vault ID | PV-W-20260607-001 |
+| Tool agent ID | Codex worker session for this assignment |
+| Nickname | README Store Docs Worker |
+| Role/type | Worker / documentation editor |
+| Spawned by | Leader Agent in `C:\Artly\Artly-site-2026` |
+| Date spawned | 2026-06-07 |
+| Mission | Update the project README so it only contains practical store-related information: Shopify local deployment/opening commands, useful shortcuts, and a concise reference to the project's art style/design/art direction. |
+| Skills/knowledge provided | README editing, Shopify theme CLI workflow inspection, documentation cleanup, Artly design-reference synthesis. |
+| Files or domains touched | `README.md`; `docs/agent-registry.md`; read-only inspection of `shopify.theme.toml`, `DESIGN_PRINCIPLES.md`, `docs/artly-homepage-design-principles-and-plan.md`, `templates/index.json`, and Shopify CLI help output. |
+| Status | Complete |
+| Outputs | Replaced Horizon boilerplate in `README.md` with concise Artly Shopify theme purpose, local preview/open/check commands, safe workflow notes, and art-direction references; appended this registry record. |
+| Quality score | Pending Leader review |
+| Reuse recommendation | Reuse for concise repo-operator documentation cleanup where Shopify theme commands and local design direction need to be made practical for future workers. |
+| Notes/lessons | Keep store credentials, tokens, private preview links, and live publish/delete instructions out of README-level docs; refer to local config and require explicit approval for live or destructive Shopify actions. |
+
+### Task Board Visualizer Worker
+
+| Property | Value |
+| --- | --- |
+| Vault ID | PV-W-20260607-002 |
+| Tool agent ID | Codex worker session for this assignment |
+| Nickname | Task Board Visualizer Worker |
+| Role/type | Worker / documentation + static HTML implementation |
+| Spawned by | Leader Agent in `C:\Artly\Artly-site-2026` |
+| Date spawned | 2026-06-07 |
+| Mission | Create a better Trello-style local visualizer HTML page for the agent task board workflow, with sticky-note kanban lanes and clear sub-agent ownership/progress fields. |
+| Skills/knowledge provided | Documentation structure, static HTML/CSS implementation, local kanban board design, workflow traceability, responsive layout. |
+| Files or domains touched | `docs/agent-task-board.md`, `docs/agent-task-board.html`, `docs/agent-registry.md`; read-only inspection of `docs/homepage-layout-delivery-whiteboard.md`, `docs/homepage-layout-activity-log.md`, and `docs/shopify-frontend-component-progress.html`. |
+| Status | Complete / passed Leader review |
+| Outputs | Added a central Markdown source and a polished static Trello-style local board with To Do, Pending / Claimed, Review, Done, and Blocked lanes; follow-up cleanup simplified visible cards by removing task IDs, priorities, status/category chips, progress bars, Vault IDs, and Tool agent IDs while keeping titles, concise descriptions, compact files/domains, real owner lines, acceptance text, and latest updates. |
+| Quality score | 4/5 - Passed Leader review; Trello-style local board is usable, responsive by code inspection, and includes clear agent-claim workflow. Browser render QA could not be completed because the available Playwright runtime was missing playwright-core. |
+| Reuse recommendation | Reuse for local static workflow visualizers and operational board setup where no external SaaS integration should be implied. |
+| Notes/lessons | Keep the HTML explicitly framed as a local/static Trello-style board; use the registry for detailed IDs and scores, and keep board cards compact enough for Richard to scan quickly. |
+
+### Artly Style System Worker
+
+| Property | Value |
+| --- | --- |
+| Vault ID | PV-W-20260608-001 |
+| Tool agent ID | 019ea82c-c7a2-7341-b9a7-5214a6eb6899 |
+| Nickname | Artly Style System Worker |
+| Role/type | Worker / style system planner |
+| Spawned by | Leader Agent in `C:\Artly\Artly-site-2026` |
+| Date spawned | 2026-06-08 |
+| Mission | Define the new Artly site style system and create `docs/artly-site-style-system.md`. |
+| Skills/knowledge provided | Visual direction, commercial robotics positioning, Shopify homepage design constraints, compact design documentation. |
+| Files or domains touched | Assigned: `docs/artly-site-style-system.md`, `DESIGN_PRINCIPLES.md`, homepage theme sections. |
+| Status | Complete / awaiting Leader review |
+| Outputs | Completed `docs/artly-site-style-system.md`; card moved to Review on `docs/agent-task-board.md` and `docs/agent-task-board.html`. |
+| Quality score | Pending Leader review |
+| Reuse recommendation | Pending review after output is delivered. |
+| Notes/lessons | Keep detailed IDs in registry and compact ownership on the visible taskboard. |
+
+### Homepage Mockup Worker
+
+| Property | Value |
+| --- | --- |
+| Vault ID | PV-W-20260608-002 |
+| Tool agent ID | 019ea82c-db73-79e2-b1cd-a15e7e12727d |
+| Nickname | Homepage Mockup Worker |
+| Role/type | Worker / high-fidelity mockup producer |
+| Spawned by | Leader Agent in `C:\Artly\Artly-site-2026` |
+| Date spawned | 2026-06-08 |
+| Mission | Create the high-fidelity homepage redesign mockup at `docs/artly-homepage-redesign-mockup.html`. |
+| Skills/knowledge provided | Static frontend mockup production, responsive layout, Artly homepage narrative, visual QA readiness. |
+| Files or domains touched | Assigned: `docs/artly-homepage-redesign-mockup.html`, homepage screenshots, `DESIGN_PRINCIPLES.md`. |
+| Status | Complete / awaiting Leader review |
+| Outputs | Completed `docs/artly-homepage-redesign-mockup.html`; card moved to Review on `docs/agent-task-board.md` and `docs/agent-task-board.html`. |
+| Quality score | Pending Leader review |
+| Reuse recommendation | Pending review after output is delivered. |
+| Notes/lessons | Mockup work should establish the visual target before theme section implementation begins. |
+
+### Header Navigation Worker
+
+| Property | Value |
+| --- | --- |
+| Vault ID | PV-W-20260608-003 |
+| Tool agent ID | 019ea82c-ef48-7ec2-8d94-a2c448a56eef |
+| Nickname | Header Navigation Worker |
+| Role/type | Worker / navigation redesign planner |
+| Spawned by | Leader Agent in `C:\Artly\Artly-site-2026` |
+| Date spawned | 2026-06-08 |
+| Mission | Draft the premium Artly header and navigation redesign plan at `docs/header-navigation-redesign-plan.md`. |
+| Skills/knowledge provided | Shopify header architecture, non-commerce navigation design, buyer-path information architecture. |
+| Files or domains touched | Assigned: `docs/header-navigation-redesign-plan.md`, `sections/header-group.json`, header snippets/sections. |
+| Status | Complete / awaiting Leader review |
+| Outputs | Completed `docs/header-navigation-redesign-plan.md`; card moved to Review on `docs/agent-task-board.md` and `docs/agent-task-board.html`. |
+| Quality score | Pending Leader review |
+| Reuse recommendation | Pending review after output is delivered. |
+| Notes/lessons | Header work should remove starter-theme and commerce noise unless explicitly approved. |
+
+### Visual Asset Audit Worker
+
+| Property | Value |
+| --- | --- |
+| Vault ID | PV-W-20260608-004 |
+| Tool agent ID | 019ea82d-0331-7ff0-9331-2dee916555a4 |
+| Nickname | Visual Asset Audit Worker |
+| Role/type | Worker / visual asset inventory specialist |
+| Spawned by | Leader Agent in `C:\Artly\Artly-site-2026` |
+| Date spawned | 2026-06-08 |
+| Mission | Inventory real Artly robot, coffee, deployment, logo, press, and resource imagery in `docs/artly-visual-asset-inventory.md`. |
+| Skills/knowledge provided | Asset audit, media suitability review, homepage image planning, placeholder-risk identification. |
+| Files or domains touched | Assigned: `docs/artly-visual-asset-inventory.md`, asset folders, Shopify files/media, homepage section settings. |
+| Status | Complete / awaiting Leader review |
+| Outputs | Completed `docs/artly-visual-asset-inventory.md`; card moved to Review on `docs/agent-task-board.md` and `docs/agent-task-board.html`. |
+| Quality score | Pending Leader review |
+| Reuse recommendation | Pending review after output is delivered. |
+| Notes/lessons | Redesign should be media-led and avoid generic filler imagery. |
+
+### Section Language Worker
+
+| Property | Value |
+| --- | --- |
+| Vault ID | PV-W-20260608-005 |
+| Tool agent ID | 019ea82d-1708-73c2-ae13-a0d074ad4af3 |
+| Nickname | Section Language Worker |
+| Role/type | Worker / homepage section redesign planner |
+| Spawned by | Leader Agent in `C:\Artly\Artly-site-2026` |
+| Date spawned | 2026-06-08 |
+| Mission | Draft the homepage section redesign plan at `docs/homepage-section-redesign-plan.md`. |
+| Skills/knowledge provided | Homepage section systems, Shopify Liquid section awareness, responsive visual rhythm, commercial robotics content structure. |
+| Files or domains touched | Assigned: `docs/homepage-section-redesign-plan.md`, homepage section Liquid files, related blocks/assets. |
+| Status | Complete / awaiting Leader review |
+| Outputs | Completed `docs/homepage-section-redesign-plan.md`; card moved to Review on `docs/agent-task-board.md` and `docs/agent-task-board.html`. |
+| Quality score | Pending Leader review |
+| Reuse recommendation | Pending review after output is delivered. |
+| Notes/lessons | Section work should unify spacing, media treatment, CTA style, and responsive behavior across the homepage. |
+
+### Redesign Board Recorder
+
+| Property | Value |
+| --- | --- |
+| Vault ID | PV-W-20260608-006 |
+| Tool agent ID | Codex worker session for this assignment |
+| Nickname | Redesign Board Recorder |
+| Role/type | Worker / taskboard recorder |
+| Spawned by | Leader Agent in `C:\Artly\Artly-site-2026` |
+| Date spawned | 2026-06-08 |
+| Mission | Update the RC Shopify Taskboard to show the active parallel redesign workers as claimed. |
+| Skills/knowledge provided | Taskboard editing, registry traceability, Markdown/HTML consistency checking. |
+| Files or domains touched | `docs/agent-task-board.md`, `docs/agent-task-board.html`, `docs/agent-registry.md`. |
+| Status | Complete |
+| Outputs | Moved five redesign cards from To Do to Pending / Claimed in Markdown and HTML; appended active worker registry records. |
+| Quality score | Pending Leader review |
+| Reuse recommendation | Reuse for narrow board-state updates that need Markdown, static HTML, and registry alignment. |
+| Notes/lessons | Keep visible cards compact and store agent IDs in the registry. |
+
+### Merge HTML Docs Worker
+
+| Property | Value |
+| --- | --- |
+| Vault ID | PV-W-20260608-007 |
+| Tool agent ID | 019ea835-e8f8-7240-beed-724e1d98f7e4 |
+| Nickname | Merge HTML Docs Worker |
+| Role/type | Worker / file implementation |
+| Spawned by | Leader Agent |
+| Date spawned | 2026-06-08 |
+| Mission | Merge `docs/shopify-frontend-component-progress.html` and `docs/agent-task-board.html` into one combined HTML doc while preserving useful styling and local functionality. |
+| Skills/knowledge provided | HTML composition, static page composition, non-destructive doc merging, registry traceability. |
+| Files or domains touched | `docs/shopify-agent-task-board-progress.html`; `docs/agent-registry.md`. |
+| Status | Complete |
+| Outputs | `docs/shopify-agent-task-board-progress.html`; `docs/agent-registry.md`. |
+| Quality score | 8/10 - Meets safe one-file merge requirement and keeps source files unchanged; remaining risk is no browser visual verification completed yet. |
+| Reuse recommendation | Reuse the inline shadow DOM template merge pattern when two existing HTML documents need a single operational file without iframe/file dependencies. |
+| Notes/lessons | Kept source artifacts untouched and merged both documents into one self-contained page by inlining full source body/style blocks into isolated `<template>` + shadow DOM hosts. |
+
+### Font Systems Worker
+
+| Property | Value |
+| --- | --- |
+| Vault ID | PV-W-20260608-001 |
+| Tool agent ID | Codex worker session for this assignment |
+| Nickname | Font Systems Worker |
+| Role/type | Worker / implementation specialist |
+| Spawned by | Leader Agent in `C:\Artly\Artly-site-2026` |
+| Date spawned | 2026-06-08 |
+| Mission | Apply the site's font standard everywhere relevant: Work Sans and Space Grotesk across documentation, mockup assets/files, and Shopify site implementation. |
+| Skills/knowledge provided | Shopify theme typography settings, static HTML/CSS font systems, documentation alignment, registry traceability. |
+| Files or domains touched | `config/settings_data.json`; `config/settings_schema.json`; `DESIGN_PRINCIPLES.md`; `README.md`; `docs/artly-site-style-system.md`; homepage mockup and documentation HTML files; `docs/agent-registry.md`. |
+| Status | Complete / awaiting Leader review |
+| Outputs | Shopify current/default font settings now use Work Sans for body/UI and Space Grotesk for heading/accent roles; docs and mockup HTML font stacks aligned; registry trace appended. |
+| Quality score | Pending Leader review |
+| Reuse recommendation | Reuse for future site-wide typography standardization passes where theme settings and static artifacts must stay aligned. |
+| Notes/lessons | Vault ID collision: `PV-W-20260608-001` was already present for Artly Style System Worker, so this record preserves Richard's supplied ID while explicitly documenting the collision instead of overwriting the existing worker record. |
