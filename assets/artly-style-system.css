@@ -848,6 +848,15 @@ body {
   inset: 0;
 }
 
+footer .section > .footer-content,
+footer .section > .utilities {
+  grid-column: 1 / -1;
+  box-sizing: border-box;
+  width: var(--artly-rail-width);
+  max-width: var(--artly-rail-width);
+  margin-inline: auto;
+}
+
 .artly-hero {
   --artly-hero-copy-offset: max(16px, calc((100% - var(--artly-rail-width)) / 2));
   position: relative;
