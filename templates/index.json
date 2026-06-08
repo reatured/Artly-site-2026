@@ -102,7 +102,7 @@
         "secondary_cta_open_in_new_tab": false,
         "secondary_cta_style": "link",
         "media_type": "video",
-        "media_position": "left",
+        "media_position": "right",
         "media_width": "wide",
         "media_height": "60svh",
         "media_alt_text": "Artly robotic workcell demonstrating service automation on a commercial counter",
