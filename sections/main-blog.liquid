@@ -19,91 +19,112 @@
   >
     {% content_for 'blocks' %}
 
-    <div
-      ref="grid"
-      class="blog-posts-container"
-    >
-      {% liquid
-        assign items_on_page = blog.articles.size
-      %}
-      {% for article in blog.articles %}
-        {% liquid
-          # Defaults for compact layout
-          assign col_span = 2
-          assign scale = 0.6
-          assign is_horizontal = false
+    {% liquid
+      assign posts_per_page = section.settings.posts_per_page | default: 6
+    %}
 
-          case items_on_page
-            when 1
-              # Single post: full width hero
-              assign col_span = 6
-              assign scale = 1
-              assign is_horizontal = true
-            when 2
-              # Two posts: both standard side by side
-              assign col_span = 3
-              assign scale = 0.8
-            when 3
-              # Three posts: hero + 2 standard
-              if forloop.index == 1
-                assign col_span = 6
-                assign scale = 1
-                assign is_horizontal = true
-              else
-                assign col_span = 3
-                assign scale = 0.8
-              endif
-            when 4
-              # Four posts: all standard in 2x2 grid
-              assign col_span = 3
-              assign scale = 0.8
-            when 5
-              # Five posts: hero + 4 standard
-              if forloop.index == 1
-                assign col_span = 6
-                assign scale = 1
-                assign is_horizontal = true
-              else
-                assign col_span = 3
-                assign scale = 0.8
-              endif
-            else
-              # 6+ posts: hero, 2 standard, rest compact
-              if forloop.index == 1
-                assign col_span = 6
-                assign scale = 1
-                assign is_horizontal = true
-              elsif forloop.index <= 3
-                assign col_span = 3
-                assign scale = 0.8
-              else
-                assign col_span = 2
-                assign scale = 0.6
-              endif
-          endcase
-        %}
-        {% style %}
-          [data-blog-index="{{ section.id }}-{{ forloop.index }}"] {
-            --col-span: {{ col_span }};
-            --blog-post-card-scale: {{ scale }};
-          }
-
-          @media screen and (max-width: 749px) {
-            [data-blog-index="{{ section.id }}-{{ forloop.index }}"] {
-              --col-span: 6;
-              --blog-post-card-scale: 0.5;
-            }
-          }
-        {% endstyle %}
+    {% paginate blog.articles by posts_per_page %}
+      {% if blog.articles_count > 0 %}
         <div
-          class="blog-post-item{% if is_horizontal %} blog-post-item--horizontal{% endif %}"
-          data-testid="blog-post-item"
-          data-blog-index="{{ section.id }}-{{ forloop.index }}"
+          ref="grid"
+          class="blog-posts-container"
+          data-last-page="{{ paginate.pages }}"
         >
-          {% content_for 'block', id: 'static-blog-post-card', type: '_blog-post-card', article: article %}
+          {% liquid
+            assign items_on_page = blog.articles.size
+          %}
+          {% for article in blog.articles %}
+            {% liquid
+              # Defaults for compact layout
+              assign col_span = 2
+              assign scale = 0.6
+              assign is_horizontal = false
+
+              case items_on_page
+                when 1
+                  # Single post: full width hero
+                  assign col_span = 6
+                  assign scale = 1
+                  assign is_horizontal = true
+                when 2
+                  # Two posts: both standard side by side
+                  assign col_span = 3
+                  assign scale = 0.8
+                when 3
+                  # Three posts: hero + 2 standard
+                  if forloop.index == 1
+                    assign col_span = 6
+                    assign scale = 1
+                    assign is_horizontal = true
+                  else
+                    assign col_span = 3
+                    assign scale = 0.8
+                  endif
+                when 4
+                  # Four posts: all standard in 2x2 grid
+                  assign col_span = 3
+                  assign scale = 0.8
+                when 5
+                  # Five posts: hero + 4 standard
+                  if forloop.index == 1
+                    assign col_span = 6
+                    assign scale = 1
+                    assign is_horizontal = true
+                  else
+                    assign col_span = 3
+                    assign scale = 0.8
+                  endif
+                else
+                  # 6+ posts: hero, 2 standard, rest compact
+                  if forloop.index == 1
+                    assign col_span = 6
+                    assign scale = 1
+                    assign is_horizontal = true
+                  elsif forloop.index <= 3
+                    assign col_span = 3
+                    assign scale = 0.8
+                  else
+                    assign col_span = 2
+                    assign scale = 0.6
+                  endif
+              endcase
+            %}
+            {% style %}
+              [data-blog-index="{{ section.id }}-{{ forloop.index }}"] {
+                --col-span: {{ col_span }};
+                --blog-post-card-scale: {{ scale }};
+              }
+
+              @media screen and (max-width: 749px) {
+                [data-blog-index="{{ section.id }}-{{ forloop.index }}"] {
+                  --col-span: 6;
+                  --blog-post-card-scale: 0.5;
+                }
+              }
+            {% endstyle %}
+            <div
+              id="{{ section.id }}-{{ article.id }}"
+              class="blog-post-item{% if is_horizontal %} blog-post-item--horizontal{% endif %}"
+              data-testid="blog-post-item"
+              data-blog-index="{{ section.id }}-{{ forloop.index }}"
+              data-page="{{ paginate.current_page }}"
+              ref="cards[]"
+            >
+              {% content_for 'block', id: 'static-blog-post-card', type: '_blog-post-card', article: article %}
+            </div>
+          {% endfor %}
         </div>
-      {% endfor %}
-    </div>
+
+        <div class="blog-posts-pagination">
+          {% render 'pagination-controls', paginate: paginate %}
+        </div>
+      {% else %}
+        <div class="blog-posts-empty">
+          <h2 class="h3">No posts yet</h2>
+          <p>Articles published in Shopify will appear here automatically.</p>
+        </div>
+      {% endif %}
+    {% endpaginate %}
   </div>
 </blog-posts-list>
 
@@ -147,6 +168,23 @@
   .blog-post-item:has(.blog-post-card__image-container) {
     border: none;
     padding: 0;
+  }
+
+  .blog-posts-empty {
+    width: 100%;
+    max-width: var(--normal-content-width);
+    margin-inline: auto;
+    padding-block: var(--padding-2xl);
+    text-align: center;
+    color: rgb(var(--color-foreground-rgb) / var(--opacity-subdued-text));
+  }
+
+  .blog-posts-empty h2 {
+    color: var(--color-foreground);
+  }
+
+  .blog-posts-pagination {
+    width: 100%;
   }
 {% endstylesheet %}
 
@@ -194,6 +232,15 @@
       "id": "color_scheme",
       "label": "t:settings.color_scheme",
       "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "posts_per_page",
+      "label": "Posts per page",
+      "min": 1,
+      "max": 24,
+      "step": 1,
+      "default": 6
     },
     {
       "type": "header",

@@ -479,11 +479,11 @@
         "resource_card_4"
       ],
       "settings": {
-        "content_mode": "manual",
+        "content_mode": "blog",
         "section_eyebrow": "Featured Content",
         "section_title": "Blogs & Resources",
         "section_intro": "Read practical notes, how-tos, and updates from the Artly newsroom.",
-        "blog": "",
+        "blog": "shopify://blogs/news",
         "cta_label_default": "Read more",
         "post_limit": 4,
         "layout_type": "grid",
