@@ -16,3 +16,7 @@ Thumbs.db
 
 *.md
 *.html
+
+# Keep the TEAM-WORK operating folder versionable.
+!TEAM-WORK/**/*.md
+!TEAM-WORK/**/*.html

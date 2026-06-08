@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Homepage Wireframe Progress Tracker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Work+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --font-body: "Work Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, Helvetica, sans-serif;
+        --font-display: "Space Grotesk", "Work Sans", ui-sans-serif, system-ui, sans-serif;
+        --bg: #f4f7fb;
+        --card: #ffffff;
+        --line: #d8e1ea;
+        --text: #16233a;
+        --muted: #5e6b84;
+        --status-completed: #0f9d58;
+        --status-not-started: #7a869e;
+        --status-in-progress: #2f67ff;
+        --status-blocked: #d84343;
+        --status-postponed: #6f5f8f;
+        --shadow: 0 8px 24px rgba(18, 38, 74, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: var(--font-body);
+        color: var(--text);
+        background: var(--bg);
+      }
+
+      .page {
+        width: min(1100px, 96vw);
+        margin: 28px auto 40px;
+      }
+
+      header {
+        margin-bottom: 18px;
+      }
+
+      h1 {
+        margin: 0;
+        font-family: var(--font-display);
+        font-size: 1.75rem;
+      }
+
+      p.subtle {
+        margin: 10px 0 0;
+        color: var(--muted);
+      }
+
+      .summary {
+        display: grid;
+        gap: 12px;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        margin: 16px 0 22px;
+      }
+
+      .card {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 14px 16px;
+        box-shadow: var(--shadow);
+      }
+
+      .card h2 {
+        font-family: var(--font-display);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        margin: 0 0 10px;
+        color: var(--muted);
+        font-weight: 600;
+      }
+
+      .card p {
+        margin: 0;
+        font-size: 1.35rem;
+        font-weight: 700;
+      }
+
+      .container {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 16px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+
+      .intro {
+        border-left: 4px solid #2f67ff;
+        padding-left: 12px;
+        margin: 0 0 12px;
+        color: var(--muted);
+      }
+
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        min-width: 780px;
+      }
+
+      thead th {
+        text-align: left;
+        font-size: 0.82rem;
+        color: var(--muted);
+        border-bottom: 2px solid var(--line);
+        padding: 10px 8px;
+      }
+
+      td {
+        padding: 12px 8px;
+        border-bottom: 1px solid var(--line);
+        vertical-align: top;
+      }
+
+      tbody tr:nth-child(even) {
+        background: #f9fbff;
+      }
+
+      .status-pill {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        padding: 5px 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #fff;
+      }
+
+      .status-completed,
+      .status-not-started,
+      .status-in-progress,
+      .status-blocked,
+      .status-postponed {
+        --status-color: var(--muted);
+      }
+
+      .status-completed {
+        --status-color: var(--status-completed);
+      }
+
+      .status-not-started {
+        --status-color: var(--status-not-started);
+      }
+
+      .status-in-progress {
+        --status-color: var(--status-in-progress);
+      }
+
+      .status-blocked {
+        --status-color: var(--status-blocked);
+      }
+
+      .status-postponed {
+        --status-color: var(--status-postponed);
+      }
+
+      .status-pill,
+      .swatch {
+        background: var(--status-color);
+      }
+
+      .subcomponents {
+        white-space: normal;
+        line-height: 1.35;
+      }
+
+      .note {
+        color: var(--muted);
+        max-width: 270px;
+      }
+
+      .legend {
+        margin-top: 12px;
+        color: var(--muted);
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+        font-size: 0.9rem;
+      }
+
+      .legend span {
+        display: inline-flex;
+        gap: 6px;
+        align-items: center;
+      }
+
+      .swatch {
+        width: 11px;
+        height: 11px;
+        border-radius: 999px;
+      }
+
+      .small-note {
+        margin: 14px 0 0;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      @media (max-width: 900px) {
+        .summary {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .container {
+          overflow-x: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <header>
+        <h1>Homepage Wireframe Progress Tracker</h1>
+        <p class="subtle">Generated/updated: <strong>June 3, 2026</strong></p>
+      </header>
+
+      <section class="summary" aria-label="Progress summary">
+        <article class="card">
+          <h2>Total sections</h2>
+          <p id="total-count">12</p>
+        </article>
+        <article class="card">
+          <h2>Completed</h2>
+          <p id="completed-count">1</p>
+        </article>
+        <article class="card">
+          <h2>In progress</h2>
+          <p id="inprogress-count">0</p>
+        </article>
+        <article class="card">
+          <h2>Postponed</h2>
+          <p id="postponed-count">0</p>
+        </article>
+        <article class="card">
+          <h2>Not started</h2>
+          <p id="notstarted-count">11</p>
+        </article>
+      </section>
+
+      <section class="container">
+        <p class="intro">
+          This tracker is derived from the Homepage wireframe and keeps the active list top-to-bottom by visible section order.
+        </p>
+
+        <table id="tracker-table">
+          <thead>
+            <tr>
+              <th style="width: 55px;">Order</th>
+              <th>Homepage Section</th>
+              <th style="width: 180px;">Status</th>
+              <th style="width: 100px;">Priority</th>
+              <th>Details / Subcomponents</th>
+              <th>Notes / Next Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Header / Navigation</td>
+              <td><span class="status-pill status-completed">Completed</span></td>
+              <td>High</td>
+              <td class="subcomponents">logo, navigation links, utility controls</td>
+              <td class="note">Header is tracked as done per current implementation baseline.</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Homepage Hero</td>
+              <td><span class="status-pill status-not-started">Not started</span></td>
+              <td>High</td>
+              <td class="subcomponents">main hero media, headline stack, CTA links, visual hierarchy</td>
+              <td class="note">Prepare hero content and responsive copy structure.</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>Homepage Callout Bar</td>
+              <td><span class="status-pill status-not-started">Not started</span></td>
+              <td>Medium</td>
+              <td class="subcomponents">message band below hero, optional CTA</td>
+              <td class="note">Use the wireframe band behavior and spacing rhythm.</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>Platform Overview Section</td>
+              <td><span class="status-pill status-not-started">Not started</span></td>
+              <td>Medium</td>
+              <td class="subcomponents">overview messaging, value blocks, spacing rhythm</td>
+              <td class="note">Align with approved homepage narrative and tone.</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>Capability / Proof Tiles</td>
+              <td><span class="status-pill status-not-started">Not started</span></td>
+              <td>Medium</td>
+              <td class="subcomponents">tile cards, proof points, iconography, supporting links</td>
+              <td class="note">Keep proof-language concise and section-scoped.</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td>Overview Media Section</td>
+              <td><span class="status-pill status-not-started">Not started</span></td>
+              <td>Medium</td>
+              <td class="subcomponents">feature media area, supporting text, transition behavior</td>
+              <td class="note">Confirm final media source and loading behavior.</td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td>Barista Bot Feature Section</td>
+              <td><span class="status-pill status-not-started">Not started</span></td>
+              <td>High</td>
+              <td class="subcomponents">feature explanation, interface mock, action prompt, proof text</td>
+              <td class="note">Use wireframe order as the final sequence source.</td>
+            </tr>
+            <tr>
+              <td>8</td>
+              <td>Trusted By Logo Strip</td>
+              <td><span class="status-pill status-not-started">Not started</span></td>
+              <td>Low</td>
+              <td class="subcomponents">logo treatments, equal spacing, accessible labeling</td>
+              <td class="note">Keep section lightweight and readable across breakpoints.</td>
+            </tr>
+            <tr>
+              <td>9</td>
+              <td>Featured Content / Blogs &amp; Resources</td>
+              <td><span class="status-pill status-not-started">Not started</span></td>
+              <td>Medium</td>
+              <td class="subcomponents">article cards, section intro, reading links</td>
+              <td class="note">Use editorial snippets for discovery and educational utility.</td>
+            </tr>
+            <tr>
+              <td>10</td>
+              <td>News &amp; Press Section</td>
+              <td><span class="status-pill status-not-started">Not started</span></td>
+              <td>Medium</td>
+              <td class="subcomponents">news cards, publication references, concise source context</td>
+              <td class="note">Keep factual and clear, without transaction-first phrasing.</td>
+            </tr>
+            <tr>
+              <td>11</td>
+              <td>Closing Audience / Resource Tiles</td>
+              <td><span class="status-pill status-not-started">Not started</span></td>
+              <td>Medium</td>
+              <td class="subcomponents">audience pathways, resource cards, final CTA links</td>
+              <td class="note">Concentrate this block on audience-level next steps.</td>
+            </tr>
+            <tr>
+              <td>12</td>
+              <td>Footer with Newsletter Signup</td>
+              <td><span class="status-pill status-not-started">Not started</span></td>
+              <td>Medium</td>
+              <td class="subcomponents">footer links, legal/resource list, newsletter signup module</td>
+              <td class="note">Implement as final section in the homepage stack.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="legend" aria-label="Status legend">
+          <span><span class="swatch status-completed"></span>Completed</span>
+          <span><span class="swatch status-not-started"></span>Not started</span>
+          <span><span class="swatch status-in-progress"></span>In progress</span>
+          <span><span class="swatch status-blocked"></span>Blocked</span>
+          <span><span class="swatch status-postponed"></span>Postponed</span>
+        </div>
+
+        <p class="small-note">
+          This file is intentionally wireframe-only with no deferred or out-of-wireframe tracker items.
+        </p>
+      </section>
+    </main>
+  </body>
+</html>
