@@ -577,7 +577,7 @@
         "press_card_4"
       ],
       "settings": {
-        "content_mode": "manual",
+        "content_mode": "blog",
         "section_eyebrow": "News & Press",
         "section_title": "News & Press",
         "section_intro": "Recent announcements, field updates, and coverage that show how Artly is scaling reliable coffee and service robotics.",
