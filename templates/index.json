@@ -483,7 +483,7 @@
         "section_eyebrow": "Featured Content",
         "section_title": "Blogs & Resources",
         "section_intro": "Read practical notes, how-tos, and updates from the Artly newsroom.",
-        "blog": "shopify://blogs/news",
+        "blog": "articles-1",
         "cta_label_default": "Read more",
         "post_limit": 4,
         "layout_type": "grid",
