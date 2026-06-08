@@ -2,7 +2,10 @@
   assign order = 'logo,menu,localization'
 
   assign rows = 'top' | split: ','
-  assign actions = ''
+  assign search = ''
+  assign drawer_search = ''
+  assign header_height_class = ''
+  assign collapse_header_paddings_class = ''
   assign show_language = false
   assign show_country = false
 
@@ -67,7 +70,6 @@
 
   # Determine transparent background value
   assign top_transparent = false
-  assign bottom_transparent = false
 
   if section.settings.color_scheme_top.settings.background.alpha != 1
     assign top_transparent = true
@@ -80,8 +82,8 @@
 
 {% capture localization_markup %}
   {% liquid
-    assign localization_font = '--menu-localization-font: var(--font-[localization_font]--family); ' | replace: '[localization_font]', section.settings.localization_font
-    assign localization_font_size = '--menu-localization-font-size: [localization_font_size]; ' | replace: '[localization_font_size]', section.settings.localization_font_size
+    assign localization_font = '--menu-localization-font: var(--font-heading--family); '
+    assign localization_font_size = '--menu-localization-font-size: 0.875rem; '
     assign color_shadow = '--color-shadow: rgb(var(--color-foreground-rgb) / var(--opacity-10-25));'
     assign form_style = localization_font | append: localization_font_size | append: color_shadow
   %}
@@ -111,7 +113,7 @@
         {% if show_country %}
           {% if section.settings.country_selector_style == true %}
             {% liquid
-              assign background_brightness = section.settings.color_scheme.settings.background | color_brightness
+              assign background_brightness = section.settings.color_scheme_top.settings.background | color_brightness
               if background_brightness < 64
                 assign shadow_size = 4
               else
@@ -156,7 +158,7 @@
       </button>
 
       <div
-        class="localization-wrapper {{ section.settings.localization_position }}-bound color-{{ settings.popover_color_scheme }}"
+        class="localization-wrapper right-bound color-{{ settings.popover_color_scheme }}"
         hidden
         ref="panel"
       >
@@ -196,7 +198,7 @@
   {% endif %}
   data-skip-node-update
   data-scroll-direction="none"
-  {% if section.settings.menu_row == 'top' and bottom_row_blocks.size > 0 %}
+  {% if bottom_row_blocks.size > 0 %}
     data-submenu-overlap-bottom-row
   {% endif %}
   {% if transparent_color_scheme_value %}
@@ -204,51 +206,44 @@
   {% endif %}
   style="
     --color-scheme-top-row: rgba({{ section.settings.color_scheme_top.settings.background.rgba }});
-    --color-scheme-bottom-row: rgba({{ section.settings.color_scheme_bottom.settings.background.rgba }});
-    {% if section.settings.actions_display_style == 'text' %}
-      --header-actions-font-size: {{ section.settings.actions_font_size | default: '1rem' }};
-      --header-actions-font-family: var(--font-{{ section.settings.actions_font | default: 'heading' }}--family);
-      --header-actions-font-weight: var(--font-{{ section.settings.actions_font | default: 'heading' }}--weight);
-      --header-actions-text-case: {{ section.settings.actions_text_case | default: 'none' }};
-    {% endif %}
+    --color-scheme-bottom-row: rgba({{ section.settings.color_scheme_top.settings.background.rgba }});
+    --artly-header-ink: {{ section.settings.color_scheme_top.settings.foreground }};
+    --artly-header-muted: {{ section.settings.color_scheme_top.settings.foreground | color_modify: 'alpha', 0.6 }};
+    --artly-header-line: {{ section.settings.color_scheme_top.settings.border | default: section.settings.color_scheme_top.settings.foreground | color_modify: 'alpha', 0.18 }};
+    --artly-header-glass: {{ section.settings.color_scheme_top.settings.background | color_modify: 'alpha', 0.72 }};
+    --artly-header-shell: {{ section.settings.color_scheme_top.settings.background | color_modify: 'alpha', 0.78 }};
+    --artly-header-hover-bg: {{ section.settings.color_scheme_top.settings.background | color_modify: 'alpha', 0.88 }};
+    --artly-header-hover-border: {{ section.settings.color_scheme_top.settings.foreground | color_modify: 'alpha', 0.3 }};
+    --artly-header-surface: {{ section.settings.color_scheme_top.settings.foreground | color_modify: 'alpha', 0.08 }};
+    --artly-header-shadow: {{ section.settings.color_scheme_top.settings.foreground | color_modify: 'alpha', 0.12 }};
+    --artly-header-shimmer: {{ section.settings.color_scheme_top.settings.background | color_modify: 'alpha', 0.65 }};
+    --artly-header-stripe: {{ section.settings.color_scheme_top.settings.foreground | color_modify: 'alpha', 0.1 }};
+    --artly-header-base: {{ section.settings.color_scheme_top.settings.background | color_modify: 'alpha', 0.55 }};
   "
 >
-  <div class="header__underlay header__underlay-closed"></div>
-  <div
-    class="header__underlay header__underlay-open"
-  ></div>
   {%- if request.page_type == 'index' -%}
     <h1 class="visually-hidden">{{ shop.name }}</h1>
   {%- endif -%}
   {% for row in rows %}
     {% liquid
-      assign scheme = 'color_scheme_' | append: row
-      assign class = 'header__row header__row--[row] color-[row_scheme] section section--full-width-margin section--[section-width]' | replace: '[row]', row | replace: '[row_scheme]', section.settings[scheme] | replace: '[section-width]', section.settings.section_width
+      assign class = 'header__row header__row--[row] color-[row_scheme] section section--full-width-margin section--page-width' | replace: '[row]', row | replace: '[row_scheme]', section.settings.color_scheme_top
 
       case row
         when 'top'
           assign first = drawer_menu
 
-          if bottom_row_blocks.size > 0 and section.settings.divider_size == 'page-width'
-            assign class = class | append: ' divider--page-width'
-          endif
-
           if bottom_row_blocks.size > 0
-            assign border_bottom_setting_id = 'divider_width'
-          else
-            assign border_bottom_setting_id = 'border_width'
+            assign class = class | append: ' divider--page-width'
           endif
         when 'bottom'
           assign first = ''
           assign class = class | append: ' mobile:hidden'
-
-          assign border_bottom_setting_id = 'border_width'
       endcase
 
-      assign style = '--border-bottom-width: [width]px; ' | replace: '[width]', section.settings[border_bottom_setting_id]
+      assign style = '--border-bottom-width: 0px; '
 
       if row == 'top'
-        assign style = style | append: '--border-bottom-width-mobile: [width]px; ' | replace: '[width]', section.settings.border_width
+        assign style = style | append: '--border-bottom-width-mobile: 0px; '
       endif
     %}
 
@@ -260,7 +255,6 @@
         first: first,
         logo: logo,
         menu: menu,
-        actions: actions,
         localization: localization_markup,
         search: search,
         drawer_search: drawer_search
@@ -271,7 +265,9 @@
     {% if content != blank %}
       <div
         class="{{ class | strip }}"
-        ref="headerRowTop"
+        {% if row == 'top' %}
+          ref="headerRowTop"
+        {% endif %}
         {%- if style != blank -%}
           style="{{ style | strip }}"
         {%- endif -%}
@@ -284,7 +280,7 @@
   {% endfor %}
 
   {% if navigation_bar != blank %}
-    <div class="header__row header__navigation-bar-row color-{{ section.settings.color_scheme_bottom }}">
+    <div class="header__row header__navigation-bar-row color-{{ section.settings.color_scheme_top }}">
       {{ navigation_bar }}
     </div>
   {% endif %}
@@ -347,8 +343,6 @@
     --header-content-transition-timing: calc(var(--submenu-animation-speed) - var(--animation-speed-fast))
       var(--animation-speed-fast) var(--ease-out-cubic);
 
-    --closed-underlay-height: 0px;
-
     /* used to display the appropriate logo based on transparency state */
     --header-logo-display: none;
     --header-logo-inverse-display: block;
@@ -370,7 +364,6 @@
       --color-background-rgb: inherit;
       --color-border: inherit;
       --color-border-rgb: inherit;
-      --closed-underlay-height: 100%;
     }
 
     /** For transparent header, apply inherit to rows when menu is not hovered */
@@ -468,86 +461,13 @@
     opacity: 0;
   }
 
-  /* ================================
-     * Underlays
-     * ================================ */
-  .header__underlay {
-    position: absolute;
-    inset: 0;
-  }
-
-  .header__underlay-closed {
-    height: var(--closed-underlay-height, 100%);
-    z-index: var(--layer-lowest);
-    background: linear-gradient(
-      var(--color-scheme-top-row) 0 var(--top-row-height),
-      var(--color-scheme-bottom-row) var(--top-row-height) var(--header-height)
-    );
-    transition: height var(--animation-speed-slow) var(--ease-out-cubic);
-  }
-
-  .header__underlay-open {
-    height: var(--full-open-header-height);
-    background: linear-gradient(
-      var(--color-scheme-top-row) 0 var(--top-row-height),
-      var(--color-scheme-bottom-row) var(--top-row-height) var(--header-height),
-      var(--color-submenu) var(--header-height) 100%
-    );
-    /* header-height is updated via js, the transition works automagically */
-    transition: height var(--submenu-animation-speed) var(--ease-out-cubic);
-  }
-
-  .header__underlay-open::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    box-shadow: var(--shadow-popover);
-    clip-path: inset(var(--header-height) 0 -100px 0); /* stylelint-disable-line */
-    transition: height var(--submenu-animation-speed) var(--ease-out-cubic);
-  }
-
-  /* When top row has transparent background, make underlay inherit colors from header component */
-  [data-transparent-color-scheme='top']:hover,
-  [data-transparent-color-scheme='top']:focus-within,
-  [data-transparent-color-scheme='both']:hover,
-  [data-transparent-color-scheme='both']:focus-within {
-    :is(.header__underlay-open, .header__underlay-closed) {
-      --color-scheme-top-row: var(--color-background);
-    }
-  }
-
-  /* When bottom row has transparent background, make underlay inherit colors from header component */
-  [data-transparent-color-scheme='bottom']:hover,
-  [data-transparent-color-scheme='bottom']:focus-within,
-  [data-transparent-color-scheme='both']:hover,
-  [data-transparent-color-scheme='both']:focus-within {
-    :is(.header__underlay-open, .header__underlay-closed) {
-      --color-scheme-bottom-row: var(--color-background);
-    }
-  }
-
-  [data-submenu-overlap-bottom-row] {
-    .header__underlay-open {
-      background: linear-gradient(
-        var(--color-scheme-top-row) 0 var(--top-row-height),
-        var(--color-submenu) var(--top-row-height) 100%
-      );
-    }
-
-    .header__row--bottom {
-      z-index: var(--layer-lowest);
-    }
-  }
-
-  /* End Underlays ================ */
-
   .header__row {
     /* The account component uses a different color scheme, but we need to override it to inherit the color of the header row */
     --color-account-icon: var(--color-foreground);
 
     position: relative;
 
-    /* Overwrite color from color scheme, background is controlled by the underlays */
+    /* Background is transparent */
     background-color: transparent;
 
     &:has(.mega-menu__list:hover),
@@ -738,13 +658,10 @@
 
   /* Check for hover support to avoid unnecessary expensive recalculations when tapping on mobile */
   @media (hover: hover) {
-    /* Column-specific dimming effect when any interactive element is hovered
-        Multiple selectors for performance: each simple :has() check is faster than one complex selector with multiple conditions */
+    /* Column-specific dimming effect when any interactive element is hovered */
     .header__column:has(header-menu:hover),
-    .header__column:has(.header-actions__action:hover),
     .header__column:has(.header__icon--menu:hover) {
       header-menu:not(:hover),
-      .header-actions__action:not(:hover),
       .header__icon--menu:not(:hover) {
         opacity: var(--opacity-subdued-text);
         transition: opacity var(--animation-speed) var(--animation-easing);
@@ -753,10 +670,8 @@
   }
 
   .header__column:has(header-menu:focus-within),
-  .header__column:has(.header-actions__action:focus-visible),
   .header__column:has(.header__icon--menu:focus-visible) {
     header-menu:not(:focus-within),
-    .header-actions__action:not(:focus-visible),
     .header__icon--menu:not(:focus-visible) {
       opacity: var(--opacity-subdued-text);
     }
@@ -764,45 +679,8 @@
 
   /* Ensure smooth transitions for all interactive elements */
   header-menu,
-  .header-actions__action,
   .header__icon--menu {
     transition: opacity var(--animation-speed) var(--animation-easing);
-  }
-
-  /* Header action button styles */
-  .header-actions__action {
-    --button-color: var(--color-foreground);
-    color: var(--button-color);
-    cursor: pointer;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    min-height: var(--header-action-hit-area);
-    min-width: var(--header-action-hit-area);
-    padding: 0 var(--padding-sm);
-    border-radius: var(--style-border-radius-buttons-primary);
-    transition:
-      opacity var(--animation-speed) var(--animation-easing),
-      background-color var(--animation-speed) var(--animation-easing);
-
-    &:focus-visible {
-      background-color: rgb(var(--color-foreground-rgb) / var(--opacity-10));
-    }
-
-    &:hover {
-      --button-color: var(--color-foreground);
-      background-color: rgb(var(--color-foreground-rgb) / var(--opacity-5));
-    }
-  }
-
-  .header-actions__action:not(.account-button) .svg-wrapper {
-    height: var(--button-size);
-    width: var(--button-size);
-  }
-
-  .header-actions__action:not(.account-button) svg {
-    width: var(--icon-size-md);
-    height: var(--icon-size-md);
   }
 
   .header:has(#Details-menu-drawer-container[open]) {
@@ -1044,30 +922,6 @@
   "settings": [
     {
       "type": "header",
-      "content": "t:content.logo"
-    },
-    {
-      "type": "select",
-      "id": "logo_position",
-      "label": "t:settings.position",
-      "options": [
-        {
-          "value": "left",
-          "label": "t:options.left"
-        },
-        {
-          "value": "center",
-          "label": "t:options.center"
-        },
-        {
-          "value": "right",
-          "label": "t:options.right"
-        }
-      ],
-      "default": "center"
-    },
-    {
-      "type": "header",
       "content": "t:content.menu"
     },
     {
@@ -1080,31 +934,11 @@
           "label": "t:options.left"
         },
         {
-          "value": "center",
-          "label": "t:options.center"
-        },
-        {
           "value": "right",
           "label": "t:options.right"
         }
       ],
       "default": "right"
-    },
-    {
-      "type": "select",
-      "id": "menu_row",
-      "label": "t:settings.row",
-      "options": [
-        {
-          "value": "top",
-          "label": "t:options.top"
-        },
-        {
-          "value": "bottom",
-          "label": "t:options.bottom"
-        }
-      ],
-      "default": "top"
     },
     {
       "type": "header",
@@ -1122,362 +956,19 @@
     },
     {
       "type": "header",
-      "content": "t:content.search"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_search",
-      "label": "t:settings.search_icon",
-      "default": false
-    },
-    {
-      "type": "select",
-      "id": "search_position",
-      "label": "t:settings.search_position",
-      "options": [
-        {
-          "value": "left",
-          "label": "t:options.left"
-        },
-        {
-          "value": "right",
-          "label": "t:options.right"
-        }
-      ],
-      "default": "right",
-      "visible_if": "{{ section.settings.show_search }}"
-    },
-    {
-      "type": "select",
-      "id": "search_row",
-      "label": "t:settings.search_row",
-      "options": [
-        {
-          "value": "top",
-          "label": "t:options.top"
-        },
-        {
-          "value": "bottom",
-          "label": "t:options.bottom"
-        }
-      ],
-      "default": "top",
-      "visible_if": "{{ section.settings.show_search }}"
-    },
-    {
-      "type": "header",
-      "content": "t:content.localization"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_country",
-      "label": "t:settings.country_region",
-      "info": "t:info.manage_countries_regions",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "country_selector_style",
-      "label": "t:settings.flag",
-      "default": true,
-      "visible_if": "{{ section.settings.show_country }}"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_language",
-      "label": "t:settings.language_selector",
-      "info": "t:info.manage_languages",
-      "default": true
-    },
-    {
-      "type": "select",
-      "id": "localization_font",
-      "label": "t:settings.font",
-      "options": [
-        {
-          "value": "heading",
-          "label": "t:options.heading"
-        },
-        {
-          "value": "subheading",
-          "label": "t:options.subheading"
-        },
-        {
-          "value": "body",
-          "label": "t:options.body"
-        },
-        {
-          "value": "accent",
-          "label": "t:options.accent"
-        }
-      ],
-      "default": "heading",
-      "visible_if": "{{ section.settings.show_country or section.settings.show_language }}"
-    },
-    {
-      "type": "select",
-      "id": "localization_font_size",
-      "label": "t:settings.size",
-      "options": [
-        {
-          "value": "0.625rem",
-          "label": "10px"
-        },
-        {
-          "value": "0.75rem",
-          "label": "12px"
-        },
-        {
-          "value": "0.875rem",
-          "label": "14px"
-        },
-        {
-          "value": "1rem",
-          "label": "16px"
-        },
-        {
-          "value": "1.125rem",
-          "label": "18px"
-        }
-      ],
-      "default": "1rem"
-    },
-    {
-      "type": "select",
-      "id": "localization_position",
-      "label": "t:settings.position",
-      "options": [
-        {
-          "value": "left",
-          "label": "t:options.left"
-        },
-        {
-          "value": "right",
-          "label": "t:options.right"
-        }
-      ],
-      "default": "right",
-      "visible_if": "{{ section.settings.show_country or section.settings.show_language }}"
-    },
-    {
-      "type": "select",
-      "id": "localization_row",
-      "label": "t:settings.row",
-      "options": [
-        {
-          "value": "top",
-          "label": "t:options.top"
-        },
-        {
-          "value": "bottom",
-          "label": "t:options.bottom"
-        }
-      ],
-      "default": "top",
-      "visible_if": "{{ section.settings.show_country or section.settings.show_language }}"
-    },
-    {
-      "type": "header",
-      "content": "t:content.appearance"
-    },
-    {
-      "type": "select",
-      "id": "section_width",
-      "label": "t:settings.width",
-      "options": [
-        {
-          "value": "page-width",
-          "label": "t:options.page"
-        },
-        {
-          "value": "full-width",
-          "label": "t:options.full"
-        }
-      ]
-    },
-    {
-      "type": "select",
-      "id": "section_height",
-      "label": "t:settings.height",
-      "options": [
-        {
-          "value": "compact",
-          "label": "t:options.compact"
-        },
-        {
-          "value": "standard",
-          "label": "t:options.standard"
-        }
-      ],
-      "default": "standard"
-    },
-    {
-      "type": "select",
-      "id": "enable_sticky_header",
-      "label": "t:settings.sticky_header",
-      "options": [
-        {
-          "value": "always",
-          "label": "t:options.always"
-        },
-        {
-          "value": "scroll-up",
-          "label": "t:options.on_scroll_up"
-        },
-        {
-          "value": "never",
-          "label": "t:options.never"
-        }
-      ],
-      "default": "always"
-    },
-    {
-      "type": "range",
-      "id": "divider_width",
-      "label": "t:settings.divider_thickness",
-      "min": 0,
-      "max": 5,
-      "step": 0.5,
-      "unit": "px",
-      "default": 0,
-      "visible_if": "{{ section.settings.menu_row == 'bottom' or section.settings.localization_row == 'bottom' or section.settings.search_row == 'bottom' }}"
-    },
-    {
-      "type": "select",
-      "id": "divider_size",
-      "label": "t:settings.divider_width",
-      "options": [
-        {
-          "value": "page-width",
-          "label": "t:options.page"
-        },
-        {
-          "value": "full-width",
-          "label": "t:options.full"
-        }
-      ],
-      "visible_if": "{{ section.settings.divider_width > 0 and section.settings.menu_row == 'bottom' or section.settings.localization_row == 'bottom' or section.settings.search_row == 'bottom' }}"
-    },
-    {
-      "type": "range",
-      "id": "border_width",
-      "label": "t:settings.border_width",
-      "min": 0,
-      "max": 5,
-      "step": 0.5,
-      "unit": "px",
-      "default": 0
-    },
-    {
-      "type": "header",
-      "content": "t:content.utilities"
-    },
-    {
-      "type": "select",
-      "id": "actions_display_style",
-      "label": "t:settings.actions_display_style",
-      "info": "t:info.actions_display_style",
-      "options": [
-        {
-          "value": "icon",
-          "label": "t:options.icons"
-        },
-        {
-          "value": "text",
-          "label": "t:options.text"
-        }
-      ],
-      "default": "icon"
-    },
-    {
-      "type": "select",
-      "id": "actions_font_size",
-      "label": "t:settings.size",
-      "options": [
-        {
-          "value": "0.75rem",
-          "label": "12px"
-        },
-        {
-          "value": "0.875rem",
-          "label": "14px"
-        },
-        {
-          "value": "1rem",
-          "label": "16px"
-        },
-        {
-          "value": "1.125rem",
-          "label": "18px"
-        }
-      ],
-      "default": "0.875rem",
-      "visible_if": "{{ section.settings.actions_display_style == 'text' }}"
-    },
-    {
-      "type": "select",
-      "id": "actions_font",
-      "label": "t:settings.font",
-      "options": [
-        {
-          "value": "heading",
-          "label": "t:options.heading"
-        },
-        {
-          "value": "subheading",
-          "label": "t:options.subheading"
-        },
-        {
-          "value": "body",
-          "label": "t:options.body"
-        },
-        {
-          "value": "accent",
-          "label": "t:options.accent"
-        }
-      ],
-      "default": "body",
-      "visible_if": "{{ section.settings.actions_display_style == 'text' }}"
-    },
-    {
-      "type": "select",
-      "id": "actions_text_case",
-      "label": "t:settings.case",
-      "options": [
-        {
-          "value": "none",
-          "label": "t:options.default"
-        },
-        {
-          "value": "uppercase",
-          "label": "t:options.uppercase"
-        }
-      ],
-      "default": "none",
-      "visible_if": "{{ section.settings.actions_display_style == 'text' }}"
-    },
-    {
-      "type": "header",
       "content": "t:content.colors"
     },
     {
       "type": "color_scheme",
       "id": "color_scheme_top",
       "label": "t:settings.default",
-      "default": "primary"
-    },
-    {
-      "type": "color_scheme",
-      "id": "color_scheme_bottom",
-      "label": "t:settings.bottom_row",
-      "default": "primary",
-      "visible_if": "{{ section.settings.menu_row == 'bottom' or section.settings.localization_row == 'bottom' or section.settings.search_row == 'bottom' }}"
+      "default": "scheme-4"
     },
     {
       "type": "color_scheme",
       "id": "color_scheme_transparent",
       "label": "t:settings.inverse",
-      "default": "primary",
+      "default": "scheme-4",
       "visible_if": "{{ section.settings.enable_transparent_header_home or section.settings.enable_transparent_header_product or section.settings.enable_transparent_header_collection }}"
     },
     {

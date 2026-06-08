@@ -56,9 +56,8 @@
       assign menu_content_type = block_settings.menu_style | default: 'text'
       assign image_border_radius = block_settings.image_border_radius
       assign color_scheme_classes = ''
-      assign color_scheme_setting_id = 'color_scheme_' | append: section.settings.menu_row
       assign current_color_scheme = block_settings.color_scheme
-      assign parent_color_scheme = section.settings[color_scheme_setting_id]
+      assign parent_color_scheme = section.settings.color_scheme_top
 
       if parent_color_scheme.id != current_color_scheme.id
         assign color_scheme_classes = ' color-' | append: current_color_scheme
@@ -110,7 +109,7 @@
                 style="{% render 'submenu-font-styles', settings: block_settings %}"
               >
                 {% assign list_id = 'MegaMenuList-' | append: forloop.index %}
-                <div class="mega-menu section section--full-width-margin section--{{ section.settings.section_width }}">
+                <div class="mega-menu section section--full-width-margin section--page-width">
                   <div
                     class="mega-menu__grid"
                     data-menu-grid-id="{{ list_id }}"
@@ -180,11 +179,6 @@
     </header-menu>
 {% endcase %}
 
-{% style %}
-  .header__underlay {
-    --color-submenu: rgb({{ block_settings.color_scheme.settings.background.rgba }});
-  }
-{% endstyle %}
 {% stylesheet %}
   .header__drawer {
     --header-drawer-min-height: 60px;
@@ -696,7 +690,7 @@
       "type": "color_scheme",
       "id": "color_scheme",
       "label": "t:settings.color_scheme",
-      "default": "primary"
+      "default": "scheme-4"
     },
     {
       "type": "header",
@@ -885,7 +879,7 @@
       "type": "color_scheme",
       "id": "color_scheme_navigation_bar",
       "label": "t:settings.navigation_bar_color_scheme",
-      "default": "primary",
+      "default": "scheme-4",
       "visible_if": "{{ block.settings.navigation_bar }}"
     },
     {

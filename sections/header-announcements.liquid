@@ -28,6 +28,7 @@
 
   <announcement-bar-component
     class="announcement-bar__slider"
+    data-has-arrows="{% if show_arrows %}true{% else %}false{% endif %}"
     {% if autoplay == true %}
       autoplay="{{ section.settings.speed }}" aria-live="polite"
     {% endif %}

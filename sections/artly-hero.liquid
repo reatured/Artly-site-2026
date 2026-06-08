@@ -117,10 +117,6 @@
     </div>
 
     <div class="artly-hero__copy">
-      {% if section.settings.eyebrow != blank %}
-        <p class="artly-hero__eyebrow artly-eyebrow">{{ section.settings.eyebrow | escape }}</p>
-      {% endif %}
-
       {% if section.settings.heading != blank %}
         <h1 class="artly-hero__heading" id="ArtlyHeroTitle-{{ section.id }}">{{ section.settings.heading | escape }}</h1>
       {% endif %}
@@ -180,21 +176,15 @@
     },
     {
       "type": "text",
-      "id": "eyebrow",
-      "label": "Eyebrow",
-      "default": "Robotic coffee for real service"
-    },
-    {
-      "type": "text",
       "id": "heading",
       "label": "Heading",
-      "default": "Robotic coffee, built for real service."
+      "default": "Powering the Next Generation of Intelligent Robots"
     },
     {
       "type": "richtext",
       "id": "body",
       "label": "Body",
-      "default": "<p>Artly brings dependable specialty coffee service to commercial spaces with a compact robotic barista, expert-taught workflows, and support built around daily operation.</p>"
+      "default": "<p>Artly is bringing physical AI out of the lab and into reality with the world’s first commercialized robot training platform.</p>"
     },
     {
       "type": "text",

@@ -8,7 +8,6 @@
   @param {string} [first] - Optional captured HTML for the first item (typically drawer menu for top row)
   @param {string} [logo] - Captured HTML for the logo element
   @param {string} [menu] - Captured HTML for the menu navigation
-  @param {string} [actions] - Captured HTML for header actions (cart, account buttons, etc.)
   @param {string} [localization] - Captured HTML for language/country selector
   @param {string} [search] - Captured HTML for search input
   @param {string} [drawer_search] - Captured HTML for drawer-based search
@@ -31,8 +30,18 @@
     assign item_column = settings[column_key] | default: 'left'
 
     case item
-      when 'actions'
-        assign item_column = 'right'
+      when 'logo'
+        assign item_row = 'top'
+        if settings.menu_position == 'left'
+          assign item_column = 'right'
+        else
+          assign item_column = 'left'
+        endif
+      when 'menu'
+        assign item_row = 'top'
+        if item_column != 'left' and item_column != 'right'
+          assign item_column = 'right'
+        endif
     endcase
 
     if item_row == row
@@ -84,8 +93,6 @@
               {{ search }}
             {% when 'drawer_search' %}
               {{ drawer_search }}
-            {% when 'actions' %}
-              {{ actions }}
           {% endcase %}
         {% endunless %}
       {% endfor %}

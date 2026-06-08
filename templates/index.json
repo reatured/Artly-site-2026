@@ -1,5 +1,7 @@
 {
   "sections": {
+    "announcement_bar_top": {
+      "type": "announcement-bar",
       "blocks": {
         "announcement_1": {
           "type": "_announcement",
@@ -31,8 +33,8 @@
       "name": "Artly hero",
       "settings": {
         "eyebrow": "Robotic coffee for real service",
-        "heading": "Robotic coffee, built for real service.",
-        "body": "<p>Artly brings dependable specialty coffee service to commercial spaces with a compact robotic barista, expert-taught workflows, and support built around daily operation.</p>",
+        "heading": "Powering the Next Generation of Intelligent Robots",
+        "body": "<p>Artly is bringing physical AI out of the lab and into reality with the world’s first commercialized robot training platform.</p>",
         "primary_cta_label": "Book a Demo",
         "primary_cta_link": "shopify://pages/contact",
         "primary_cta_open_in_new_tab": false,
@@ -106,8 +108,8 @@
         "media_alt_text": "Artly robotic workcell demonstrating service automation on a commercial counter",
         "section_width": "page-width",
         "color_scheme": "scheme-1",
-        "padding-block-start": 32,
-        "padding-block-end": 32
+        "padding-block-start": 0,
+        "padding-block-end": 0
       }
     },
     "capability_proof_tiles": {
@@ -167,7 +169,6 @@
       "settings": {
         "section_heading": "Built to prove capability, fast",
         "section_body": "These are the core proof points for dependable robot deployment.",
-        "columns": 4,
         "gap": 24,
         "icon_size": 44,
         "color_scheme": "scheme-2",

@@ -17,14 +17,20 @@
   endcase
 
   assign has_video = false
+  assign has_external_video = false
   assign has_image = false
   assign media_image = section.settings.media_fallback_image
 
-  if media_type == 'video' and section.settings.media_video != blank
+  if media_type == 'video_url' and section.settings.media_video_url != blank
+    assign has_external_video = true
+  elsif media_type == 'video' and section.settings.media_video != blank
     assign has_video = true
   elsif media_type == 'image' and section.settings.media_image != blank
     assign has_image = true
     assign media_image = section.settings.media_image
+  elsif section.settings.media_video_url != blank
+    # If the editor changed media_type but left an external video URL selected.
+    assign has_external_video = true
   elsif section.settings.media_video != blank
     # If the editor changed media_type but left the prior video selected.
     assign has_video = true
@@ -48,6 +54,11 @@
     assign media_tag = section.settings.media_video
   endif
 
+  if has_external_video
+    assign media_poster = section.settings.media_fallback_image
+    assign media_alt_text = media_alt_text | default: section.settings.media_video_url.alt
+  endif
+
   if has_image
     assign media_alt_text = media_alt_text | default: media_image.alt
   endif
@@ -55,17 +66,36 @@
 
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
 <div
-  class="section section--{{ section.settings.section_width }} platform-overview color-{{ section.settings.color_scheme }} spacing-style platform-overview--{{ section.settings.media_position }} platform-overview--{{ media_width }}"
+  class="section section--{{ section.settings.section_width }} platform-overview color-{{ section.settings.color_scheme }} spacing-style disable-section-top-offset platform-overview--{{ section.settings.media_position }} platform-overview--{{ media_width }}"
   style="
     {%- render 'spacing-style', settings: section.settings -%}
     --platform-overview-media-height: {{ section.settings.media_height }};
     --platform-overview-media-height-mobile: {{ media_height_mobile }};
     --platform-overview-media-column: 3.5fr;
     --platform-overview-content-column: 2.5fr;
+    --section-top-offset: 0px;
+    padding-block: 0 !important;
+    margin-block: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
   "
 >
   <div class="platform-overview__media-wrap" role="img"{% if media_alt_text != blank %} aria-label="{{ media_alt_text | escape }}"{% endif %}>
-    {% if has_video %}
+    {% if has_external_video %}
+      {% render 'video',
+        video_from_url: true,
+        video: section.settings.media_video_url.id,
+        video_type: section.settings.media_video_url.type,
+        disable_controls: section.settings.media_video_url.type == 'youtube',
+        video_class: 'platform-overview__media platform-overview__media--external',
+        video_autoplay: section.settings.video_autoplay,
+        video_loop: section.settings.video_loop,
+        video_alt: media_alt_text,
+        video_preview_image: media_poster
+      %}
+    {% elsif has_video %}
       {{
         media_tag
         | video_tag:
@@ -220,6 +250,21 @@
     min-height: var(--platform-overview-media-height);
     object-fit: cover;
     border-radius: 8px;
+  }
+
+  .platform-overview__media--external {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .platform-overview__media--external iframe,
+  .platform-overview__media--external video,
+  .platform-overview__media--external img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: 0;
   }
 
   .platform-overview__media--placeholder svg {
@@ -428,6 +473,10 @@
         {
           "value": "video",
           "label": "Video"
+        },
+        {
+          "value": "video_url",
+          "label": "External video (YouTube/Vimeo)"
         }
       ],
       "default": "video"
@@ -445,24 +494,32 @@
       "visible_if": "{{ section.settings.media_type == 'video' }}"
     },
     {
+      "type": "video_url",
+      "id": "media_video_url",
+      "label": "External video URL",
+      "info": "Paste a YouTube or Vimeo link.",
+      "accept": ["youtube", "vimeo"],
+      "visible_if": "{{ section.settings.media_type == 'video_url' }}"
+    },
+    {
       "type": "image_picker",
       "id": "media_fallback_image",
       "label": "Video poster / fallback image",
-      "visible_if": "{{ section.settings.media_type == 'video' }}"
+      "visible_if": "{{ section.settings.media_type == 'video' or section.settings.media_type == 'video_url' }}"
     },
     {
       "type": "checkbox",
       "id": "video_autoplay",
       "label": "Video autoplay",
       "default": false,
-      "visible_if": "{{ section.settings.media_type == 'video' }}"
+      "visible_if": "{{ section.settings.media_type == 'video' or section.settings.media_type == 'video_url' }}"
     },
     {
       "type": "checkbox",
       "id": "video_loop",
       "label": "Video loop",
       "default": true,
-      "visible_if": "{{ section.settings.media_type == 'video' }}"
+      "visible_if": "{{ section.settings.media_type == 'video' or section.settings.media_type == 'video_url' }}"
     },
     {
       "type": "text",
@@ -572,7 +629,7 @@
       "max": 100,
       "step": 1,
       "unit": "px",
-      "default": 32
+      "default": 0
     },
     {
       "type": "range",
@@ -582,7 +639,7 @@
       "max": 100,
       "step": 1,
       "unit": "px",
-      "default": 32
+      "default": 0
     }
   ],
   "presets": [
@@ -596,8 +653,8 @@
         "media_height": "60svh",
         "section_width": "page-width",
         "color_scheme": "scheme-1",
-        "padding-block-start": 32,
-        "padding-block-end": 32
+        "padding-block-start": 0,
+        "padding-block-end": 0
       }
     }
   ]

@@ -13,10 +13,9 @@
 {% endif %}
 
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
-<aside
-  class="announcement-bar spacing-style section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }} artly-system artly-announcement-bar"
+<announcement-bar-component
+  class="announcement-bar announcement-bar__slider section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }} spacing-style artly-system artly-announcement-bar"
   style="{% render 'spacing-style', settings: section.settings %}; --border-bottom-width: {{ section.settings.divider_width }}px;"
->
   {% liquid
     assign autoplay = false
     assign show_arrows = false
@@ -25,22 +24,19 @@
       assign show_arrows = true
     endif
   %}
+  data-has-arrows="{% if show_arrows %}true{% else %}false{% endif %}"
+  {% if autoplay == true %}
+    autoplay="{{ section.settings.speed }}" aria-live="polite"
+  {% endif %}
+>
+  {% if show_arrows %}
+    {% render 'slideshow-arrows', icon_style: 'chevron' %}
+  {% endif %}
 
-  <announcement-bar-component
-    class="announcement-bar__slider"
-    {% if autoplay == true %}
-      autoplay="{{ section.settings.speed }}" aria-live="polite"
-    {% endif %}
-  >
-    {% if show_arrows %}
-      {% render 'slideshow-arrows', icon_style: 'chevron' %}
-    {% endif %}
-
-    <div class="announcement-bar__slides">
-      {% content_for 'blocks' %}
-    </div>
-  </announcement-bar-component>
-</aside>
+  <div class="announcement-bar__slides">
+    {% content_for 'blocks' %}
+  </div>
+</announcement-bar-component>
 
 
 {% schema %}

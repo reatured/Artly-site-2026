@@ -1,13 +1,9 @@
-{% liquid
-  assign tile_columns = section.settings.columns | default: 4
-%}
-
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
 <div
-  class="section section--{{ section.settings.section_width }} spacing-style color-{{ section.settings.color_scheme }} capability-proof-tiles"
+  class="section section--full-width-margin section--{{ section.settings.section_width }} spacing-style color-{{ section.settings.color_scheme }} capability-proof-tiles"
   style="
     {% render 'spacing-style', settings: section.settings %}
-    --capability-proof-columns: {{ tile_columns }};
+    --capability-proof-columns: 2;
     --capability-proof-icon-size: {{ section.settings.icon_size }}px;
     {% render 'gap-style', value: section.settings.gap, name: 'capability-proof-tile-gap' %}
   "
@@ -43,15 +39,17 @@
 
 {% stylesheet %}
   .capability-proof-tiles {
-    --capability-proof-columns: 4;
+    --capability-proof-columns: 2;
     --capability-proof-gap: var(--capability-proof-tile-gap, 24px);
     --capability-proof-icon-size: 40px;
+    --capability-proof-content-width: min(1210px, calc(100% - (var(--page-margin, 40px) * 2)));
   }
 
   .capability-proof-tiles__content {
     display: grid;
     gap: clamp(16px, var(--capability-proof-gap), 32px);
-    width: 100%;
+    width: var(--capability-proof-content-width);
+    margin-inline: auto;
   }
 
   .capability-proof-tiles__heading {
@@ -77,12 +75,6 @@
   }
 
   @media screen and (min-width: 750px) {
-    .capability-proof-tiles__grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-
-  @media screen and (min-width: 1000px) {
     .capability-proof-tiles__grid {
       grid-template-columns: repeat(var(--capability-proof-columns), minmax(0, 1fr));
     }
@@ -118,15 +110,6 @@
       "id": "section_notes",
       "label": "Section notes",
       "default": "Update numbers and links as proof assets are approved."
-    },
-    {
-      "type": "range",
-      "id": "columns",
-      "label": "Columns (desktop)",
-      "min": 1,
-      "max": 4,
-      "step": 1,
-      "default": 4
     },
     {
       "type": "range",
@@ -207,7 +190,6 @@
       "settings": {
         "section_heading": "Built to prove capability, fast",
         "section_body": "These are the core proof points for dependable robot deployment.",
-        "columns": 4,
         "gap": 24,
         "icon_size": 44,
         "color_scheme": "scheme-2",
