@@ -422,62 +422,6 @@
     },
     "featured_content_resources": {
       "type": "featured-content-resources",
-      "blocks": {
-        "resource_card_1": {
-          "type": "featured-resource-card",
-          "name": "Resource card",
-          "settings": {
-            "card_title": "A practical introduction to physical AI",
-            "card_image_alt": "Robot operating with human supervision",
-            "card_excerpt": "A practical walkthrough of how specialized robots get better at real-world tasks through field feedback and human expertise.",
-            "card_link": "/blogs/news/physical-ai",
-            "card_cta_label": "Read more",
-            "open_new_tab": false
-          }
-        },
-        "resource_card_2": {
-          "type": "featured-resource-card",
-          "name": "Resource card",
-          "settings": {
-            "card_title": "Deployment notes: improving reliability",
-            "card_image_alt": "Robot arm inspecting equipment in a warehouse",
-            "card_excerpt": "Why deployment quality matters as much as model quality, and what teams can do differently to get stable outcomes quickly.",
-            "card_link": "/blogs/news/deployment-reliability",
-            "card_cta_label": "Read more",
-            "open_new_tab": false
-          }
-        },
-        "resource_card_3": {
-          "type": "featured-resource-card",
-          "name": "Resource card",
-          "settings": {
-            "card_title": "Operator workflow design for service teams",
-            "card_image_alt": "Technician reviewing a service robot dashboard",
-            "card_excerpt": "A short guide on training and operating service robots with a clear handoff between operators, sensors, and learning loops.",
-            "card_link": "/blogs/news/operator-workflow",
-            "card_cta_label": "Read more",
-            "open_new_tab": false
-          }
-        },
-        "resource_card_4": {
-          "type": "featured-resource-card",
-          "name": "Resource card",
-          "settings": {
-            "card_title": "Press notes: what to watch next",
-            "card_image_alt": "Robot deployment timeline graphic with milestones",
-            "card_excerpt": "A concise view of recent advances in physical AI and what they mean for early teams exploring automation investments.",
-            "card_link": "/blogs/news/press-notes",
-            "card_cta_label": "Read more",
-            "open_new_tab": false
-          }
-        }
-      },
-      "block_order": [
-        "resource_card_1",
-        "resource_card_2",
-        "resource_card_3",
-        "resource_card_4"
-      ],
       "settings": {
         "content_mode": "blog",
         "section_eyebrow": "Featured Content",
@@ -504,85 +448,13 @@
     },
     "news_and_press": {
       "type": "news-and-press",
-      "blocks": {
-        "press_card_1": {
-          "type": "news_press_card",
-          "name": "News & Press card",
-          "settings": {
-            "card_category": "Announcement",
-            "card_source": "Artly",
-            "card_date": "May 14, 2026",
-            "card_author": "Artly Team",
-            "card_title": "What customers told us after the first large-site pilot",
-            "card_image_alt": "",
-            "card_excerpt": "Deployment insights from the first wave of long-term operations and what changed in uptime, workflow, and consistency.",
-            "card_link": "/blogs/news",
-            "card_cta_label": "Read more",
-            "open_in_new_tab": false
-          }
-        },
-        "press_card_2": {
-          "type": "news_press_card",
-          "name": "News & Press card",
-          "settings": {
-            "card_category": "Field update",
-            "card_source": "Field Operations",
-            "card_date": "May 22, 2026",
-            "card_author": "Operations Team",
-            "card_title": "Service reliability updates from current fleets",
-            "card_image_alt": "",
-            "card_excerpt": "A practical update on support loops, remote monitoring, and consistency checks that keep commercial service stable through busy shifts.",
-            "card_link": "/blogs/news",
-            "card_cta_label": "Read more",
-            "open_in_new_tab": false
-          }
-        },
-        "press_card_3": {
-          "type": "news_press_card",
-          "name": "News & Press card",
-          "settings": {
-            "card_category": "Coverage",
-            "card_source": "Trade Review",
-            "card_date": "June 1, 2026",
-            "card_author": "Byline Desk",
-            "card_title": "Press coverage: reliable coffee delivery becomes operationally practical",
-            "card_image_alt": "",
-            "card_excerpt": "A look at how service teams are now treating service robotics as part of operations design rather than a side experiment.",
-            "card_link": "/blogs/news",
-            "card_cta_label": "Read more",
-            "open_in_new_tab": false
-          }
-        },
-        "press_card_4": {
-          "type": "news_press_card",
-          "name": "News & Press card",
-          "settings": {
-            "card_category": "Research",
-            "card_source": "Field Notes",
-            "card_date": "June 2, 2026",
-            "card_author": "Operations Team",
-            "card_title": "How teams reduced startup friction with guided deployment",
-            "card_image_alt": "",
-            "card_excerpt": "Operational checklists and rollout patterns that make first-time deployment predictable and easier to reproduce across sites.",
-            "card_link": "/blogs/news",
-            "card_cta_label": "Read more",
-            "open_in_new_tab": false
-          }
-        }
-      },
-      "block_order": [
-        "press_card_1",
-        "press_card_2",
-        "press_card_3",
-        "press_card_4"
-      ],
       "settings": {
         "content_mode": "blog",
         "section_eyebrow": "News & Press",
         "section_title": "News & Press",
         "section_intro": "Recent announcements, field updates, and coverage that show how Artly is scaling reliable coffee and service robotics.",
         "cta_label": "More Resources",
-        "cta_link": "/blogs/news",
+        "cta_link": "shopify://blogs/articles-1/artly-attending-ces-2025-in-las-vegas",
         "layout_type": "grid",
         "columns": "4",
         "mobile_columns": "1",
