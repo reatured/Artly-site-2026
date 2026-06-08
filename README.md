@@ -77,6 +77,8 @@ Use real-world deployment credibility, specialty coffee robotics, clean commerci
 
 Typography standard: Work Sans is the body/UI font; Space Grotesk is the heading, display, and accent font. The Shopify theme should express this through theme font settings rather than local hardcoded CSS where possible.
 
+Header visual reference: use a soft-metal or translucent glass header shell with a compact logo capsule, rounded pill navigation, and a right-side utility/action capsule. Navigation and utility labels use Work Sans; Artly brand/display moments use Space Grotesk.
+
 Key homepage files to inspect when matching the current direction:
 
 - `templates/index.json`

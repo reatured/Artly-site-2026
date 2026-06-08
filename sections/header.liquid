@@ -1,21 +1,10 @@
 {% liquid
-  assign order = 'logo,menu,localization,search,drawer_search,actions'
+  assign order = 'logo,menu,localization'
 
-  if shop.customer_accounts_enabled
-    assign order = 'drawer_search,logo,menu,localization,search,actions'
-  endif
-
-  assign rows = 'top,bottom' | split: ','
-  assign search_style = 'none'
-
-  if section.settings.show_search
-    assign search_style = 'modal'
-  endif
-
-  if section.settings.show_search
-    render 'predictive-search-styles'
-    render 'slideshow-styles'
-  endif
+  assign rows = 'top' | split: ','
+  assign actions = ''
+  assign show_language = false
+  assign show_country = false
 
   if section.settings.enable_transparent_header_home and template.name == 'index'
     assign transparent = 'always'
@@ -28,11 +17,7 @@
     assign transparent_color_scheme = section.settings.collection_color_scheme
   endif
 
-  if section.settings.enable_sticky_header == 'always'
-    assign sticky = 'always'
-  elsif section.settings.enable_sticky_header == 'scroll-up'
-    assign sticky = 'scroll-up'
-  endif
+  assign sticky = 'always'
 
   if transparent and sticky
     assign transparent = 'not-sticky'
@@ -64,94 +49,7 @@
   endcapture
   # theme-check-enable UniqueStaticBlockId
 
-  capture actions
-    render 'header-actions', customer_account_menu: section.settings.customer_account_menu, display_style: section.settings.actions_display_style, section: section
-  endcapture
-
-  if shop.customer_accounts_enabled
-    assign search_class = 'search-action--hidden-on-drawer'
-  endif
-
-  # Handle localization positioning
-  if section.settings.localization_position == 'left'
-    if section.settings.search_position == 'left'
-      if shop.customer_accounts_enabled
-        assign order = 'drawer_search,logo,search,localization,menu,actions'
-      else
-        assign order = 'logo,search,localization,menu,drawer_search,actions'
-      endif
-    else
-      if shop.customer_accounts_enabled
-        assign order = 'drawer_search,logo,localization,menu,search,actions'
-      else
-        assign order = 'logo,localization,menu,search,drawer_search,actions'
-      endif
-    endif
-  else
-    if section.settings.search_position == 'left'
-      if shop.customer_accounts_enabled
-        assign order = 'drawer_search,logo,search,menu,localization,actions'
-      else
-        assign order = 'logo,search,menu,localization,drawer_search,actions'
-      endif
-    endif
-  endif
-  capture search
-    render 'search', style: search_style, class: search_class, display_style: section.settings.actions_display_style
-  endcapture
-
-  # Skip drawer search under specific conditions:
-  # Always render if search_row is bottom
-  # Don't render when shop.customer_accounts_enabled is false and search_position is left and search_style is not none
-  assign skip_drawer_search = false
-  if shop.customer_accounts_enabled == false and section.settings.search_position == 'left' and search_style != 'none'
-    assign skip_drawer_search = true
-  endif
-
-  if section.settings.search_row == 'bottom' or search_style != 'none' and skip_drawer_search == false
-    # Mobile search duplicate for when search is not in the right order for mobile layout
-    capture drawer_search
-      render 'search', class: 'search-action--hidden-on-menu', style: search_style, display_style: section.settings.actions_display_style
-    endcapture
-  endif
-
-  assign show_language = section.settings.show_language
-  if localization.available_languages.size <= 1
-    assign show_language = false
-  endif
-
-  assign show_country = section.settings.show_country
-  if localization.available_countries.size <= 1
-    assign show_country = false
-  endif
-
   assign bottom_row_blocks = ''
-
-  if section.settings.menu_row == 'bottom'
-    assign bottom_row_blocks = bottom_row_blocks | append: 'menu,'
-  endif
-
-  if section.settings.search_style != 'none'
-    if section.settings.search_row == 'bottom'
-      assign bottom_row_blocks = bottom_row_blocks | append: 'search,'
-    endif
-  endif
-
-  if section.settings.show_country or section.settings.show_language
-    if section.settings.localization_row == 'bottom'
-      assign bottom_row_blocks = bottom_row_blocks | append: 'localization,'
-    endif
-  endif
-
-  assign bottom_row_blocks = bottom_row_blocks | split: ',' | compact
-
-  if section.settings.section_height == 'compact'
-    assign header_height_class = ' header--compact'
-  endif
-
-  if bottom_row_blocks.size > 0 and section.settings.color_scheme_top.settings.background.rgb == section.settings.color_scheme_bottom.settings.background.rgb and section.settings.divider_width == 0
-    assign collapse_header_paddings_class = 'header--collapse-row-paddings'
-  endif
 
   assign class = 'header'
 
@@ -175,16 +73,8 @@
     assign top_transparent = true
   endif
 
-  if section.settings.color_scheme_bottom.settings.background.alpha != 1
-    assign bottom_transparent = true
-  endif
-
-  if top_transparent and bottom_transparent
-    assign transparent_color_scheme_value = 'both'
-  elsif top_transparent
+  if top_transparent
     assign transparent_color_scheme_value = 'top'
-  elsif bottom_transparent
-    assign transparent_color_scheme_value = 'bottom'
   endif
 %}
 
@@ -296,7 +186,7 @@
 
 <header-component
   id="header-component"
-  class="{{ class }}"
+  class="{{ class }} artly-system artly-site-header"
   data-theme-color="rgb({{ section.settings.color_scheme_top.settings.background.rgb }})"
   {% if transparent %}
     transparent="{{ transparent }}"
@@ -1198,7 +1088,7 @@
           "label": "t:options.right"
         }
       ],
-      "default": "left"
+      "default": "right"
     },
     {
       "type": "select",
@@ -1238,7 +1128,7 @@
       "type": "checkbox",
       "id": "show_search",
       "label": "t:settings.search_icon",
-      "default": true
+      "default": false
     },
     {
       "type": "select",

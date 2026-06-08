@@ -11,3 +11,8 @@ coverage/
 
 .DS_Store
 Thumbs.db
+
+/docs
+
+*.md
+*.html

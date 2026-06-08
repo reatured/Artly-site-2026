@@ -1,0 +1,351 @@
+{% liquid
+  assign has_video = false
+  assign has_image = false
+  assign media_alt = section.settings.media_alt_text
+
+  if section.settings.media_type == 'video' and section.settings.media_video != blank
+    assign has_video = true
+    assign media_asset = section.settings.media_video
+    assign media_alt = media_alt | default: media_asset.alt
+  elsif section.settings.media_type == 'image' and section.settings.media_image != blank
+    assign has_image = true
+    assign media_asset = section.settings.media_image
+    assign media_alt = media_alt | default: media_asset.alt
+  elsif section.settings.media_video != blank
+    assign has_video = true
+    assign media_asset = section.settings.media_video
+    assign media_alt = media_alt | default: media_asset.alt
+  elsif section.settings.media_image != blank
+    assign has_image = true
+    assign media_asset = section.settings.media_image
+    assign media_alt = media_alt | default: media_asset.alt
+  elsif section.settings.media_poster != blank
+    assign has_image = true
+    assign media_asset = section.settings.media_poster
+    assign media_alt = media_alt | default: media_asset.alt
+  endif
+
+  if has_video
+    assign media_poster = section.settings.media_poster
+    if media_poster == blank and media_asset.preview_image != blank
+      assign media_poster = media_asset.preview_image
+    endif
+  endif
+%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+
+<section
+  class="section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }} spacing-style artly-system artly-hero"
+  aria-labelledby="ArtlyHeroTitle-{{ section.id }}"
+  style="{% render 'spacing-style', settings: section.settings %}"
+>
+  <div class="artly-hero__media-wrap" role="group" aria-label="{{ section.settings.media_panel_label | escape }}">
+    <div class="artly-hero__media-frame">
+      {% if has_video %}
+        {{
+          media_asset
+          | video_tag:
+            autoplay: section.settings.video_autoplay,
+            loop: section.settings.video_loop,
+            muted: section.settings.video_autoplay,
+            controls: section.settings.video_controls,
+            poster: media_poster,
+            class: 'artly-hero__media-asset'
+        }}
+      {% elsif has_image %}
+        {{
+          media_asset
+          | image_url: width: 2400
+          | image_tag:
+            width: media_asset.width,
+            widths: '416, 600, 768, 1024, 1440, 1920, 2400',
+            height: media_asset.height,
+            alt: media_alt,
+            loading: 'eager',
+            fetchpriority: 'high',
+            class: 'artly-hero__media-asset'
+        }}
+      {% else %}
+        <div class="artly-hero__visual">
+          <svg viewBox="0 0 760 560" role="img" aria-labelledby="ArtlyHeroVisualTitle-{{ section.id }} ArtlyHeroVisualDesc-{{ section.id }}">
+            <title id="ArtlyHeroVisualTitle-{{ section.id }}">Robotic coffee workcell</title>
+            <desc id="ArtlyHeroVisualDesc-{{ section.id }}">A compact Artly robotic barista workcell with arm, coffee modules, cup handoff, and service telemetry.</desc>
+            <rect x="48" y="52" width="664" height="418" rx="8" fill="#22313b" stroke="#b9dce5" stroke-width="2"/>
+            <rect x="82" y="344" width="596" height="82" rx="8" fill="#b9dce5"/>
+            <rect x="112" y="292" width="536" height="70" rx="8" fill="#ffffff" stroke="#9cadb8" stroke-width="3"/>
+            <rect x="126" y="120" width="148" height="172" rx="8" fill="#6f4e37"/>
+            <rect x="150" y="150" width="100" height="56" rx="8" fill="#17212a"/>
+            <rect x="166" y="166" width="68" height="10" rx="3" fill="#00a8b5"/>
+            <rect x="166" y="185" width="42" height="8" rx="3" fill="#dcd06a"/>
+            <rect x="486" y="116" width="136" height="176" rx="8" fill="#3f6f8f"/>
+            <rect x="512" y="150" width="84" height="58" rx="8" fill="#17212a"/>
+            <rect x="526" y="166" width="52" height="10" rx="3" fill="#00a8b5"/>
+            <rect x="526" y="184" width="38" height="8" rx="3" fill="#b9dce5"/>
+            <path d="M274 130v-56c0-30 24-54 54-54h92" fill="none" stroke="#f7fafb" stroke-width="20" stroke-linecap="square"/>
+            <path d="M420 20h62c36 0 66 30 66 66v50" fill="none" stroke="#b9dce5" stroke-width="20" stroke-linecap="square"/>
+            <rect x="396" y="0" width="52" height="52" rx="8" fill="#00a8b5"/>
+            <rect x="526" y="110" width="52" height="52" rx="8" fill="#ffffff"/>
+            <rect x="532" y="116" width="40" height="40" rx="6" fill="#efe5d8"/>
+            <rect x="334" y="320" width="92" height="80" rx="8" fill="#ffffff" stroke="#00a8b5" stroke-width="5"/>
+            <path d="M350 342h54" stroke="#dcd06a" stroke-width="6" stroke-linecap="square"/>
+            <path d="M350 364h38" stroke="#3f6f8f" stroke-width="6" stroke-linecap="square"/>
+            <path d="M150 362h460" stroke="#00a8b5" stroke-width="5" stroke-linecap="square"/>
+            <rect x="82" y="78" width="154" height="38" rx="6" fill="#17212a" stroke="#b9dce5" stroke-width="2"/>
+            <text x="159" y="103" text-anchor="middle" fill="#dce8ec" font-family="Work Sans, Arial, Helvetica, sans-serif" font-size="13" font-weight="900">DRINK QUEUE</text>
+            <rect x="540" y="382" width="86" height="24" rx="4" fill="#17212a"/>
+            <rect x="552" y="390" width="44" height="8" rx="3" fill="#00a8b5"/>
+            <g fill="#ffffff" stroke="#17212a" stroke-width="3">
+              <rect x="126" y="444" width="86" height="34" rx="6"/>
+              <rect x="234" y="444" width="86" height="34" rx="6"/>
+              <rect x="342" y="444" width="86" height="34" rx="6"/>
+              <rect x="450" y="444" width="86" height="34" rx="6"/>
+              <rect x="558" y="444" width="86" height="34" rx="6"/>
+            </g>
+            <g fill="#17212a" font-family="Work Sans, Arial, Helvetica, sans-serif" font-size="11" font-weight="900">
+              <text x="169" y="466" text-anchor="middle">ORDER</text>
+              <text x="277" y="466" text-anchor="middle">GRIND</text>
+              <text x="385" y="466" text-anchor="middle">BREW</text>
+              <text x="493" y="466" text-anchor="middle">HANDOFF</text>
+              <text x="601" y="466" text-anchor="middle">LEARN</text>
+            </g>
+            <path d="M96 504h568" stroke="#b9dce5" stroke-width="2" stroke-dasharray="14 9"/>
+            <text x="380" y="532" text-anchor="middle" fill="#dce8ec" font-family="Work Sans, Arial, Helvetica, sans-serif" font-size="15" font-weight="900">coffee craft + robot control + field feedback</text>
+          </svg>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="artly-hero__copy">
+      {% if section.settings.eyebrow != blank %}
+        <p class="artly-hero__eyebrow artly-eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {% endif %}
+
+      {% if section.settings.heading != blank %}
+        <h1 class="artly-hero__heading" id="ArtlyHeroTitle-{{ section.id }}">{{ section.settings.heading | escape }}</h1>
+      {% endif %}
+
+      {% if section.settings.body != blank %}
+        <div class="artly-hero__body rte">{{ section.settings.body }}</div>
+      {% endif %}
+
+      <div class="artly-hero__actions">
+        {% if section.settings.primary_cta_label != blank %}
+          <a
+            class="artly-hero__button artly-button artly-button--primary"
+            {% if section.settings.primary_cta_link == blank %}
+              role="link"
+              aria-disabled="true"
+            {% else %}
+              href="{{ section.settings.primary_cta_link }}"
+              {% if section.settings.primary_cta_open_in_new_tab %}
+                target="_blank"
+                rel="noopener noreferrer"
+              {% endif %}
+            {% endif %}
+          >
+            {{ section.settings.primary_cta_label | escape }}
+          </a>
+        {% endif %}
+
+        {% if section.settings.secondary_cta_label != blank %}
+          <a
+            class="artly-hero__button artly-button artly-button--secondary"
+            {% if section.settings.secondary_cta_link == blank %}
+              role="link"
+              aria-disabled="true"
+            {% else %}
+              href="{{ section.settings.secondary_cta_link }}"
+              {% if section.settings.secondary_cta_open_in_new_tab %}
+                target="_blank"
+                rel="noopener noreferrer"
+              {% endif %}
+            {% endif %}
+          >
+            {{ section.settings.secondary_cta_label | escape }}
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Artly hero",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Robotic coffee for real service"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Robotic coffee, built for real service."
+    },
+    {
+      "type": "richtext",
+      "id": "body",
+      "label": "Body",
+      "default": "<p>Artly brings dependable specialty coffee service to commercial spaces with a compact robotic barista, expert-taught workflows, and support built around daily operation.</p>"
+    },
+    {
+      "type": "text",
+      "id": "primary_cta_label",
+      "label": "Primary CTA label",
+      "default": "Book a Demo"
+    },
+    {
+      "type": "url",
+      "id": "primary_cta_link",
+      "label": "Primary CTA link"
+    },
+    {
+      "type": "checkbox",
+      "id": "primary_cta_open_in_new_tab",
+      "label": "Open primary CTA in new tab",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "secondary_cta_label",
+      "label": "Secondary CTA label",
+      "default": "Explore the Platform"
+    },
+    {
+      "type": "url",
+      "id": "secondary_cta_link",
+      "label": "Secondary CTA link"
+    },
+    {
+      "type": "checkbox",
+      "id": "secondary_cta_open_in_new_tab",
+      "label": "Open secondary CTA in new tab",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Media"
+    },
+    {
+      "type": "text",
+      "id": "media_panel_label",
+      "label": "Media panel accessibility label",
+      "default": "Artly robotic coffee workcell visualization"
+    },
+    {
+      "type": "select",
+      "id": "media_type",
+      "label": "Media type",
+      "options": [
+        {
+          "value": "image",
+          "label": "Image"
+        },
+        {
+          "value": "video",
+          "label": "Video"
+        }
+      ],
+      "default": "image"
+    },
+    {
+      "type": "image_picker",
+      "id": "media_image",
+      "label": "Image"
+    },
+    {
+      "type": "video",
+      "id": "media_video",
+      "label": "Video"
+    },
+    {
+      "type": "image_picker",
+      "id": "media_poster",
+      "label": "Video poster or fallback image"
+    },
+    {
+      "type": "text",
+      "id": "media_alt_text",
+      "label": "Media alt text",
+      "default": "Artly robotic coffee workcell in a commercial service setting"
+    },
+    {
+      "type": "checkbox",
+      "id": "video_autoplay",
+      "label": "Autoplay video",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "video_loop",
+      "label": "Loop video",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "video_controls",
+      "label": "Show video controls",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page"
+        },
+        {
+          "value": "full-width",
+          "label": "Full"
+        }
+      ],
+      "default": "full-width"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 28
+    }
+  ],
+  "presets": [
+    {
+      "name": "Artly hero"
+    }
+  ]
+}
+{% endschema %}

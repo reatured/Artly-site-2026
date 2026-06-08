@@ -11,7 +11,7 @@ Rebuild the Artly header so it reads as a commercial robotics site, not a defaul
 
 This is a plan/spec pass only. No theme implementation files were changed.
 
-Style direction to carry into implementation: use a glassy, soft-metal header bar with rounded pill navigation controls, a small logo capsule on the left, and a compact right-side icon/action capsule. Navigation text should use Work Sans. The Artly wordmark, brand display text, and short product/display accents can use Space Grotesk.
+Style direction to carry into implementation: use a glassy, soft-metal header bar with rounded pill navigation controls, a small logo capsule on the left, and a compact right-side icon/action capsule. Navigation text should use Work Sans. The Artly wordmark, brand display text, and short product/display accents can use Space Grotesk. Richard's 2026-06-08 reference approves the compact search/account/bag capsule as a visual direction when those utilities are intentionally shown.
 
 ## Current Observations
 
@@ -47,7 +47,7 @@ Desktop, 750px and wider:
 - Far right CTA group:
   - Primary CTA: `Book a Demo`
   - Optional secondary text link: `Contact`
-- Far-right utility/action treatment: compact icon or CTA capsule only. Do not reintroduce cart/account/search icons unless approved.
+- Far-right utility/action treatment: compact icon or CTA capsule only. Search/account/bag icons are acceptable when they use the approved compact capsule treatment; replace them with demo/contact actions if commerce or accounts are removed from launch scope.
 
 Preferred desktop order:
 

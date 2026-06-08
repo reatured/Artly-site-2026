@@ -1576,3 +1576,60 @@
 | Quality score | Pending Leader review |
 | Reuse recommendation | Reuse for future site-wide typography standardization passes where theme settings and static artifacts must stay aligned. |
 | Notes/lessons | Vault ID collision: `PV-W-20260608-001` was already present for Artly Style System Worker, so this record preserves Richard's supplied ID while explicitly documenting the collision instead of overwriting the existing worker record. |
+
+### Header Implementer
+
+| Property | Value |
+| --- | --- |
+| Vault ID | PV-W-20260608-001 |
+| Tool agent ID | Codex worker session for this assignment |
+| Nickname | Header Implementer |
+| Role/type | Worker / frontend implementation |
+| Spawned by | Leader Agent in `C:\Artly\Artly-site-2026` |
+| Date spawned | 2026-06-08 |
+| Mission | Implement the new header for the Artly site in the local Shopify theme repo. |
+| Skills/knowledge provided | Shopify theme header architecture, Liquid section settings, responsive CSS, local preview QA, registry traceability. |
+| Files or domains touched | `sections/header.liquid`; `sections/header-group.json`; `docs/agent-registry.md`; read-only inspection of header snippets, design docs, and local preview. |
+| Status | Complete / awaiting Leader review |
+| Outputs | Hid header search, account, and cart utilities; moved the existing page navigation to the right; scoped existing right-column capsule styling so it only applies when utility actions render; removed the stale starter announcement section from the header group; verified desktop, mobile, and mobile drawer rendering in local preview; `shopify theme check --path .` passed. |
+| Quality score | Pending Leader review |
+| Reuse recommendation | Pending Leader review |
+| Notes/lessons | Vault ID collision: `PV-W-20260608-001` was already present for Artly Style System Worker and Font Systems Worker, so this record preserves Richard's supplied ID and documents the collision. Final navigation labels and CTA destinations remain Leader/Richard decisions because local docs list them as open decisions. |
+
+### Hero Implementer
+
+| Property | Value |
+| --- | --- |
+| Vault ID | PV-W-20260608-001 |
+| Tool agent ID | Codex worker session for this assignment |
+| Nickname | Hero Implementer |
+| Role/type | Worker / frontend implementation |
+| Spawned by | Leader Agent in `C:\Artly\Artly-site-2026` |
+| Date spawned | 2026-06-08 |
+| Mission | Implement the new hero section for the Artly site in the local Shopify theme repo. |
+| Skills/knowledge provided | Shopify Liquid section implementation, responsive homepage hero design, Artly style-system application, registry traceability. |
+| Files or domains touched | `sections/artly-hero.liquid`; `templates/index.json`; `docs/agent-registry.md`; read-only inspection of homepage mockup, design docs, current hero section, and asset inventory. |
+| Status | Complete / awaiting Leader review |
+| Outputs | Added `sections/artly-hero.liquid`; updated `templates/index.json` to mount the new Artly hero; verified JSON parsing, Shopify theme check, served HTML, and desktop/mobile preview geometry. |
+| Quality score | Pending Leader review |
+| Reuse recommendation | Reuse for focused homepage section implementation where a static mockup is being translated into Shopify Liquid. |
+| Notes/lessons | Vault ID collision: `PV-W-20260608-001` was already present for Artly Style System Worker, Font Systems Worker, and Header Implementer, so this record preserves Richard's supplied ID and documents the collision. Local approved robot media is still missing, so the section ships an intentional workcell visualization and media picker slots for later replacement. |
+
+### Header Alignment Worker
+
+| Property | Value |
+| --- | --- |
+| Vault ID | PV-W-20260608-008 |
+| Tool agent ID | Codex worker session for this assignment |
+| Nickname | Header Alignment Worker |
+| Role/type | Worker / frontend implementation |
+| Spawned by | Leader Agent in `C:\Artly\Artly-site-2026` |
+| Date spawned | 2026-06-08 |
+| Mission | Make a narrow header update: hide account, cart, and search controls, and align page navigation to the right. |
+| Skills/knowledge provided | Shopify Liquid header architecture, narrow theme settings/default updates, registry traceability. |
+| Files or domains touched | `sections/header.liquid`; `sections/header-group.json`; `docs/agent-registry.md`; read-only inspection of header snippets and current diffs. |
+| Status | Complete |
+| Outputs | Header implementation summary: account actions, cart actions, and search are hidden/not rendered in the active header path; page navigation is right-aligned; section defaults now keep search hidden and navigation right-aligned for new/reset header sections. |
+| Quality score | 8/10 |
+| Reuse recommendation | Yes for narrow Shopify/Liquid header edits. |
+| Notes/lessons | Duplicate Vault IDs should be checked before assignment. Interpreted "shopping card" as shopping cart. |

@@ -1,54 +1,150 @@
-{
+﻿{
   "sections": {
+    "hero_jVaWmY": {
+      "type": "hero",
       "blocks": {
-        "announcement_1": {
-          "type": "_announcement",
+        "text_YLPk4p": {
+          "type": "text",
+          "name": "t:names.heading",
           "settings": {
-            "text": "New: Barista Bot is now available for commercial deployment. <a href=\"/pages/contact\">Book a demo →</a>",
-            "link": "",
-            "enable_countdown": false,
-            "show_button": false,
-            "font": "var(--font-body--family)",
-            "font_size": "0.875rem",
-            "weight": "500",
+            "text": "<p>Physical AI for commercial robotics</p>",
+            "width": "fit-content",
+            "max_width": "normal",
+            "alignment": "left",
+            "type_preset": "h6",
+            "font": "var(--font-accent--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
             "letter_spacing": "normal",
-            "case": "none"
-          }
+            "case": "none",
+            "wrap": "pretty",
+            "color": "var(--color-foreground)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "text_km9xL8": {
+          "type": "text",
+          "name": "t:names.heading",
+          "settings": {
+            "text": "<h1>Powering the Next Generation of Intelligent Robots</h1>",
+            "width": "100%",
+            "max_width": "normal",
+            "alignment": "left",
+            "type_preset": "h1",
+            "font": "var(--font-heading--family)",
+            "font_size": "",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "var(--color-foreground)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "text_n8FqX3": {
+          "type": "text",
+          "name": "t:names.text",
+          "settings": {
+            "text": "<p>Artly is bringing physical AI out of the lab and into reality with the world’s first commercialized robot training platform.</p>",
+            "width": "100%",
+            "max_width": "normal",
+            "alignment": "left",
+            "type_preset": "rte",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "var(--color-foreground)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "button_H9gpTf": {
+          "type": "button",
+          "name": "t:names.button",
+          "settings": {
+            "label": "Book a Demo",
+            "link": "shopify://pages/contact",
+            "open_in_new_tab": false,
+            "style_class": "button",
+            "width": "fit-content",
+            "custom_width": 100,
+            "width_mobile": "fit-content",
+            "custom_width_mobile": 100
+          },
+          "blocks": {}
+        },
+        "button_B8xQp4": {
+          "type": "button",
+          "name": "t:names.button",
+          "settings": {
+            "label": "Explore the Platform",
+            "link": "shopify://pages/platform",
+            "open_in_new_tab": false,
+            "style_class": "button-secondary",
+            "width": "fit-content",
+            "custom_width": 100,
+            "width_mobile": "fit-content",
+            "custom_width_mobile": 100
+          },
+          "blocks": {}
         }
       },
-      "block_order": ["announcement_1"],
+      "block_order": [
+        "text_YLPk4p",
+        "text_km9xL8",
+        "text_n8FqX3",
+        "button_H9gpTf",
+        "button_B8xQp4"
+      ],
+      "name": "t:names.hero",
       "settings": {
-        "speed": 5,
+        "media_type_1": "image",
+        "media_type_2": "image",
+        "link": "",
+        "open_in_new_tab": false,
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "flex-end",
+        "align_baseline": true,
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "flex-end",
+        "gap": 24,
         "section_width": "page-width",
-        "color_scheme": "scheme-4",
-        "divider_width": 0,
-        "padding-block-start": 12,
-        "padding-block-end": 12
-      }
-    },
-    "hero_jVaWmY": {
-      "type": "artly-hero",
-      "name": "Artly hero",
-      "settings": {
-        "eyebrow": "Robotic coffee for real service",
-        "heading": "Robotic coffee, built for real service.",
-        "body": "<p>Artly brings dependable specialty coffee service to commercial spaces with a compact robotic barista, expert-taught workflows, and support built around daily operation.</p>",
-        "primary_cta_label": "Book a Demo",
-        "primary_cta_link": "shopify://pages/contact",
-        "primary_cta_open_in_new_tab": false,
-        "secondary_cta_label": "Explore the Platform",
-        "secondary_cta_link": "shopify://pages/platform",
-        "secondary_cta_open_in_new_tab": false,
-        "media_panel_label": "Artly robotic coffee workcell visualization",
-        "media_type": "image",
-        "media_alt_text": "Artly robotic coffee workcell in a commercial service setting",
-        "video_autoplay": true,
-        "video_loop": true,
-        "video_controls": false,
-        "section_width": "full-width",
-        "color_scheme": "scheme-1",
-        "padding-block-start": 40,
-        "padding-block-end": 28
+        "section_height": "large",
+        "section_height_custom": 50,
+        "color_scheme": "scheme-6",
+        "toggle_overlay": true,
+        "overlay_color": "#0f0f0fd9",
+        "overlay_style": "gradient",
+        "gradient_direction": "to bottom",
+        "blurred_reflection": false,
+        "reflection_opacity": 75,
+        "padding-block-start": 100,
+        "padding-block-end": 72
       }
     },
     "homepage_callout_bar": {
@@ -517,7 +613,6 @@
     }
   },
   "order": [
-    "announcement_bar_top",
     "hero_jVaWmY",
     "homepage_callout_bar",
     "platform_overview",

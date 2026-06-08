@@ -111,7 +111,7 @@ Material rules:
 - Header should feel like a commercial robotics site, not a store.
 - Preferred visual direction: a rounded translucent or soft-metal navigation bar with a compact logo capsule on the left, rounded pill navigation controls, and a compact right-side action/icon capsule.
 - Use Work Sans for navigation and button text; reserve Space Grotesk for the Artly wordmark, brand display moments, and short header accent labels where appropriate.
-- Remove or hide visible cart, account, product, collection, and "Welcome to our store" entry points for the current launch.
+- Remove starter-store language such as "Welcome to our store". Search, account, and bag icons may remain only when intentionally styled as the approved compact utility capsule; otherwise replace them with approved demo/contact actions.
 - Use focused navigation: Robot, Platform, Deployments, Resources, Company, Contact or Demo.
 - Keep the primary CTA visible as "Book a Demo" or "Talk to an Expert".
 - Avoid mega-menu product-card treatments unless they route to real solution content.
