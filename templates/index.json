@@ -1,38 +1,18 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
-    "announcement_bar_top": {
-      "type": "announcement-bar",
-      "blocks": {
-        "announcement_1": {
-          "type": "_announcement",
-          "settings": {
-            "text": "New: Barista Bot is now available for commercial deployment. <a href=\"/pages/contact\">Book a demo →</a>",
-            "link": "",
-            "enable_countdown": false,
-            "show_button": false,
-            "font": "var(--font-body--family)",
-            "font_size": "0.875rem",
-            "weight": "500",
-            "letter_spacing": "normal",
-            "case": "none"
-          }
-        }
-      },
-      "block_order": ["announcement_1"],
-      "settings": {
-        "speed": 5,
-        "section_width": "page-width",
-        "color_scheme": "scheme-4",
-        "divider_width": 0,
-        "padding-block-start": 12,
-        "padding-block-end": 12
-      }
-    },
     "hero_jVaWmY": {
       "type": "artly-hero",
       "name": "Artly hero",
       "settings": {
-        "eyebrow": "Robotic coffee for real service",
         "heading": "Powering the Next Generation of Intelligent Robots",
         "body": "<p>Artly is bringing physical AI out of the lab and into reality with the world’s first commercialized robot training platform.</p>",
         "primary_cta_label": "Book a Demo",
@@ -43,6 +23,7 @@
         "secondary_cta_open_in_new_tab": false,
         "media_panel_label": "Artly robotic coffee workcell visualization",
         "media_type": "image",
+        "media_image": "shopify://shop_images/blog-banner.jpg",
         "media_alt_text": "Artly robotic coffee workcell in a commercial service setting",
         "video_autoplay": true,
         "video_loop": true,
@@ -55,6 +36,7 @@
     },
     "homepage_callout_bar": {
       "type": "homepage-callout-bar",
+      "disabled": true,
       "settings": {
         "campaign_mode": "message",
         "bar_text": "Built for real deployments, not robotics demos.",
@@ -87,6 +69,41 @@
         "signup_consent_text": "By continuing, you agree to receive Artly communications. You can unsubscribe anytime."
       }
     },
+    "announcement_bar_top": {
+      "type": "announcement-bar",
+      "blocks": {
+        "announcement_1": {
+          "type": "_announcement",
+          "settings": {
+            "text": "New: Barista Bot is now available for commercial deployment. <a href=\"/pages/contact\">Book a demo →</a>",
+            "link": "",
+            "enable_countdown": false,
+            "countdown_end_date": "",
+            "countdown_end_time": "00:00",
+            "show_button": false,
+            "button_text": "",
+            "button_url": "",
+            "font": "var(--font-body--family)",
+            "font_size": "0.875rem",
+            "weight": "500",
+            "letter_spacing": "normal",
+            "case": "none"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "announcement_1"
+      ],
+      "settings": {
+        "speed": 5,
+        "section_width": "page-width",
+        "color_scheme": "scheme-4",
+        "divider_width": 0,
+        "padding-block-start": 12,
+        "padding-block-end": 12
+      }
+    },
     "platform_overview": {
       "type": "platform-overview",
       "settings": {
@@ -96,16 +113,21 @@
         "body_line_2": "Our patented physical AI platform combines proprietary hardware, deep learning + Vision-Language-Action models, and a real-world deployment feedback loop to deliver custom specialized robots at commercial scale — without the steep learning curve.",
         "proof_microcopy": "Evidence markers: Expert-taught tasks | Real-world deployment feedback | Deployable hardware stack",
         "primary_cta_label": "Talk to an Expert",
+        "primary_cta_link": "",
         "primary_cta_open_in_new_tab": false,
         "primary_cta_style": "button",
         "secondary_cta_label": "Learn More",
+        "secondary_cta_link": "",
         "secondary_cta_open_in_new_tab": false,
         "secondary_cta_style": "link",
-        "media_type": "video",
+        "media_type": "video_url",
+        "media_video_url": "https://www.youtube.com/watch?v=gZD3YzRf7HA",
+        "video_autoplay": false,
+        "video_loop": true,
+        "media_alt_text": "Artly robotic workcell demonstrating service automation on a commercial counter",
         "media_position": "left",
         "media_width": "wide",
         "media_height": "60svh",
-        "media_alt_text": "Artly robotic workcell demonstrating service automation on a commercial counter",
         "section_width": "page-width",
         "color_scheme": "scheme-1",
         "padding-block-start": 0,
@@ -123,8 +145,10 @@
             "body": "Unlike robots trained in labs or on simulations, our robots are trained exclusively on data from live deployments, making them ready to perform in unpredictable environments from day one.",
             "stat_value": "30",
             "stat_label": "minute setup",
-            "link": ""
-          }
+            "link": "",
+            "open_in_new_tab": false
+          },
+          "blocks": {}
         },
         "tile-ecosystem": {
           "type": "capability-proof-tile",
@@ -134,8 +158,10 @@
             "body": "Every deployment generates real-world data that feeds back into the system, continuously improving robot knowledge, perception, control, and prompt understanding over time.",
             "stat_value": "Closed-loop",
             "stat_label": "learning cycle",
-            "link": ""
-          }
+            "link": "",
+            "open_in_new_tab": false
+          },
+          "blocks": {}
         },
         "tile-actions": {
           "type": "capability-proof-tile",
@@ -145,8 +171,10 @@
             "body": "Our sensing rigs capture environmental data that allows robots to truly understand tasks — not just mimic them — by perceiving changes in their environment and responding in real time.",
             "stat_value": "1.2M+",
             "stat_label": "logged actions",
-            "link": ""
-          }
+            "link": "",
+            "open_in_new_tab": false
+          },
+          "blocks": {}
         },
         "tile-learning": {
           "type": "capability-proof-tile",
@@ -156,8 +184,10 @@
             "body": "Our imitation learning methodology captures the precision and process knowledge of domain experts, resulting in craft-level accuracy and shorter training cycles.",
             "stat_value": "Human-guided",
             "stat_label": "knowledge transfer",
-            "link": ""
-          }
+            "link": "",
+            "open_in_new_tab": false
+          },
+          "blocks": {}
         }
       },
       "block_order": [
@@ -169,13 +199,13 @@
       "settings": {
         "section_heading": "Built to prove capability, fast",
         "section_body": "These are the core proof points for dependable robot deployment.",
+        "section_notes": "Update numbers and links as proof assets are approved.",
         "gap": 24,
         "icon_size": 44,
         "color_scheme": "scheme-2",
         "section_width": "page-width",
         "padding-block-start": 28,
-        "padding-block-end": 28,
-        "section_notes": "Update numbers and links as proof assets are approved."
+        "padding-block-end": 28
       }
     },
     "overview_media": {
@@ -187,9 +217,11 @@
         "body_line_2": "This proof media captures real calibration, handoff, and quality checks across real-world operations.",
         "microcopy": "Proof clips are refreshed from active field deployments to keep expectations grounded in live outcomes.",
         "primary_cta_label": "Watch full proof clip",
+        "primary_cta_link": "",
         "primary_cta_style": "button",
         "primary_cta_open_in_new_tab": false,
         "secondary_cta_label": "Book a Demo",
+        "secondary_cta_link": "",
         "secondary_cta_style": "button",
         "secondary_cta_open_in_new_tab": false,
         "media_type": "video",
@@ -219,9 +251,11 @@
         "heading": "Specialty coffee, designed around you.",
         "body": "Meet the AI-trained robotic barista built for autonomous operation. Barista Bot’s 4x5 footprint, self-cleaning components, and automatic calibration make a quality café experience possible in even the most demanding environments.",
         "primary_cta_label": "Book a Demo",
+        "primary_cta_link": "",
         "primary_cta_open_in_new_tab": false,
         "primary_cta_style": "button",
         "secondary_cta_label": "Learn More",
+        "secondary_cta_link": "",
         "secondary_cta_open_in_new_tab": false,
         "secondary_cta_style": "link",
         "media_type": "video",
@@ -244,37 +278,45 @@
           "type": "trusted-by-logo",
           "settings": {
             "logo_name": "Trusted Brand 1",
+            "logo_url": "",
             "logo_alt_text": "Trusted Brand 1 logo",
             "display_height": 44,
             "open_in_new_tab": "inherit"
-          }
+          },
+          "blocks": {}
         },
         "logo-b": {
           "type": "trusted-by-logo",
           "settings": {
             "logo_name": "Trusted Brand 2",
+            "logo_url": "",
             "logo_alt_text": "Trusted Brand 2 logo",
             "display_height": 44,
             "open_in_new_tab": "inherit"
-          }
+          },
+          "blocks": {}
         },
         "logo-c": {
           "type": "trusted-by-logo",
           "settings": {
             "logo_name": "Trusted Brand 3",
+            "logo_url": "",
             "logo_alt_text": "Trusted Brand 3 logo",
             "display_height": 44,
             "open_in_new_tab": "inherit"
-          }
+          },
+          "blocks": {}
         },
         "logo-d": {
           "type": "trusted-by-logo",
           "settings": {
             "logo_name": "Trusted Brand 4",
+            "logo_url": "",
             "logo_alt_text": "Trusted Brand 4 logo",
             "display_height": 44,
             "open_in_new_tab": "inherit"
-          }
+          },
+          "blocks": {}
         }
       },
       "block_order": [
@@ -294,7 +336,9 @@
         "section_width": "page-width",
         "color_scheme": "scheme-1",
         "padding-block-start": 28,
-        "padding-block-end": 28
+        "padding-block-end": 28,
+        "padding-inline-start": 0,
+        "padding-inline-end": 0
       }
     },
     "featured_content_resources": {
@@ -360,6 +404,7 @@
         "section_eyebrow": "Featured Content",
         "section_title": "Blogs & Resources",
         "section_intro": "Read practical notes, how-tos, and updates from the Artly newsroom.",
+        "blog": "",
         "cta_label_default": "Read more",
         "post_limit": 4,
         "layout_type": "grid",
@@ -390,8 +435,11 @@
             "card_date": "May 14, 2026",
             "card_author": "Artly Team",
             "card_title": "What customers told us after the first large-site pilot",
+            "card_image_alt": "",
             "card_excerpt": "Deployment insights from the first wave of long-term operations and what changed in uptime, workflow, and consistency.",
-            "card_cta_label": "Read more"
+            "card_link": "",
+            "card_cta_label": "Read more",
+            "open_in_new_tab": false
           }
         },
         "press_card_2": {
@@ -403,8 +451,11 @@
             "card_date": "May 22, 2026",
             "card_author": "Operations Team",
             "card_title": "Service reliability updates from current fleets",
+            "card_image_alt": "",
             "card_excerpt": "A practical update on support loops, remote monitoring, and consistency checks that keep commercial service stable through busy shifts.",
-            "card_cta_label": "Read more"
+            "card_link": "",
+            "card_cta_label": "Read more",
+            "open_in_new_tab": false
           }
         },
         "press_card_3": {
@@ -416,8 +467,11 @@
             "card_date": "June 1, 2026",
             "card_author": "Byline Desk",
             "card_title": "Press coverage: reliable coffee delivery becomes operationally practical",
+            "card_image_alt": "",
             "card_excerpt": "A look at how service teams are now treating service robotics as part of operations design rather than a side experiment.",
-            "card_cta_label": "Read more"
+            "card_link": "",
+            "card_cta_label": "Read more",
+            "open_in_new_tab": false
           }
         },
         "press_card_4": {
@@ -429,8 +483,11 @@
             "card_date": "June 2, 2026",
             "card_author": "Operations Team",
             "card_title": "How teams reduced startup friction with guided deployment",
+            "card_image_alt": "",
             "card_excerpt": "Operational checklists and rollout patterns that make first-time deployment predictable and easier to reproduce across sites.",
-            "card_cta_label": "Read more"
+            "card_link": "",
+            "card_cta_label": "Read more",
+            "open_in_new_tab": false
           }
         }
       },
@@ -454,6 +511,7 @@
         "rows_gap": 20,
         "section_width": "page-width",
         "color_scheme": "scheme-1",
+        "blog": "",
         "post_limit": 4,
         "padding-block-start": 44,
         "padding-block-end": 44
@@ -466,37 +524,37 @@
           "type": "closing-audience-resource-tile",
           "settings": {
             "icon": "lightning_bolt",
-            "image": "",
             "heading": "Artly AI",
             "body": "The AI platform built on expert input and real-world data. With over 1.2 million actions collected from the field, our models are built to thrive in real environments.",
             "link_label": "Learn More",
             "link_url": "/pages/platform",
             "open_in_new_tab": false
-          }
+          },
+          "blocks": {}
         },
         "audience_tile_barista_bot": {
           "type": "closing-audience-resource-tile",
           "settings": {
             "icon": "serving_dish",
-            "image": "",
             "heading": "Barista Bot",
             "body": "The first-ever champion-trained robotic barista. Barista Bot autonomously delivers a full specialty café program, production-ready at commercial scale.",
             "link_label": "Learn More",
             "link_url": "/pages/barista-bot",
             "open_in_new_tab": false
-          }
+          },
+          "blocks": {}
         },
         "audience_tile_invest": {
           "type": "closing-audience-resource-tile",
           "settings": {
             "icon": "question_mark",
-            "image": "",
             "heading": "Invest",
             "body": "The defining company in robotics won't just build hardware — it will own the intelligence layer. If that's a thesis you believe in, we'd love to connect.",
             "link_label": "Learn More",
             "link_url": "/pages/investors",
             "open_in_new_tab": false
-          }
+          },
+          "blocks": {}
         }
       },
       "block_order": [
@@ -518,9 +576,9 @@
     }
   },
   "order": [
-    "announcement_bar_top",
     "hero_jVaWmY",
     "homepage_callout_bar",
+    "announcement_bar_top",
     "platform_overview",
     "capability_proof_tiles",
     "overview_media",
@@ -531,4 +589,3 @@
     "closing_audience_resource_tiles"
   ]
 }
-
