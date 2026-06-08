@@ -45,7 +45,7 @@
             sizes: '(min-width: 750px) 180px, 150px'
         }}
       {% elsif external_image_url != blank %}
-        <img src="{{ external_image_url | escape }}" alt="{{ logo_alt_text | escape }}" class="trusted-by-logo-strip__image" loading="lazy" width="200" height="44">
+        <img src="{{ external_image_url | escape }}" alt="{{ logo_alt_text | escape }}" class="trusted-by-logo-strip__image" loading="lazy" width="160" height="{{ logo_height }}">
       {% else %}
         <span class="trusted-by-logo-strip__fallback">{{ logo_name }}</span>
       {% endif %}
@@ -72,7 +72,7 @@
             sizes: '(min-width: 750px) 180px, 150px'
         }}
       {% elsif external_image_url != blank %}
-        <img src="{{ external_image_url | escape }}" alt="{{ logo_alt_text | escape }}" class="trusted-by-logo-strip__image" loading="lazy" width="200" height="44">
+        <img src="{{ external_image_url | escape }}" alt="{{ logo_alt_text | escape }}" class="trusted-by-logo-strip__image" loading="lazy" width="160" height="{{ logo_height }}">
       {% else %}
         <span class="trusted-by-logo-strip__fallback">{{ logo_name }}</span>
       {% endif %}
@@ -89,18 +89,18 @@
 
   .trusted-by-logo-strip__link,
   .trusted-by-logo-strip__logo {
-    min-height: 44px;
-    min-width: 44px;
+    min-height: 36px;
+    min-width: 36px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 0.35rem 0.65rem;
+    padding: 0.2rem 0.45rem;
     color: inherit;
     text-decoration: none;
     border-radius: 4px;
     text-align: center;
     width: fit-content;
-    max-width: 14rem;
+    max-width: 11rem;
   }
 
   .trusted-by-logo-strip__logo {
@@ -176,7 +176,7 @@
       "max": 120,
       "step": 2,
       "unit": "px",
-      "default": 44
+      "default": 32
     },
     {
       "type": "select",
