@@ -1,84 +1,93 @@
 {
   "sections": {
     "main": {
-      "type": "legal-page",
+      "type": "main-page",
       "blocks": {
-        "overview": {
-          "type": "policy_section",
+        "heading": {
+          "type": "text",
+          "name": "Title",
           "settings": {
-            "heading": "Overview",
-            "text": "<p>This Privacy Policy explains how Artly collects, uses, and protects information when you visit our website, submit a form, subscribe to updates, or contact our team.</p>"
-          }
+            "text": "<h1>Privacy Policy</h1>",
+            "width": "100%",
+            "max_width": "normal",
+            "alignment": "left",
+            "type_preset": "h2",
+            "font": "var(--font-primary--family)",
+            "font_size": "",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
         },
-        "information_we_collect": {
-          "type": "policy_section",
+        "intro": {
+          "type": "text",
+          "name": "Intro",
           "settings": {
-            "heading": "Information we collect",
-            "text": "<p>We may collect contact details you submit, such as name, email address, company, phone number, and message content. We may also collect technical information such as browser type, device information, pages viewed, referral source, and approximate location derived from IP address.</p>"
-          }
+            "text": "<p>Last updated June 9, 2026</p><p>Artly respects visitor privacy. This page summarizes what information this website may collect, why it is used, and the choices available to visitors.</p>",
+            "width": "100%",
+            "max_width": "normal",
+            "alignment": "left",
+            "type_preset": "rte",
+            "font": "var(--font-body--family)",
+            "font_size": "",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
         },
-        "how_we_use_information": {
-          "type": "policy_section",
+        "content": {
+          "type": "text",
+          "name": "Policy Content",
           "settings": {
-            "heading": "How we use information",
-            "text": "<p>We use information to respond to inquiries, operate and improve the website, send requested updates, measure content performance, protect the site from misuse, and support business communications about Artly products and services.</p>"
-          }
-        },
-        "sharing": {
-          "type": "policy_section",
-          "settings": {
-            "heading": "Sharing and service providers",
-            "text": "<p>We may share information with vendors that help us host the website, process forms, provide analytics, send communications, or operate our business. We do not sell personal information through this website.</p>"
-          }
-        },
-        "cookies": {
-          "type": "policy_section",
-          "settings": {
-            "heading": "Cookies and similar technologies",
-            "text": "<p>We use essential cookies for site functionality and optional cookies for analytics or marketing measurement when you allow them. You can review and update choices from the Cookie Policy page.</p>"
-          }
-        },
-        "choices": {
-          "type": "policy_section",
-          "settings": {
-            "heading": "Your choices",
-            "text": "<p>You can unsubscribe from marketing emails by using the unsubscribe link in those messages. You can request access, correction, or deletion of personal information by contacting us. Browser settings may also let you block or delete cookies.</p>"
-          }
-        },
-        "retention_security": {
-          "type": "policy_section",
-          "settings": {
-            "heading": "Retention and security",
-            "text": "<p>We keep information only as long as needed for the purposes described in this policy, unless a longer period is required by law or business records obligations. We use reasonable administrative, technical, and organizational safeguards to protect information.</p>"
-          }
-        },
-        "contact": {
-          "type": "policy_section",
-          "settings": {
-            "heading": "Contact",
-            "text": "<p>For privacy questions or requests, contact Artly through the contact form on this website or by using the contact details provided by our team.</p>"
-          }
+            "text": "<h2>Overview</h2><p>This Privacy Policy explains how Artly collects, uses, and protects information when you visit our website, submit a form, subscribe to updates, or contact our team.</p><h2>Information we collect</h2><p>We may collect contact details you submit, such as name, email address, company, phone number, and message content. We may also collect technical information such as browser type, device information, pages viewed, referral source, and approximate location derived from IP address.</p><h2>How we use information</h2><p>We use information to respond to inquiries, operate and improve the website, send requested updates, measure content performance, protect the site from misuse, and support business communications about Artly products and services.</p><h2>Sharing and service providers</h2><p>We may share information with vendors that help us host the website, process forms, provide analytics, send communications, or operate our business. We do not sell personal information through this website.</p><h2>Cookies and similar technologies</h2><p>We use essential cookies for site functionality and optional cookies for analytics or marketing measurement when you allow them. You can review and update choices from the Cookie Policy page.</p><h2>Your choices</h2><p>You can unsubscribe from marketing emails by using the unsubscribe link in those messages. You can request access, correction, or deletion of personal information by contacting us. Browser settings may also let you block or delete cookies.</p><h2>Retention and security</h2><p>We keep information only as long as needed for the purposes described in this policy, unless a longer period is required by law or business records obligations. We use reasonable administrative, technical, and organizational safeguards to protect information.</p><h2>Contact</h2><p>For privacy questions or requests, contact Artly through the contact form on this website or by using the contact details provided by our team.</p>",
+            "width": "100%",
+            "max_width": "normal",
+            "alignment": "left",
+            "type_preset": "rte",
+            "font": "var(--font-body--family)",
+            "font_size": "",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
         }
       },
-      "block_order": [
-        "overview",
-        "information_we_collect",
-        "how_we_use_information",
-        "sharing",
-        "cookies",
-        "choices",
-        "retention_security",
-        "contact"
-      ],
+      "block_order": ["heading", "intro", "content"],
       "settings": {
-        "section_width": "page-width",
-        "eyebrow": "Privacy",
-        "heading": "Privacy Policy",
-        "intro": "<p>Artly respects visitor privacy. This page summarizes what information this website may collect, why it is used, and the choices available to visitors.</p>",
-        "last_updated": "June 9, 2026",
-        "show_cookie_settings_button": false,
-        "color_scheme": "scheme-1",
-        "padding-block-start": 64,
+        "content_direction": "column",
+        "gap": 24,
+        "color_scheme": "",
+        "padding-block-start": 40,
         "padding-block-end": 80
       }
     }

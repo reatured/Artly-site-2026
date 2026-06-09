@@ -1,68 +1,101 @@
 {
   "sections": {
     "main": {
-      "type": "legal-page",
+      "type": "main-page",
       "blocks": {
-        "overview": {
-          "type": "policy_section",
+        "heading": {
+          "type": "text",
+          "name": "Title",
           "settings": {
-            "heading": "Overview",
-            "text": "<p>This Cookie Policy explains how Artly uses cookies and similar technologies on this website. Cookies are small files placed on your device to support site functionality, remember choices, and help us understand site activity when you allow optional categories.</p>"
-          }
+            "text": "<h1>Cookie Policy</h1>",
+            "width": "100%",
+            "max_width": "normal",
+            "alignment": "left",
+            "type_preset": "h2",
+            "font": "var(--font-primary--family)",
+            "font_size": "",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
         },
-        "essential": {
-          "type": "policy_section",
+        "intro": {
+          "type": "text",
+          "name": "Intro",
           "settings": {
-            "heading": "Essential cookies",
-            "text": "<p>Essential cookies are required for the website to work. They may support navigation, security, form handling, checkout, accessibility, and storage of your privacy preference. These cookies cannot be disabled through the site consent form.</p>"
-          }
+            "text": "<p>Last updated June 9, 2026</p><p>Use this page to understand the cookie categories available on Artly and to update your cookie preferences.</p>",
+            "width": "100%",
+            "max_width": "normal",
+            "alignment": "left",
+            "type_preset": "rte",
+            "font": "var(--font-body--family)",
+            "font_size": "",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
         },
-        "analytics": {
-          "type": "policy_section",
+        "content": {
+          "type": "text",
+          "name": "Policy Content",
           "settings": {
-            "heading": "Analytics cookies",
-            "text": "<p>Analytics cookies help us understand which pages visitors use, how the site performs, and where improvements are needed. These cookies are optional and are only enabled when selected in the cookie consent form.</p>"
-          }
+            "text": "<h2>Overview</h2><p>This Cookie Policy explains how Artly uses cookies and similar technologies on this website. Cookies are small files placed on your device to support site functionality, remember choices, and help us understand site activity when you allow optional categories.</p><h2>Essential cookies</h2><p>Essential cookies are required for the website to work. They may support navigation, security, form handling, checkout, accessibility, and storage of your privacy preference. These cookies cannot be disabled through the site consent form.</p><h2>Analytics cookies</h2><p>Analytics cookies help us understand which pages visitors use, how the site performs, and where improvements are needed. These cookies are optional and are only enabled when selected in the cookie consent form.</p><h2>Marketing cookies</h2><p>Marketing cookies may help measure campaigns, understand referrals, and make outreach more relevant. These cookies are optional and are only enabled when selected in the cookie consent form.</p><h2>Managing choices</h2><p>When you first visit the site, the cookie consent form lets you accept all optional cookies, reject optional cookies, or save a custom choice. After you make a choice, the consent UI is hidden. You can update your choice from this page using the button below.</p><h2>Changes to this policy</h2><p>We may update this Cookie Policy as the website or our use of cookies changes. The date above shows when this policy was last updated.</p>",
+            "width": "100%",
+            "max_width": "normal",
+            "alignment": "left",
+            "type_preset": "rte",
+            "font": "var(--font-body--family)",
+            "font_size": "",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
         },
-        "marketing": {
-          "type": "policy_section",
+        "cookie_settings": {
+          "type": "custom-liquid",
+          "name": "Cookie Settings Button",
           "settings": {
-            "heading": "Marketing cookies",
-            "text": "<p>Marketing cookies may help measure campaigns, understand referrals, and make outreach more relevant. These cookies are optional and are only enabled when selected in the cookie consent form.</p>"
-          }
-        },
-        "managing": {
-          "type": "policy_section",
-          "settings": {
-            "heading": "Managing choices",
-            "text": "<p>When you first visit the site, the cookie consent form lets you accept all optional cookies, reject optional cookies, or save a custom choice. After you make a choice, the consent UI is hidden. You can update your choice from this page using the button below.</p>"
-          }
-        },
-        "changes": {
-          "type": "policy_section",
-          "settings": {
-            "heading": "Changes to this policy",
-            "text": "<p>We may update this Cookie Policy as the website or our use of cookies changes. The date above shows when this policy was last updated.</p>"
-          }
+            "custom_liquid": "<button class=\"button\" type=\"button\" data-cookie-consent-open>Update cookie choices</button>"
+          },
+          "blocks": {}
         }
       },
-      "block_order": [
-        "overview",
-        "essential",
-        "analytics",
-        "marketing",
-        "managing",
-        "changes"
-      ],
+      "block_order": ["heading", "intro", "content", "cookie_settings"],
       "settings": {
-        "section_width": "page-width",
-        "eyebrow": "Cookies",
-        "heading": "Cookie Policy",
-        "intro": "<p>Use this page to understand the cookie categories available on Artly and to update your cookie preferences.</p>",
-        "last_updated": "June 9, 2026",
-        "show_cookie_settings_button": true,
-        "color_scheme": "scheme-1",
-        "padding-block-start": 64,
+        "content_direction": "column",
+        "gap": 24,
+        "color_scheme": "",
+        "padding-block-start": 40,
         "padding-block-end": 80
       }
     }

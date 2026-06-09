@@ -3,7 +3,7 @@
   z-index: 1000;
   inset-inline: auto 16px;
   inset-block-end: 16px;
-  width: min(560px, calc(100vw - 32px));
+  width: min(380px, calc(100vw - 32px));
   max-height: calc(100svh - 32px);
   overflow: auto;
   background: var(--color-background);
@@ -19,13 +19,13 @@
 
 .cookie-consent__form {
   display: grid;
-  gap: 18px;
-  padding: clamp(18px, 4vw, 28px);
+  gap: 10px;
+  padding: clamp(12px, 3vw, 16px);
 }
 
 .cookie-consent__header {
   display: grid;
-  gap: 8px;
+  gap: 4px;
 }
 
 .cookie-consent__eyebrow,
@@ -36,7 +36,7 @@
 
 .cookie-consent__eyebrow {
   color: var(--color-foreground-muted);
-  font-size: 0.75rem;
+  font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0;
   text-transform: uppercase;
@@ -44,19 +44,19 @@
 
 .cookie-consent__title {
   margin: 0;
-  font-size: clamp(1.25rem, 1.1rem + 0.45vw, 1.5rem);
+  font-size: clamp(1.05rem, 1rem + 0.25vw, 1.18rem);
   line-height: 1.1;
 }
 
 .cookie-consent__description {
   color: var(--color-foreground-muted);
-  font-size: 0.95rem;
-  line-height: 1.5;
+  font-size: 0.8rem;
+  line-height: 1.35;
 }
 
 .cookie-consent__choices {
   display: grid;
-  gap: 10px;
+  gap: 6px;
   min-width: 0;
   margin: 0;
   padding: 0;
@@ -65,13 +65,13 @@
 
 .cookie-consent__choice {
   display: grid;
-  grid-template-columns: 28px minmax(0, 1fr);
-  gap: 12px;
+  grid-template-columns: 20px minmax(0, 1fr);
+  gap: 8px;
   align-items: start;
   min-width: 0;
-  padding: 12px;
+  padding: 7px;
   border: 1px solid rgb(var(--color-border-rgb) / var(--opacity-25));
-  border-radius: 8px;
+  border-radius: 6px;
   background: rgb(var(--color-foreground-rgb) / var(--opacity-5));
   cursor: pointer;
 }
@@ -84,36 +84,45 @@
   position: relative;
   display: grid;
   place-items: center;
-  width: 24px;
-  height: 24px;
-  margin-block-start: 2px;
+  width: 18px;
+  height: 18px;
+  margin-block-start: 1px;
 }
 
 .cookie-consent__choice-input input {
   position: absolute;
   inset: 0;
-  width: 24px;
-  height: 24px;
+  width: 18px;
+  height: 18px;
   margin: 0;
   opacity: 0;
   cursor: inherit;
 }
 
 .cookie-consent__choice-input span {
-  display: block;
-  width: 22px;
-  height: 22px;
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
   border: 1.5px solid currentcolor;
-  border-radius: 5px;
+  border-radius: 4px;
   background: var(--color-background);
 }
 
 .cookie-consent__choice-input input:checked + span {
-  background:
-    linear-gradient(45deg, transparent 56%, var(--color-primary-button-text) 56% 68%, transparent 68%),
-    linear-gradient(-45deg, transparent 48%, var(--color-primary-button-text) 48% 60%, transparent 60%),
-    var(--color-primary-button-background);
+  background: var(--color-primary-button-background);
   border-color: var(--color-primary-button-background);
+}
+
+.cookie-consent__choice-input input:checked + span::after {
+  content: '';
+  width: 4px;
+  height: 8px;
+  margin-block-start: -2px;
+  border: solid var(--color-primary-button-text);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
 }
 
 .cookie-consent__choice-input input:focus-visible + span {
@@ -122,38 +131,47 @@
 }
 
 .cookie-consent__choice-copy {
-  display: grid;
-  gap: 4px;
+  display: block;
   min-width: 0;
+  line-height: 1.25;
 }
 
 .cookie-consent__choice-title {
+  display: inline;
+  margin-inline-end: 6px;
+  font-size: 0.88rem;
   font-weight: 700;
   line-height: 1.25;
 }
 
 .cookie-consent__choice-description {
+  display: inline;
   color: var(--color-foreground-muted);
-  font-size: 0.875rem;
-  line-height: 1.45;
+  font-size: 0.78rem;
+  line-height: 1.25;
 }
 
 .cookie-consent__actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 7px;
 }
 
 .cookie-consent__button {
-  min-width: min(100%, 150px);
+  --button-padding-block: 0.5rem;
+  --button-padding-inline: 0.65rem;
+
+  min-width: min(100%, 104px);
+  font-size: 0.76rem;
+  line-height: 1.2;
 }
 
 .cookie-consent__links {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 7px;
   color: var(--color-foreground-muted);
-  font-size: 0.8rem;
+  font-size: 0.72rem;
 }
 
 .cookie-consent__links a {
