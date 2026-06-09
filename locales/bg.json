@@ -15,7 +15,10 @@
       "phone": "Телефон",
       "comment": "Коментар",
       "post_success": "Благодарим, че се свързахте с нас. Ще се свържем с вас възможно най-скоро.",
-      "error_heading": "Коригирайте следното:"
+      "error_heading": "Коригирайте следното:",
+      "post_received": "Received. We'll be in touch soon.",
+      "post_error": "Failed to send. Please check your information and try again.",
+      "sending": "Sending..."
     },
     "slider_label": "Плъзгач"
   },
@@ -347,8 +350,8 @@
       "heading": "Start a conversation",
       "text": "Leave your name and email, and we'll follow up soon.",
       "default_message": "Floating contact form request.",
-      "success": "Thanks. We'll be in touch soon.",
-      "submit": "Send"
+      "success": "Thanks for subscribing!",
+      "submit": "Subscribe"
     }
   }
 }

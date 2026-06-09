@@ -24,14 +24,20 @@
 
     {%- if form.errors and form.id == form_id -%}
       <div
+        id="ContactForm-email-error"
         class="contact-form__error"
         tabindex="-1"
         autofocus
       >
         {{- 'icon-error.svg' | inline_asset_content -}}
 
-        {{- form.errors.translated_fields.email | capitalize }}
-        {{ form.errors.messages.email -}}
+        <span>
+          <strong>{{- 'blocks.contact_form.post_error' | t -}}</strong>
+          <span>
+            {{- form.errors.translated_fields.email | capitalize }}
+            {{ form.errors.messages.email -}}
+          </span>
+        </span>
       </div>
     {%- endif -%}
 
@@ -42,7 +48,7 @@
         autofocus
       >
         {{- 'icon-checkmark.svg' | inline_asset_content -}}
-        {{- 'blocks.contact_form.post_success' | t -}}
+        {{- 'blocks.contact_form.post_received' | t -}}
       </div>
     {%- endif -%}
 
@@ -122,6 +128,16 @@
     </textarea>
 
     {{ submit_button }}
+
+    <p
+      class="contact-form__submit-status"
+      data-contact-form-status
+      data-sending-text="{{ 'blocks.contact_form.sending' | t | escape }}"
+      aria-live="polite"
+      hidden
+    >
+      {{- 'blocks.contact_form.sending' | t -}}
+    </p>
   {%- endform -%}
 </div>
 
@@ -163,10 +179,105 @@
   .contact-form__error,
   .contact-form__success {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: var(--gap-xs);
   }
+
+  .contact-form__error svg,
+  .contact-form__success svg {
+    flex: 0 0 auto;
+    margin-top: 0.125em;
+  }
+
+  .contact-form__error strong {
+    display: block;
+  }
+
+  .contact-form__submit-status {
+    margin: 0;
+    font-size: var(--font-size--sm);
+    color: rgb(var(--color-foreground-rgb) / 72%);
+  }
+
+  .contact-form__form[data-submitting='true'] .submit-button {
+    gap: var(--gap-xs);
+    pointer-events: none;
+    opacity: 0.82;
+  }
+
+  .contact-form__form[data-submitting='true'] .submit-button::before {
+    content: '';
+    width: 1em;
+    height: 1em;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: contact-form-submit-spin 700ms linear infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .contact-form__form[data-submitting='true'] .submit-button::before {
+      animation: none;
+    }
+  }
+
+  @keyframes contact-form-submit-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
 {% endstylesheet %}
+
+{% javascript %}
+  function initializeContactFormSubmitStates() {
+    const forms = document.querySelectorAll('.contact-form__form');
+
+    forms.forEach((form) => {
+      if (form.dataset.submitStateInitialized === 'true') return;
+
+      form.dataset.submitStateInitialized = 'true';
+
+      form.addEventListener('submit', () => {
+        if (!form.checkValidity()) return;
+
+        const button = form.querySelector('.submit-button');
+        const status = form.querySelector('[data-contact-form-status]');
+
+        form.dataset.submitting = 'true';
+
+        if (button instanceof HTMLButtonElement) {
+          button.disabled = true;
+          button.setAttribute('aria-busy', 'true');
+        }
+
+        if (status instanceof HTMLElement) {
+          status.hidden = false;
+          status.textContent = status.dataset.sendingText || '';
+        }
+      });
+    });
+  }
+
+  initializeContactFormSubmitStates();
+
+  window.addEventListener('pageshow', () => {
+    document.querySelectorAll('.contact-form__form[data-submitting="true"]').forEach((form) => {
+      const button = form.querySelector('.submit-button');
+      const status = form.querySelector('[data-contact-form-status]');
+
+      delete form.dataset.submitting;
+
+      if (button instanceof HTMLButtonElement) {
+        button.disabled = false;
+        button.removeAttribute('aria-busy');
+      }
+
+      if (status instanceof HTMLElement) {
+        status.hidden = true;
+      }
+    });
+  });
+{% endjavascript %}
 
 {% schema %}
 {

@@ -15,7 +15,10 @@
       "phone": "电话",
       "comment": "评论",
       "post_success": "感谢您联系我们。我们会尽快回复您。",
-      "error_heading": "请调整以下内容："
+      "error_heading": "请调整以下内容：",
+      "post_received": "Received. We'll be in touch soon.",
+      "post_error": "Failed to send. Please check your information and try again.",
+      "sending": "Sending..."
     },
     "slider_label": "滑块"
   },
@@ -347,8 +350,8 @@
       "heading": "Start a conversation",
       "text": "Leave your name and email, and we'll follow up soon.",
       "default_message": "Floating contact form request.",
-      "success": "Thanks. We'll be in touch soon.",
-      "submit": "Send"
+      "success": "Thanks for subscribing!",
+      "submit": "Subscribe"
     }
   }
 }

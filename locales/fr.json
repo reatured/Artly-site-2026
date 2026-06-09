@@ -15,7 +15,10 @@
       "phone": "Téléphone",
       "comment": "Commentaire",
       "post_success": "Merci de nous avoir contactés. Nous vous répondrons dès que possible.",
-      "error_heading": "Veuillez ajuster les éléments suivants :"
+      "error_heading": "Veuillez ajuster les éléments suivants :",
+      "post_received": "Received. We'll be in touch soon.",
+      "post_error": "Failed to send. Please check your information and try again.",
+      "sending": "Sending..."
     },
     "slider_label": "Carrousel"
   },
@@ -354,8 +357,8 @@
       "heading": "Start a conversation",
       "text": "Leave your name and email, and we'll follow up soon.",
       "default_message": "Floating contact form request.",
-      "success": "Thanks. We'll be in touch soon.",
-      "submit": "Send"
+      "success": "Thanks for subscribing!",
+      "submit": "Subscribe"
     }
   }
 }

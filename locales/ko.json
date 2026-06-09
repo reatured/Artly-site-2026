@@ -15,7 +15,10 @@
       "phone": "전화",
       "comment": "댓글",
       "post_success": "문의해 주셔서 감사합니다. 최대한 빨리 답변드리겠습니다.",
-      "error_heading": "다음을 조정하세요."
+      "error_heading": "다음을 조정하세요.",
+      "post_received": "Received. We'll be in touch soon.",
+      "post_error": "Failed to send. Please check your information and try again.",
+      "sending": "Sending..."
     },
     "slider_label": "슬라이더"
   },
@@ -347,8 +350,8 @@
       "heading": "Start a conversation",
       "text": "Leave your name and email, and we'll follow up soon.",
       "default_message": "Floating contact form request.",
-      "success": "Thanks. We'll be in touch soon.",
-      "submit": "Send"
+      "success": "Thanks for subscribing!",
+      "submit": "Subscribe"
     }
   }
 }

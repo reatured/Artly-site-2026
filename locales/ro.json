@@ -14,7 +14,10 @@
       "phone": "Telefon",
       "comment": "Comentariu",
       "post_success": "Îți mulțumim că ne-ai contactat. Vom reveni cât mai curând posibil.",
-      "error_heading": "Ajustează următoarele:"
+      "error_heading": "Ajustează următoarele:",
+      "post_received": "Received. We'll be in touch soon.",
+      "post_error": "Failed to send. Please check your information and try again.",
+      "sending": "Sending..."
     },
     "payment_methods": "Metode de plată",
     "slider_label": "Cursor"
@@ -354,8 +357,8 @@
       "heading": "Start a conversation",
       "text": "Leave your name and email, and we'll follow up soon.",
       "default_message": "Floating contact form request.",
-      "success": "Thanks. We'll be in touch soon.",
-      "submit": "Send"
+      "success": "Thanks for subscribing!",
+      "submit": "Subscribe"
     }
   }
 }

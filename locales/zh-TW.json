@@ -15,7 +15,10 @@
       "phone": "電話",
       "comment": "留言",
       "post_success": "感謝您聯絡我們。我們會盡快回覆您。",
-      "error_heading": "請調整以下內容："
+      "error_heading": "請調整以下內容：",
+      "post_received": "Received. We'll be in touch soon.",
+      "post_error": "Failed to send. Please check your information and try again.",
+      "sending": "Sending..."
     },
     "slider_label": "投影播放器"
   },
@@ -347,8 +350,8 @@
       "heading": "Start a conversation",
       "text": "Leave your name and email, and we'll follow up soon.",
       "default_message": "Floating contact form request.",
-      "success": "Thanks. We'll be in touch soon.",
-      "submit": "Send"
+      "success": "Thanks for subscribing!",
+      "submit": "Subscribe"
     }
   }
 }

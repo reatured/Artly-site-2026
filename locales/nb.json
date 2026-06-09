@@ -15,7 +15,10 @@
       "phone": "Telefon",
       "comment": "Kommentar",
       "post_success": "Takk for at du kontaktet oss. Vi svarer så snart som mulig.",
-      "error_heading": "Juster følgende:"
+      "error_heading": "Juster følgende:",
+      "post_received": "Received. We'll be in touch soon.",
+      "post_error": "Failed to send. Please check your information and try again.",
+      "sending": "Sending..."
     },
     "slider_label": "Glidefelt"
   },
@@ -347,8 +350,8 @@
       "heading": "Start a conversation",
       "text": "Leave your name and email, and we'll follow up soon.",
       "default_message": "Floating contact form request.",
-      "success": "Thanks. We'll be in touch soon.",
-      "submit": "Send"
+      "success": "Thanks for subscribing!",
+      "submit": "Subscribe"
     }
   }
 }

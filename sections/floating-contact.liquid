@@ -31,16 +31,11 @@
           </p>
         </div>
 
-        {%- form 'contact', id: floating_contact_form_id, class: 'floating-contact__form', return_to: floating_contact_return_to -%}
+        {%- form 'customer', id: floating_contact_form_id, class: 'floating-contact__form', return_to: floating_contact_return_to -%}
           <input
-            name="contact[id]"
+            name="contact[tags]"
             type="hidden"
-            value="{{ floating_contact_form_id }}"
-          >
-          <input
-            name="contact[body]"
-            type="hidden"
-            value="{{ 'sections.floating_contact.default_message' | t | escape }}"
+            value="newsletter,floating-contact"
           >
 
           {%- if form.errors and form.id == floating_contact_form_id -%}
@@ -72,9 +67,9 @@
               class="floating-contact__input"
               id="FloatingContactName-{{ section.id }}"
               type="text"
-              name="contact[name]"
+              name="contact[first_name]"
               autocomplete="name"
-              value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}"
+              value="{% if customer %}{{ customer.first_name }}{% endif %}"
               required
             >
           </div>
@@ -104,6 +99,16 @@
           <button class="button floating-contact__submit" type="submit">
             {{- 'sections.floating_contact.submit' | t -}}
           </button>
+
+          <p
+            class="floating-contact__submit-status"
+            data-floating-contact-status
+            data-sending-text="{{ 'blocks.contact_form.sending' | t | escape }}"
+            aria-live="polite"
+            hidden
+          >
+            {{- 'blocks.contact_form.sending' | t -}}
+          </p>
         {%- endform -%}
       </div>
     </details>
@@ -277,6 +282,29 @@
     margin-top: 2px;
   }
 
+  .floating-contact__form[data-submitting='true'] .floating-contact__submit {
+    gap: var(--gap-xs);
+    pointer-events: none;
+    opacity: 0.82;
+  }
+
+  .floating-contact__form[data-submitting='true'] .floating-contact__submit::before {
+    content: '';
+    width: 1em;
+    height: 1em;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: floating-contact-submit-spin 700ms linear infinite;
+  }
+
+  .floating-contact__submit-status {
+    margin: 0;
+    color: rgb(var(--color-foreground-rgb) / 72%);
+    font-size: var(--font-size--sm);
+    line-height: 1.35;
+  }
+
   .floating-contact__message {
     margin: 0;
     padding: 10px 12px;
@@ -318,6 +346,12 @@
     }
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    .floating-contact__form[data-submitting='true'] .floating-contact__submit::before {
+      animation: none;
+    }
+  }
+
   @keyframes floating-contact-panel-in {
     from {
       opacity: 0;
@@ -329,6 +363,12 @@
       transform: translateY(0) scale(1);
     }
   }
+
+  @keyframes floating-contact-submit-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
 {% endstylesheet %}
 
 {% javascript %}
@@ -336,6 +376,29 @@
     connectedCallback() {
       const details = this.querySelector('details');
       const message = this.querySelector('[data-floating-contact-message]');
+      const form = this.querySelector('.floating-contact__form');
+
+      if (form instanceof HTMLFormElement && form.dataset.submitStateInitialized !== 'true') {
+        form.dataset.submitStateInitialized = 'true';
+        form.addEventListener('submit', () => {
+          if (!form.checkValidity()) return;
+
+          const button = form.querySelector('.floating-contact__submit');
+          const status = form.querySelector('[data-floating-contact-status]');
+
+          form.dataset.submitting = 'true';
+
+          if (button instanceof HTMLButtonElement) {
+            button.disabled = true;
+            button.setAttribute('aria-busy', 'true');
+          }
+
+          if (status instanceof HTMLElement) {
+            status.hidden = false;
+            status.textContent = status.dataset.sendingText || '';
+          }
+        });
+      }
 
       if (!(details instanceof HTMLDetailsElement) || !(message instanceof HTMLElement)) return;
 
@@ -347,6 +410,24 @@
   if (!customElements.get('floating-contact')) {
     customElements.define('floating-contact', FloatingContact);
   }
+
+  window.addEventListener('pageshow', () => {
+    document.querySelectorAll('.floating-contact__form[data-submitting="true"]').forEach((form) => {
+      const button = form.querySelector('.floating-contact__submit');
+      const status = form.querySelector('[data-floating-contact-status]');
+
+      delete form.dataset.submitting;
+
+      if (button instanceof HTMLButtonElement) {
+        button.disabled = false;
+        button.removeAttribute('aria-busy');
+      }
+
+      if (status instanceof HTMLElement) {
+        status.hidden = true;
+      }
+    });
+  });
 {% endjavascript %}
 
 {% schema %}
