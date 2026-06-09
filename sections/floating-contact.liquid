@@ -1,0 +1,357 @@
+{% assign floating_contact_form_id = 'FloatingContactForm-' | append: section.id %}
+{% assign floating_contact_return_to = request.path | default: routes.root_url | append: '#floating-contact' %}
+
+<floating-contact class="floating-contact" data-floating-contact>
+  <section id="floating-contact" class="floating-contact__section">
+    <details class="floating-contact__details">
+      <summary class="floating-contact__summary">
+        <span class="floating-contact__summary-label floating-contact__summary-label--closed">
+          {{- 'sections.floating_contact.trigger' | t -}}
+        </span>
+        <span class="floating-contact__summary-label floating-contact__summary-label--open visually-hidden">
+          {{- 'sections.floating_contact.close' | t -}}
+        </span>
+        <span class="floating-contact__summary-close" aria-hidden="true">
+          {{- 'icon-close.svg' | inline_asset_content -}}
+        </span>
+      </summary>
+
+      <div
+        class="floating-contact__panel"
+        id="FloatingContactPanel-{{ section.id }}"
+        role="region"
+        aria-labelledby="FloatingContactHeading-{{ section.id }}"
+      >
+        <div class="floating-contact__header">
+          <h2 class="floating-contact__heading" id="FloatingContactHeading-{{ section.id }}">
+            {{- 'sections.floating_contact.heading' | t -}}
+          </h2>
+          <p class="floating-contact__text">
+            {{- 'sections.floating_contact.text' | t -}}
+          </p>
+        </div>
+
+        {%- form 'contact', id: floating_contact_form_id, class: 'floating-contact__form', return_to: floating_contact_return_to -%}
+          <input
+            name="contact[id]"
+            type="hidden"
+            value="{{ floating_contact_form_id }}"
+          >
+          <input
+            name="contact[body]"
+            type="hidden"
+            value="{{ 'sections.floating_contact.default_message' | t | escape }}"
+          >
+
+          {%- if form.errors and form.id == floating_contact_form_id -%}
+            <div
+              class="floating-contact__message floating-contact__message--error"
+              id="FloatingContactError-{{ section.id }}"
+              tabindex="-1"
+              data-floating-contact-message
+            >
+              {{ form.errors | default_errors }}
+            </div>
+          {%- endif -%}
+
+          {%- if form.posted_successfully? and form.id == floating_contact_form_id -%}
+            <p
+              class="floating-contact__message floating-contact__message--success"
+              tabindex="-1"
+              data-floating-contact-message
+            >
+              {{- 'sections.floating_contact.success' | t -}}
+            </p>
+          {%- endif -%}
+
+          <div class="floating-contact__field">
+            <label class="floating-contact__label" for="FloatingContactName-{{ section.id }}">
+              {{- 'blocks.contact_form.name' | t -}}
+            </label>
+            <input
+              class="floating-contact__input"
+              id="FloatingContactName-{{ section.id }}"
+              type="text"
+              name="contact[name]"
+              autocomplete="name"
+              value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}"
+              required
+            >
+          </div>
+
+          <div class="floating-contact__field">
+            <label class="floating-contact__label" for="FloatingContactEmail-{{ section.id }}">
+              {{- 'blocks.contact_form.email' | t -}}
+            </label>
+            <input
+              class="floating-contact__input"
+              id="FloatingContactEmail-{{ section.id }}"
+              type="email"
+              name="contact[email]"
+              autocomplete="email"
+              spellcheck="false"
+              autocapitalize="off"
+              value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+              required
+              aria-required="true"
+              {% if form.errors contains 'email' and form.id == floating_contact_form_id %}
+                aria-invalid="true"
+                aria-describedby="FloatingContactError-{{ section.id }}"
+              {% endif %}
+            >
+          </div>
+
+          <button class="button floating-contact__submit" type="submit">
+            {{- 'sections.floating_contact.submit' | t -}}
+          </button>
+        {%- endform -%}
+      </div>
+    </details>
+  </section>
+</floating-contact>
+
+{% stylesheet %}
+  .floating-contact {
+    display: block;
+    position: fixed;
+    right: max(16px, env(safe-area-inset-right));
+    bottom: max(16px, env(safe-area-inset-bottom));
+    z-index: 40;
+    width: min(360px, calc(100vw - 32px));
+    pointer-events: none;
+  }
+
+  .floating-contact__details {
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    pointer-events: auto;
+  }
+
+  .floating-contact__summary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 112px;
+    min-height: 44px;
+    padding: 0 18px;
+    color: var(--color-primary-button-text);
+    background: var(--color-primary-button-background);
+    border-radius: 999px;
+    box-shadow: 0 14px 34px rgb(0 0 0 / 18%);
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+    font: var(--font-body--weight) var(--font-size--sm) / 1 var(--font-body--family);
+    transition:
+      transform var(--animation-speed) var(--animation-easing),
+      box-shadow var(--animation-speed) var(--animation-easing);
+  }
+
+  .floating-contact__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .floating-contact__summary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 18px 42px rgb(0 0 0 / 20%);
+  }
+
+  .floating-contact__summary:focus-visible {
+    outline: 2px solid var(--color-foreground);
+    outline-offset: 3px;
+  }
+
+  .floating-contact__summary-close {
+    display: none;
+    width: 18px;
+    height: 18px;
+  }
+
+  .floating-contact__summary-close svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .floating-contact__details[open] .floating-contact__summary {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    z-index: 1;
+    min-width: 36px;
+    width: 36px;
+    min-height: 36px;
+    padding: 0;
+    color: var(--color-foreground);
+    background: transparent;
+    border-radius: 50%;
+    box-shadow: none;
+  }
+
+  .floating-contact__details[open] .floating-contact__summary:hover {
+    transform: none;
+    background: rgb(0 0 0 / 6%);
+  }
+
+  .floating-contact__details[open] .floating-contact__summary-label--closed {
+    display: none;
+  }
+
+  .floating-contact__summary-label--open {
+    display: none;
+  }
+
+  .floating-contact__details[open] .floating-contact__summary-label--open {
+    display: block;
+  }
+
+  .floating-contact__details[open] .floating-contact__summary-close {
+    display: block;
+  }
+
+  .floating-contact__panel {
+    width: 100%;
+    padding: 22px;
+    color: var(--color-foreground);
+    background: var(--color-background);
+    border: 1px solid rgb(var(--color-foreground-rgb) / 12%);
+    border-radius: 8px;
+    box-shadow: 0 20px 56px rgb(0 0 0 / 22%);
+  }
+
+  .floating-contact__header {
+    padding-right: 42px;
+    margin-bottom: 16px;
+  }
+
+  .floating-contact__heading {
+    margin: 0 0 6px;
+    font: var(--font-heading--weight) var(--font-size--lg) / 1.15 var(--font-heading--family);
+    letter-spacing: 0;
+  }
+
+  .floating-contact__text {
+    margin: 0;
+    color: rgb(var(--color-foreground-rgb) / 72%);
+    font-size: var(--font-size--sm);
+    line-height: 1.45;
+  }
+
+  .floating-contact__form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .floating-contact__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .floating-contact__label {
+    font-size: var(--font-size--xs);
+    line-height: 1.2;
+  }
+
+  .floating-contact__input {
+    width: 100%;
+    min-height: 44px;
+    padding: 11px 13px;
+    color: var(--color-input-text);
+    background: var(--color-input-background);
+    border: var(--style-border-width-inputs) solid var(--color-input-border);
+    border-radius: var(--style-border-radius-inputs);
+    font: inherit;
+  }
+
+  .floating-contact__input:focus-visible {
+    outline: 2px solid var(--color-foreground);
+    outline-offset: 2px;
+  }
+
+  .floating-contact__submit {
+    width: 100%;
+    min-height: 44px;
+    margin-top: 2px;
+  }
+
+  .floating-contact__message {
+    margin: 0;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: var(--font-size--sm);
+    line-height: 1.35;
+  }
+
+  .floating-contact__message ul {
+    margin: 0;
+    padding-left: 18px;
+  }
+
+  .floating-contact__message--error {
+    color: var(--color-error);
+    background: color-mix(in srgb, var(--color-error) 10%, transparent);
+  }
+
+  .floating-contact__message--success {
+    color: var(--color-foreground);
+    background: rgb(var(--color-foreground-rgb) / 8%);
+  }
+
+  @media screen and (max-width: 749px) {
+    .floating-contact {
+      right: max(12px, env(safe-area-inset-right));
+      bottom: max(12px, env(safe-area-inset-bottom));
+      width: min(340px, calc(100vw - 24px));
+    }
+
+    .floating-contact__panel {
+      padding: 20px;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .floating-contact__panel {
+      animation: floating-contact-panel-in var(--animation-speed) var(--animation-easing);
+    }
+  }
+
+  @keyframes floating-contact-panel-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px) scale(0.98);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  class FloatingContact extends HTMLElement {
+    connectedCallback() {
+      const details = this.querySelector('details');
+      const message = this.querySelector('[data-floating-contact-message]');
+
+      if (!(details instanceof HTMLDetailsElement) || !(message instanceof HTMLElement)) return;
+
+      details.open = true;
+      requestAnimationFrame(() => message.focus({ preventScroll: true }));
+    }
+  }
+
+  if (!customElements.get('floating-contact')) {
+    customElements.define('floating-contact', FloatingContact);
+  }
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Floating contact",
+  "class": "floating-contact-section"
+}
+{% endschema %}

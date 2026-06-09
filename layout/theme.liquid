@@ -134,5 +134,16 @@
     {% if settings.quick_add or settings.mobile_quick_add %}
       {% render 'quick-add-modal' %}
     {% endif %}
+
+    {% assign is_contact_page = false %}
+    {% if template.name == 'page' %}
+      {% if template.suffix == 'contact' or page.handle == 'contact' %}
+        {% assign is_contact_page = true %}
+      {% endif %}
+    {% endif %}
+
+    {% unless is_contact_page %}
+      {% section 'floating-contact' %}
+    {% endunless %}
   </body>
 </html>
