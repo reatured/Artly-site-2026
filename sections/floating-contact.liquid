@@ -283,13 +283,17 @@
   }
 
   .floating-contact__form[data-submitting='true'] .floating-contact__submit {
-    gap: var(--gap-xs);
+    position: relative;
     pointer-events: none;
     opacity: 0.82;
   }
 
   .floating-contact__form[data-submitting='true'] .floating-contact__submit::before {
     content: '';
+    position: absolute;
+    inset-inline-start: var(--button-padding-inline);
+    top: 50%;
+    translate: 0 -50%;
     width: 1em;
     height: 1em;
     border: 2px solid currentColor;
