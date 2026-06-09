@@ -1,0 +1,87 @@
+{
+  "sections": {
+    "main": {
+      "type": "legal-page",
+      "blocks": {
+        "overview": {
+          "type": "policy_section",
+          "settings": {
+            "heading": "Overview",
+            "text": "<p>This Privacy Policy explains how Artly collects, uses, and protects information when you visit our website, submit a form, subscribe to updates, or contact our team.</p>"
+          }
+        },
+        "information_we_collect": {
+          "type": "policy_section",
+          "settings": {
+            "heading": "Information we collect",
+            "text": "<p>We may collect contact details you submit, such as name, email address, company, phone number, and message content. We may also collect technical information such as browser type, device information, pages viewed, referral source, and approximate location derived from IP address.</p>"
+          }
+        },
+        "how_we_use_information": {
+          "type": "policy_section",
+          "settings": {
+            "heading": "How we use information",
+            "text": "<p>We use information to respond to inquiries, operate and improve the website, send requested updates, measure content performance, protect the site from misuse, and support business communications about Artly products and services.</p>"
+          }
+        },
+        "sharing": {
+          "type": "policy_section",
+          "settings": {
+            "heading": "Sharing and service providers",
+            "text": "<p>We may share information with vendors that help us host the website, process forms, provide analytics, send communications, or operate our business. We do not sell personal information through this website.</p>"
+          }
+        },
+        "cookies": {
+          "type": "policy_section",
+          "settings": {
+            "heading": "Cookies and similar technologies",
+            "text": "<p>We use essential cookies for site functionality and optional cookies for analytics or marketing measurement when you allow them. You can review and update choices from the Cookie Policy page.</p>"
+          }
+        },
+        "choices": {
+          "type": "policy_section",
+          "settings": {
+            "heading": "Your choices",
+            "text": "<p>You can unsubscribe from marketing emails by using the unsubscribe link in those messages. You can request access, correction, or deletion of personal information by contacting us. Browser settings may also let you block or delete cookies.</p>"
+          }
+        },
+        "retention_security": {
+          "type": "policy_section",
+          "settings": {
+            "heading": "Retention and security",
+            "text": "<p>We keep information only as long as needed for the purposes described in this policy, unless a longer period is required by law or business records obligations. We use reasonable administrative, technical, and organizational safeguards to protect information.</p>"
+          }
+        },
+        "contact": {
+          "type": "policy_section",
+          "settings": {
+            "heading": "Contact",
+            "text": "<p>For privacy questions or requests, contact Artly through the contact form on this website or by using the contact details provided by our team.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "overview",
+        "information_we_collect",
+        "how_we_use_information",
+        "sharing",
+        "cookies",
+        "choices",
+        "retention_security",
+        "contact"
+      ],
+      "settings": {
+        "section_width": "page-width",
+        "eyebrow": "Privacy",
+        "heading": "Privacy Policy",
+        "intro": "<p>Artly respects visitor privacy. This page summarizes what information this website may collect, why it is used, and the choices available to visitors.</p>",
+        "last_updated": "June 9, 2026",
+        "show_cookie_settings_button": false,
+        "color_scheme": "scheme-1",
+        "padding-block-start": 64,
+        "padding-block-end": 80
+      }
+    }
+  },
+  "order": ["main"]
+}

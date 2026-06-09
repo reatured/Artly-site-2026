@@ -1,0 +1,129 @@
+{%- doc -%}
+  Renders the global cookie consent form.
+
+  @example
+  {% render 'cookie-consent' %}
+{%- enddoc -%}
+
+{% liquid
+  assign consent_color_scheme = settings.popover_color_scheme | default: 'scheme-1'
+  assign privacy_policy_url = '/pages/privacy-policy'
+  assign cookie_policy_url = '/pages/cookie-policy'
+%}
+
+{{ 'cookie-consent.css' | asset_url | stylesheet_tag }}
+<script
+  src="{{ 'cookie-consent.js' | asset_url }}"
+  defer
+></script>
+
+<div
+  class="cookie-consent color-{{ consent_color_scheme }}"
+  data-cookie-consent
+  data-cookie-consent-version="2026-06-09"
+  role="dialog"
+  aria-modal="false"
+  aria-labelledby="CookieConsentTitle"
+  aria-describedby="CookieConsentDescription"
+  hidden
+>
+  <form
+    class="cookie-consent__form"
+    data-cookie-consent-form
+  >
+    <div class="cookie-consent__header">
+      <p class="cookie-consent__eyebrow">Privacy choices</p>
+      <h2
+        class="cookie-consent__title"
+        id="CookieConsentTitle"
+      >
+        Cookie preferences
+      </h2>
+      <p
+        class="cookie-consent__description"
+        id="CookieConsentDescription"
+      >
+        We use essential cookies to keep the site working. Optional cookies help us understand site performance and improve Artly communications.
+      </p>
+    </div>
+
+    <fieldset class="cookie-consent__choices">
+      <legend class="visually-hidden">Cookie categories</legend>
+
+      <label class="cookie-consent__choice cookie-consent__choice--locked">
+        <span class="cookie-consent__choice-input">
+          <input
+            type="checkbox"
+            checked
+            disabled
+          >
+          <span aria-hidden="true"></span>
+        </span>
+        <span class="cookie-consent__choice-copy">
+          <span class="cookie-consent__choice-title">Essential</span>
+          <span class="cookie-consent__choice-description">Required for security, checkout, navigation, and preference storage.</span>
+        </span>
+      </label>
+
+      <label class="cookie-consent__choice">
+        <span class="cookie-consent__choice-input">
+          <input
+            type="checkbox"
+            name="analytics"
+            data-cookie-category="analytics"
+          >
+          <span aria-hidden="true"></span>
+        </span>
+        <span class="cookie-consent__choice-copy">
+          <span class="cookie-consent__choice-title">Analytics</span>
+          <span class="cookie-consent__choice-description">Helps us measure visits, page performance, and content usefulness.</span>
+        </span>
+      </label>
+
+      <label class="cookie-consent__choice">
+        <span class="cookie-consent__choice-input">
+          <input
+            type="checkbox"
+            name="marketing"
+            data-cookie-category="marketing"
+          >
+          <span aria-hidden="true"></span>
+        </span>
+        <span class="cookie-consent__choice-copy">
+          <span class="cookie-consent__choice-title">Marketing</span>
+          <span class="cookie-consent__choice-description">Allows us to tailor campaign measurement and outreach.</span>
+        </span>
+      </label>
+    </fieldset>
+
+    <div class="cookie-consent__actions">
+      <button
+        class="button-secondary cookie-consent__button"
+        type="button"
+        data-cookie-consent-reject
+      >
+        Reject optional
+      </button>
+      <button
+        class="button-secondary cookie-consent__button"
+        type="submit"
+        data-cookie-consent-save
+      >
+        Save choices
+      </button>
+      <button
+        class="button cookie-consent__button"
+        type="button"
+        data-cookie-consent-accept
+      >
+        Accept all
+      </button>
+    </div>
+
+    <p class="cookie-consent__links">
+      <a href="{{ privacy_policy_url }}">Privacy Policy</a>
+      <span aria-hidden="true">/</span>
+      <a href="{{ cookie_policy_url }}">Cookie Policy</a>
+    </p>
+  </form>
+</div>

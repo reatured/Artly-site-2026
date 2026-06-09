@@ -1,4 +1,31 @@
-{% if shop.policies.size > 0 %}
+{% liquid
+  assign privacy_policy_url = block.settings.privacy_policy_url | default: '/pages/privacy-policy'
+  assign privacy_policy_label = block.settings.privacy_policy_label | default: 'Privacy Policy'
+  assign cookie_policy_url = block.settings.cookie_policy_url | default: '/pages/cookie-policy'
+  assign cookie_policy_label = block.settings.cookie_policy_label | default: 'Cookie Policy'
+
+  assign show_privacy_policy_link = false
+  assign show_cookie_policy_link = false
+  assign should_render_policy_list = false
+
+  if shop.policies.size > 0
+    assign should_render_policy_list = true
+  endif
+
+  if block.settings.show_theme_policy_links
+    if privacy_policy_url != blank
+      assign show_privacy_policy_link = true
+      assign should_render_policy_list = true
+    endif
+
+    if cookie_policy_url != blank
+      assign show_cookie_policy_link = true
+      assign should_render_policy_list = true
+    endif
+  endif
+%}
+
+{% if should_render_policy_list %}
   <anchored-popover-component
     data-hover-triggered="true"
   >
@@ -37,6 +64,28 @@
             </li>
           {%- endif -%}
         {%- endfor -%}
+
+        {% if show_privacy_policy_link %}
+          <li>
+            <a
+              href="{{ privacy_policy_url }}"
+              class="footer-utilities__text"
+            >
+              {{ privacy_policy_label | escape }}
+            </a>
+          </li>
+        {% endif %}
+
+        {% if show_cookie_policy_link %}
+          <li>
+            <a
+              href="{{ cookie_policy_url }}"
+              class="footer-utilities__text"
+            >
+              {{ cookie_policy_label | escape }}
+            </a>
+          </li>
+        {% endif %}
       </ul>
     </div>
   </anchored-popover-component>
@@ -148,6 +197,34 @@
     {
       "type": "paragraph",
       "content": "t:content.manage_policies"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_theme_policy_links",
+      "label": "Show theme privacy and cookie links",
+      "default": true
+    },
+    {
+      "type": "url",
+      "id": "privacy_policy_url",
+      "label": "Privacy page link"
+    },
+    {
+      "type": "text",
+      "id": "privacy_policy_label",
+      "label": "Privacy page label",
+      "default": "Privacy Policy"
+    },
+    {
+      "type": "url",
+      "id": "cookie_policy_url",
+      "label": "Cookie page link"
+    },
+    {
+      "type": "text",
+      "id": "cookie_policy_label",
+      "label": "Cookie page label",
+      "default": "Cookie Policy"
     },
     {
       "type": "select",

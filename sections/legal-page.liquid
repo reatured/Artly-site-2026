@@ -1,0 +1,251 @@
+{% liquid
+  assign section_width = section.settings.section_width
+  assign eyebrow = section.settings.eyebrow
+  assign heading = section.settings.heading
+  assign intro = section.settings.intro
+  assign last_updated = section.settings.last_updated
+%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div
+  class="
+    section
+    section--{{ section_width }}
+    color-{{ section.settings.color_scheme }}
+    legal-page
+    spacing-style
+  "
+  style="{% render 'spacing-style', settings: section.settings %}"
+  {{ section.shopify_attributes }}
+>
+  <article class="legal-page__inner">
+    <header class="legal-page__header">
+      {% if eyebrow != blank %}
+        <p class="legal-page__eyebrow">{{ eyebrow }}</p>
+      {% endif %}
+
+      {% if heading != blank %}
+        <h1 class="legal-page__title">{{ heading }}</h1>
+      {% endif %}
+
+      {% if last_updated != blank %}
+        <p class="legal-page__updated">Last updated {{ last_updated }}</p>
+      {% endif %}
+
+      {% if intro != blank %}
+        <div class="legal-page__intro rte">
+          {{ intro }}
+        </div>
+      {% endif %}
+    </header>
+
+    <div class="legal-page__content rte">
+      {% if section.blocks.size > 0 %}
+        {% for block in section.blocks %}
+          <section
+            class="legal-page__section"
+            {{ block.shopify_attributes }}
+          >
+            {% if block.settings.heading != blank %}
+              <h2>{{ block.settings.heading }}</h2>
+            {% endif %}
+
+            {% if block.settings.text != blank %}
+              {{ block.settings.text }}
+            {% endif %}
+          </section>
+        {% endfor %}
+      {% else %}
+        <p>Add policy content for this page in the theme editor.</p>
+      {% endif %}
+    </div>
+
+    {% if section.settings.show_cookie_settings_button %}
+      <div class="legal-page__actions">
+        <button
+          class="button legal-page__cookie-settings-button"
+          type="button"
+          data-cookie-consent-open
+        >
+          Update cookie choices
+        </button>
+      </div>
+    {% endif %}
+  </article>
+</div>
+
+{% stylesheet %}
+  .legal-page__inner {
+    width: min(100%, 880px);
+    margin-inline: auto;
+  }
+
+  .legal-page__header {
+    display: grid;
+    gap: 14px;
+    padding-block-end: clamp(28px, 5vw, 56px);
+    border-bottom: 1px solid rgb(var(--color-border-rgb) / var(--opacity-30));
+  }
+
+  .legal-page__eyebrow,
+  .legal-page__updated {
+    margin: 0;
+    color: var(--color-foreground-muted);
+  }
+
+  .legal-page__eyebrow {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+
+  .legal-page__title {
+    margin: 0;
+    font-size: clamp(2.25rem, 1.75rem + 2vw, 4rem);
+    line-height: 1;
+    letter-spacing: 0;
+  }
+
+  .legal-page__updated {
+    font-size: 0.9rem;
+  }
+
+  .legal-page__intro {
+    color: var(--color-foreground-muted);
+    font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+    line-height: 1.6;
+  }
+
+  .legal-page__content {
+    display: grid;
+    gap: clamp(24px, 4vw, 44px);
+    padding-block-start: clamp(28px, 5vw, 56px);
+  }
+
+  .legal-page__section {
+    display: grid;
+    gap: 12px;
+  }
+
+  .legal-page__section h2 {
+    margin: 0;
+    font-size: clamp(1.35rem, 1.1rem + 0.8vw, 2rem);
+    line-height: 1.15;
+  }
+
+  .legal-page__actions {
+    margin-block-start: clamp(28px, 5vw, 52px);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Legal page",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "t:settings.width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "t:options.page"
+        },
+        {
+          "value": "full-width",
+          "label": "t:options.full"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Legal"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Policy"
+    },
+    {
+      "type": "richtext",
+      "id": "intro",
+      "label": "Intro",
+      "default": "<p>Review how this site handles visitor information and privacy choices.</p>"
+    },
+    {
+      "type": "text",
+      "id": "last_updated",
+      "label": "Last updated",
+      "default": "June 9, 2026"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cookie_settings_button",
+      "label": "Show cookie settings button",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 80
+    }
+  ],
+  "blocks": [
+    {
+      "type": "policy_section",
+      "name": "Policy section",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Policy section"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Add policy details here.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Legal page"
+    }
+  ]
+}
+{% endschema %}
