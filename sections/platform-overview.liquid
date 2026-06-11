@@ -92,10 +92,11 @@
       {{
         media_tag
         | video_tag:
-          autoplay: section.settings.video_autoplay,
+          autoplay: true,
           loop: section.settings.video_loop,
-          muted: section.settings.video_autoplay,
+          muted: true,
           controls: true,
+          playsinline: true,
           poster: media_poster,
           class: 'platform-overview__media'
       }}
@@ -566,9 +567,9 @@
     {
       "type": "checkbox",
       "id": "video_autoplay",
-      "label": "Video autoplay",
+      "label": "External video autoplay",
       "default": false,
-      "visible_if": "{{ section.settings.media_type == 'video' or section.settings.media_type == 'video_url' }}"
+      "visible_if": "{{ section.settings.media_type == 'video_url' }}"
     },
     {
       "type": "checkbox",
