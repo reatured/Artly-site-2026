@@ -74,9 +74,9 @@
       "type": "platform-overview",
       "settings": {
         "eyebrow": "The Artly Ecosystem",
-        "heading": "Automation that fits real service environments.",
-        "body_line_1": "Artly combines robotic coffee hardware, field-tested workflows, and operator support into a deployable service system for offices, campuses, hospitality spaces, and high-traffic venues.",
-        "body_line_2": "The platform is built around real deployment feedback, so the experience keeps improving across drink quality, reliability, and day-to-day operations.",
+        "heading": "Automation built for the real world.",
+        "body_line_1": "At Artly, we believe the future belongs to everyone, and everyone belongs in it. We’re on a mission to give everyone, regardless of technical background, the ability to teach, deploy, and benefit from the next generation of intelligent technology.",
+        "body_line_2": "Our patented physical AI platform combines proprietary hardware, deep learning + Vision-Language-Action models, and a real-world deployment feedback loop to deliver custom specialized robots at commercial scale — without the steep learning curve.",
         "proof_microcopy": "Designed for commercial service, operator handoff, and repeatable drink quality.",
         "primary_cta_label": "Talk to an Expert",
         "primary_cta_link": "shopify://pages/contact",
@@ -107,11 +107,11 @@
         "tile-training": {
           "type": "capability-proof-tile",
           "settings": {
-            "icon": "stopwatch",
+            "icon": "world",
             "heading": "Real-World Readiness",
             "body": "Unlike robots trained in labs or on simulations, our robots are trained exclusively on data from live deployments, making them ready to perform in unpredictable environments from day one.",
-            "stat_value": "30",
-            "stat_label": "minute setup",
+            "stat_value": "",
+            "stat_label": "",
             "link": "",
             "open_in_new_tab": false
           },
@@ -120,11 +120,11 @@
         "tile-ecosystem": {
           "type": "capability-proof-tile",
           "settings": {
-            "icon": "recycle",
+            "icon": "flywheel",
             "heading": "Self-Improving Ecosystem",
             "body": "Every deployment generates real-world data that feeds back into the system, continuously improving robot knowledge, perception, control, and prompt understanding over time.",
-            "stat_value": "Closed-loop",
-            "stat_label": "learning cycle",
+            "stat_value": "",
+            "stat_label": "",
             "link": "",
             "open_in_new_tab": false
           },
@@ -133,11 +133,11 @@
         "tile-actions": {
           "type": "capability-proof-tile",
           "settings": {
-            "icon": "truck",
+            "icon": "hand",
             "heading": "Adaptive Intelligence",
             "body": "Our sensing rigs capture environmental data that allows robots to truly understand tasks — not just mimic them — by perceiving changes in their environment and responding in real time.",
-            "stat_value": "1.2M+",
-            "stat_label": "logged actions",
+            "stat_value": "",
+            "stat_label": "",
             "link": "",
             "open_in_new_tab": false
           },
@@ -146,11 +146,11 @@
         "tile-learning": {
           "type": "capability-proof-tile",
           "settings": {
-            "icon": "plant",
+            "icon": "lightbulb",
             "heading": "Human-Style Learning",
             "body": "Our imitation learning methodology captures the precision and process knowledge of domain experts, resulting in craft-level accuracy and shorter training cycles.",
-            "stat_value": "Human-guided",
-            "stat_label": "knowledge transfer",
+            "stat_value": "",
+            "stat_label": "",
             "link": "",
             "open_in_new_tab": false
           },
