@@ -1,0 +1,385 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "artly_ai_l1": {
+      "type": "artly-ai-l1",
+      "blocks": {
+        "stat-training-time": {
+          "type": "stat",
+          "settings": {
+            "icon": "stopwatch",
+            "value": "30-Minute",
+            "label": "Training Time"
+          }
+        },
+        "stat-no-code": {
+          "type": "stat",
+          "settings": {
+            "icon": "lightning_bolt",
+            "value": "No-Code",
+            "label": "Learning Methodology"
+          }
+        },
+        "stat-data": {
+          "type": "stat",
+          "settings": {
+            "icon": "world",
+            "value": "1.2M+",
+            "label": "Real-World Data Points"
+          }
+        },
+        "stat-custom": {
+          "type": "stat",
+          "settings": {
+            "icon": "check_box",
+            "value": "Fully Custom",
+            "label": "Solutions"
+          }
+        },
+        "advantage-real-world": {
+          "type": "advantage",
+          "settings": {
+            "icon": "world",
+            "heading": "Real-World Training Data",
+            "body": "Artly AI models are built exclusively on data from live deployments, not simulations, so robots are ready to perform in unpredictable environments from day one."
+          }
+        },
+        "advantage-rapid": {
+          "type": "advantage",
+          "settings": {
+            "icon": "stopwatch",
+            "heading": "Rapid Training Cycles",
+            "body": "Our imitation learning methodology brings training times down to as little as 30 minutes, with no lengthy development cycles and no coding required."
+          }
+        },
+        "advantage-custom": {
+          "type": "advantage",
+          "settings": {
+            "icon": "check_box",
+            "heading": "Fully Custom Solutions",
+            "body": "Every deployment is built around your operation and the specific tasks you need automated. There is no off-the-shelf solution here."
+          }
+        },
+        "advantage-precision": {
+          "type": "advantage",
+          "settings": {
+            "icon": "hand",
+            "heading": "Support for Precision Tasks",
+            "body": "Artly AI is designed for tasks that demand craft-level accuracy, from fine motor control to complex, multi-step processes."
+          }
+        },
+        "advantage-anomaly": {
+          "type": "advantage",
+          "settings": {
+            "icon": "lightbulb",
+            "heading": "Anomaly Detection and Correction",
+            "body": "Artly AI continuously monitors robot performance and flags deviations in real time, catching errors before they become operational problems."
+          }
+        },
+        "advantage-ecosystem": {
+          "type": "advantage",
+          "settings": {
+            "icon": "flywheel",
+            "heading": "Compounding Ecosystem",
+            "body": "Every deployment generates new real-world data that feeds back into the platform, making the system smarter with every operation."
+          }
+        },
+        "step-need": {
+          "type": "step",
+          "settings": {
+            "number": "1",
+            "heading": "Tell Us What You Need",
+            "body": "Share your operation, your environment, and the tasks you want automated. We'll design a training plan around it."
+          }
+        },
+        "step-expert": {
+          "type": "step",
+          "settings": {
+            "number": "2",
+            "heading": "We Source Your Expert",
+            "body": "We identify and onboard a domain expert with the precise skill set your deployment requires."
+          }
+        },
+        "step-train": {
+          "type": "step",
+          "settings": {
+            "number": "3",
+            "heading": "We Train Your Robot",
+            "body": "Our team captures the expert's knowledge using Artly AI and trains your robot to perform at commercial scale."
+          }
+        },
+        "step-deploy": {
+          "type": "step",
+          "settings": {
+            "number": "4",
+            "heading": "We Support Your Deployment",
+            "body": "We get your robot operational and stay on to ensure it keeps performing."
+          }
+        },
+        "logo-cisco": {
+          "type": "logo",
+          "settings": {
+            "logo_name": "Cisco",
+            "logo_alt_text": "Cisco logo"
+          }
+        },
+        "logo-intel": {
+          "type": "logo",
+          "settings": {
+            "logo_name": "Intel",
+            "logo_alt_text": "Intel logo"
+          }
+        },
+        "logo-microsoft": {
+          "type": "logo",
+          "settings": {
+            "logo_name": "Microsoft",
+            "logo_alt_text": "Microsoft logo"
+          }
+        },
+        "logo-salesforce": {
+          "type": "logo",
+          "settings": {
+            "logo_name": "Salesforce",
+            "logo_alt_text": "Salesforce logo"
+          }
+        },
+        "logo-skydio": {
+          "type": "logo",
+          "settings": {
+            "logo_name": "Skydio",
+            "logo_alt_text": "Skydio logo"
+          }
+        },
+        "logo-nvidia": {
+          "type": "logo",
+          "settings": {
+            "logo_name": "Nvidia",
+            "logo_alt_text": "Nvidia logo"
+          }
+        },
+        "team-1": {
+          "type": "team_member",
+          "settings": {
+            "name": "Team Member",
+            "bio": "Leadership bio coming soon."
+          }
+        },
+        "team-2": {
+          "type": "team_member",
+          "settings": {
+            "name": "Team Member",
+            "bio": "AI training bio coming soon."
+          }
+        },
+        "team-3": {
+          "type": "team_member",
+          "settings": {
+            "name": "Team Member",
+            "bio": "Deployment bio coming soon."
+          }
+        },
+        "press-1": {
+          "type": "press_item",
+          "settings": {
+            "source": "Press",
+            "heading": "Artly AI coverage coming soon",
+            "body": "Use this tile for the first approved article, announcement, or launch feature.",
+            "link_label": "Read the Article"
+          }
+        },
+        "press-2": {
+          "type": "press_item",
+          "settings": {
+            "source": "Press",
+            "heading": "Deployment coverage coming soon",
+            "body": "Add media coverage that supports commercial credibility and technical differentiation.",
+            "link_label": "Read the Article"
+          }
+        },
+        "press-3": {
+          "type": "press_item",
+          "settings": {
+            "source": "Press",
+            "heading": "Training platform story coming soon",
+            "body": "Highlight coverage of the Artly AI methodology, data loop, or partner ecosystem.",
+            "link_label": "Read the Article"
+          }
+        },
+        "press-4": {
+          "type": "press_item",
+          "settings": {
+            "source": "Press",
+            "heading": "Physical AI news coming soon",
+            "body": "Use this slot for future launch coverage or investor-facing proof.",
+            "link_label": "Read the Article"
+          }
+        },
+        "faq-what": {
+          "type": "faq_item",
+          "settings": {
+            "question": "What is Artly AI?",
+            "answer": "<p>Artly AI is a robot training platform that captures expert demonstrations and converts them into deployment-ready robot behavior.</p>"
+          }
+        },
+        "faq-code": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Do we need to write code to train a robot?",
+            "answer": "<p>No. Artly AI is built around no-code imitation learning, where expert demonstrations become the training signal for the robot.</p>"
+          }
+        },
+        "faq-time": {
+          "type": "faq_item",
+          "settings": {
+            "question": "How long does training take?",
+            "answer": "<p>Some tasks can be trained in as little as 30 minutes, depending on task complexity, deployment environment, and required validation.</p>"
+          }
+        },
+        "faq-custom": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Can Artly AI support custom operations?",
+            "answer": "<p>Yes. Each deployment is scoped around the customer's operation, environment, domain expert, and automation goals.</p>"
+          }
+        },
+        "faq-data": {
+          "type": "faq_item",
+          "settings": {
+            "question": "What kind of data does Artly AI use?",
+            "answer": "<p>Artly AI uses real-world data from live deployments and expert demonstrations instead of relying only on simulation.</p>"
+          }
+        },
+        "faq-precision": {
+          "type": "faq_item",
+          "settings": {
+            "question": "What tasks are a good fit?",
+            "answer": "<p>Artly AI is designed for precise, repeatable, multi-step tasks where expert craft and consistency matter.</p>"
+          }
+        },
+        "faq-deployment": {
+          "type": "faq_item",
+          "settings": {
+            "question": "What happens after deployment?",
+            "answer": "<p>Artly supports deployment and ongoing performance, including monitoring for anomalies and opportunities to improve robot behavior.</p>"
+          }
+        },
+        "cta-invest": {
+          "type": "cta_tile",
+          "settings": {
+            "icon": "lightning_bolt",
+            "heading": "Invest on StartEngine",
+            "body": "Explore Artly's company thesis and current investment opportunity.",
+            "link_label": "Learn More",
+            "link": "shopify://pages/investors"
+          }
+        },
+        "cta-partner": {
+          "type": "cta_tile",
+          "settings": {
+            "icon": "hand",
+            "heading": "Become a Partner",
+            "body": "Bring Artly AI into a deployment environment, product line, or customer operation.",
+            "link_label": "Learn More",
+            "link": "shopify://pages/contact"
+          }
+        },
+        "cta-contact": {
+          "type": "cta_tile",
+          "settings": {
+            "icon": "world",
+            "heading": "Contact Us",
+            "body": "Talk with our team about a custom robot training project.",
+            "link_label": "Learn More",
+            "link": "shopify://pages/contact"
+          }
+        }
+      },
+      "block_order": [
+        "stat-training-time",
+        "stat-no-code",
+        "stat-data",
+        "stat-custom",
+        "advantage-real-world",
+        "advantage-rapid",
+        "advantage-custom",
+        "advantage-precision",
+        "advantage-anomaly",
+        "advantage-ecosystem",
+        "step-need",
+        "step-expert",
+        "step-train",
+        "step-deploy",
+        "logo-cisco",
+        "logo-intel",
+        "logo-microsoft",
+        "logo-salesforce",
+        "logo-skydio",
+        "logo-nvidia",
+        "team-1",
+        "team-2",
+        "team-3",
+        "press-1",
+        "press-2",
+        "press-3",
+        "press-4",
+        "faq-what",
+        "faq-code",
+        "faq-time",
+        "faq-custom",
+        "faq-data",
+        "faq-precision",
+        "faq-deployment",
+        "cta-invest",
+        "cta-partner",
+        "cta-contact"
+      ],
+      "name": "Artly AI L1 page",
+      "settings": {
+        "hero_heading": "The Core Training Layer for Physical AI",
+        "hero_body": "<p>Artly AI turns expert human knowledge into specialized, production-ready robots. Built on imitation learning and real-world data, our robot training services are the fastest path from concept to deployment.</p>",
+        "hero_cta_heading": "Get deployment-ready robots fast, no coding required.",
+        "hero_cta_body": "<p>Tell us about your operation, and we'll design a training solution built around it.</p>",
+        "contact_label": "Contact Us",
+        "contact_link": "shopify://pages/contact",
+        "demo_label": "Book a Demo",
+        "demo_link": "shopify://pages/contact",
+        "demo_heading": "Commercial-scale automation without the training bottleneck.",
+        "demo_body": "<p>Artly AI uses imitation learning methodology, specialized sensing rigs, and Vision-Action-Language models to capture the knowledge of domain experts to train robots directly with no code required. A specialist demonstrates a task, Artly AI analyzes the demonstration, and the robot learns the exact motions needed to replicate it with craft-level precision.</p>",
+        "demo_media_alt_text": "Artly AI robot training demonstration",
+        "advantage_heading": "The Artly Advantage",
+        "how_heading": "How it Works",
+        "how_cta_heading": "See your robots in action.",
+        "how_cta_body": "<p>Whether you're exploring automation for the first time or have a specific operation in mind, our team will get you deployment-ready.</p>",
+        "how_cta_label": "Connect With an Expert",
+        "how_cta_link": "shopify://pages/contact",
+        "how_media_alt_text": "Artly AI deployment planning and robot training workflow",
+        "case_eyebrow": "Case Study",
+        "case_heading": "A deployment story belongs here.",
+        "case_body": "<p>Use this space for the first approved Artly AI deployment proof point, including the operation, task trained, time to readiness, and measurable commercial outcome.</p>",
+        "case_media_alt_text": "Artly AI robot deployment case study",
+        "case_link_label": "Read the Case Study",
+        "logos_heading": "Trusted By",
+        "team_heading": "Meet the Team",
+        "press_heading": "Press",
+        "faq_heading": "Frequently Asked Questions",
+        "closing_heading": "Believe in what we're building?",
+        "closing_body": "<p>Join Artly as we build the core training layer for commercial physical AI.</p>",
+        "color_scheme": "scheme-1",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    }
+  },
+  "order": [
+    "artly_ai_l1"
+  ]
+}
