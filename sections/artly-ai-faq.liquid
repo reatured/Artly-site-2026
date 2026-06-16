@@ -1,4 +1,4 @@
-﻿<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
 
 <section
   class="section section--full-width color-{{ section.settings.color_scheme }} spacing-style artly-system artly-ai-l1"
@@ -18,8 +18,8 @@
         {% for block in section.blocks %}
           <details class="artly-ai__faq-item" {{ block.shopify_attributes }}>
             <summary>
-              <span class="artly-ai__faq-toggle" aria-hidden="true">&#x25B8;</span>
-              <span class="artly-ai__faq-question">{{ block.settings.question | escape }}</span>
+              <span>{{ block.settings.question | escape }}</span>
+              <span aria-hidden="true">+</span>
             </summary>
             {% if block.settings.answer != blank %}
               <div class="rte">{{ block.settings.answer }}</div>
@@ -104,4 +104,3 @@
   ]
 }
 {% endschema %}
-

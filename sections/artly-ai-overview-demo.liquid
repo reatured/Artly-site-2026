@@ -1,30 +1,5 @@
 {% liquid
   assign demo_media_alt = section.settings.demo_media_alt_text | default: 'Artly AI robot training demonstration'
-  assign has_uploaded_video = false
-  assign has_video_url = false
-  assign has_demo_image = false
-  assign demo_poster_image = section.settings.demo_image
-
-  if section.settings.demo_video != blank
-    assign has_uploaded_video = true
-    assign demo_media_source = section.settings.demo_video
-    if demo_poster_image == blank
-      assign demo_poster_image = section.settings.demo_video.preview_image
-    endif
-  elsif section.settings.demo_video_url != blank
-    assign has_video_url = true
-    assign demo_video_url = section.settings.demo_video_url
-  elsif section.settings.demo_image != blank
-    assign has_demo_image = true
-  endif
-
-  if has_uploaded_video
-    assign demo_media_alt = demo_media_alt | default: section.settings.demo_video.alt
-  elsif has_video_url
-    assign demo_media_alt = demo_media_alt | default: section.settings.demo_video_url.alt
-  elsif has_demo_image
-    assign demo_media_alt = demo_media_alt | default: section.settings.demo_image.alt
-  endif
 %}
 
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
@@ -46,31 +21,19 @@
     </div>
 
     <div class="artly-ai__video-shell" role="img" aria-label="{{ demo_media_alt | escape }}">
-      {% if has_uploaded_video %}
-        {{
-          demo_media_source
-          | video_tag:
-            autoplay: false,
-            loop: false,
-            muted: false,
-            controls: true,
-            playsinline: true,
-            poster: demo_poster_image,
-            class: 'artly-ai__external-video'
-        }}
-      {% elsif has_video_url %}
+      {% if section.settings.demo_video_url != blank %}
         {% render 'video',
           video_from_url: true,
-          video: demo_video_url.id,
-          video_type: demo_video_url.type,
-          disable_controls: demo_video_url.type == 'youtube',
+          video: section.settings.demo_video_url.id,
+          video_type: section.settings.demo_video_url.type,
+          disable_controls: section.settings.demo_video_url.type == 'youtube',
           video_class: 'artly-ai__external-video',
           video_autoplay: false,
           video_loop: false,
           video_alt: demo_media_alt,
           video_preview_image: section.settings.demo_image
         %}
-      {% elsif has_demo_image %}
+      {% elsif section.settings.demo_image != blank %}
         {{
           section.settings.demo_image
           | image_url: width: 1800
@@ -124,11 +87,6 @@
       "id": "demo_video_url",
       "label": "External video URL",
       "accept": ["youtube", "vimeo"]
-    },
-    {
-      "type": "video",
-      "id": "demo_video",
-      "label": "Uploaded demo video"
     },
     {
       "type": "image_picker",

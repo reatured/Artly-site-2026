@@ -40,14 +40,17 @@
           <div class="rte">{{ section.settings.how_cta_body }}</div>
         {% endif %}
         {% if section.settings.how_cta_label != blank %}
-          <button
-            id="ArtlyAiHowExpertTrigger-{{ section.id }}"
-            type="button"
+          <a
             class="artly-button artly-button--primary"
-            aria-label="Open contact form"
+            {% if section.settings.how_cta_link == blank %}
+              role="link"
+              aria-disabled="true"
+            {% else %}
+              href="{{ section.settings.how_cta_link }}"
+            {% endif %}
           >
             {{ section.settings.how_cta_label | escape }}
-          </button>
+          </a>
         {% endif %}
       </div>
     </div>
@@ -190,19 +193,3 @@
   ]
 }
 {% endschema %}
-
-{% javascript %}
-  (function () {
-    const howExpertTrigger = document.getElementById('ArtlyAiHowExpertTrigger-{{ section.id }}');
-    const heroDemoTrigger = document.querySelector('[data-artly-ai-demo-trigger]') || document.querySelector('[id^=\"ArtlyAiHeroDemoTrigger-\"]');
-
-    if (!howExpertTrigger || !heroDemoTrigger) {
-      return;
-    }
-
-    howExpertTrigger.addEventListener('click', (event) => {
-      event.preventDefault();
-      heroDemoTrigger.click();
-    });
-  })();
-{% endjavascript %}

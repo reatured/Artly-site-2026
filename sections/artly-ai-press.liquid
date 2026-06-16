@@ -15,7 +15,7 @@
 
     {% if section.blocks.size > 0 %}
       <div class="artly-ai__press-grid">
-        {% for block in section.blocks limit: 2 %}
+        {% for block in section.blocks %}
           <article class="artly-ai__press-card" {{ block.shopify_attributes }}>
             {% if block.settings.source != blank %}
               <p class="artly-ai__press-source">{{ block.settings.source | escape }}</p>
@@ -48,7 +48,7 @@
 {
   "name": "Artly AI press",
   "class": "artly-ai-press-section",
-  "max_blocks": 2,
+  "max_blocks": 8,
   "disabled_on": {
     "groups": ["header", "footer"]
   },
