@@ -1,0 +1,133 @@
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+
+<section
+  class="section section--full-width color-{{ section.settings.color_scheme }} spacing-style artly-system artly-ai-l1"
+  aria-labelledby="ArtlyAiAdvantageTitle-{{ section.id }}"
+  style="{% render 'spacing-style', settings: section.settings %}"
+  {{ section.shopify_attributes }}
+>
+  <div class="artly-ai__rail artly-ai__section artly-ai__advantage">
+    <div class="artly-ai__section-intro artly-ai__section-intro--center">
+      {% if section.settings.advantage_heading != blank %}
+        <h2 id="ArtlyAiAdvantageTitle-{{ section.id }}">{{ section.settings.advantage_heading | escape }}</h2>
+      {% endif %}
+    </div>
+
+    {% if section.blocks.size > 0 %}
+      <div class="artly-ai__advantage-grid">
+        {% for block in section.blocks %}
+          <article class="artly-ai__advantage-card" {{ block.shopify_attributes }}>
+            <div class="artly-ai__advantage-icon" aria-hidden="true">
+              {% render 'icon-or-image',
+                icon: block.settings.icon,
+                image_upload: block.settings.icon_image,
+                width: 36,
+                class_name: 'artly-ai__advantage-icon-svg'
+              %}
+            </div>
+            <div>
+              <h3>{{ block.settings.heading | escape }}</h3>
+              {% if block.settings.body != blank %}
+                <div class="rte">{{ block.settings.body }}</div>
+              {% endif %}
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Artly AI advantage",
+  "class": "artly-ai-advantage-section",
+  "max_blocks": 6,
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "advantage_heading",
+      "label": "Heading",
+      "default": "The Artly Advantage"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "advantage",
+      "name": "Advantage tile",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "world", "label": "World" },
+            { "value": "stopwatch", "label": "Stopwatch" },
+            { "value": "check_box", "label": "Checklist" },
+            { "value": "hand", "label": "Hand" },
+            { "value": "lightbulb", "label": "Lightbulb" },
+            { "value": "flywheel", "label": "Flywheel" },
+            { "value": "lightning_bolt", "label": "Lightning" }
+          ],
+          "default": "world"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon_image",
+          "label": "Icon image"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Real-World Training Data"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "body",
+          "label": "Body",
+          "default": "Artly AI models are built exclusively on data from live deployments, not simulations, so robots are ready to perform in unpredictable environments from day one."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Artly AI advantage"
+    }
+  ]
+}
+{% endschema %}

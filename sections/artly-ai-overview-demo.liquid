@@ -1,0 +1,139 @@
+{% liquid
+  assign demo_media_alt = section.settings.demo_media_alt_text | default: 'Artly AI robot training demonstration'
+%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+
+<section
+  class="section section--full-width color-{{ section.settings.color_scheme }} spacing-style artly-system artly-ai-l1 artly-ai__band artly-ai__band--demo"
+  aria-labelledby="ArtlyAiDemoTitle-{{ section.id }}"
+  style="{% render 'spacing-style', settings: section.settings %}"
+  {{ section.shopify_attributes }}
+>
+  <div class="artly-ai__rail artly-ai__demo">
+    <div class="artly-ai__section-intro artly-ai__section-intro--center">
+      {% if section.settings.demo_heading != blank %}
+        <h2 id="ArtlyAiDemoTitle-{{ section.id }}">{{ section.settings.demo_heading | escape }}</h2>
+      {% endif %}
+      {% if section.settings.demo_body != blank %}
+        <div class="rte">{{ section.settings.demo_body }}</div>
+      {% endif %}
+    </div>
+
+    <div class="artly-ai__video-shell" role="img" aria-label="{{ demo_media_alt | escape }}">
+      {% if section.settings.demo_video_url != blank %}
+        {% render 'video',
+          video_from_url: true,
+          video: section.settings.demo_video_url.id,
+          video_type: section.settings.demo_video_url.type,
+          disable_controls: section.settings.demo_video_url.type == 'youtube',
+          video_class: 'artly-ai__external-video',
+          video_autoplay: false,
+          video_loop: false,
+          video_alt: demo_media_alt,
+          video_preview_image: section.settings.demo_image
+        %}
+      {% elsif section.settings.demo_image != blank %}
+        {{
+          section.settings.demo_image
+          | image_url: width: 1800
+          | image_tag:
+            width: section.settings.demo_image.width,
+            widths: '416, 600, 768, 1024, 1440, 1800',
+            height: section.settings.demo_image.height,
+            alt: demo_media_alt,
+            loading: 'lazy',
+            class: 'artly-ai__media-image'
+        }}
+      {% else %}
+        <svg class="artly-ai__media-placeholder" viewBox="0 0 960 540" role="img" aria-labelledby="ArtlyAiDemoPlaceholderTitle-{{ section.id }}">
+          <title id="ArtlyAiDemoPlaceholderTitle-{{ section.id }}">Artly AI training demo placeholder</title>
+          <rect width="960" height="540" rx="8" fill="#e4eaee"/>
+          <path d="M0 410c120-116 246-160 378-132v132H0Z" fill="#f4f7f9"/>
+          <path d="M960 0c-92 122-220 183-384 183H314v-72h262c120 0 207-37 262-111h122Z" fill="#f5f8fa"/>
+          <rect x="362" y="168" width="236" height="160" rx="8" fill="#ffffff" stroke="#ccd6dc" stroke-width="8"/>
+          <circle cx="480" cy="270" r="36" fill="#f7fafb" stroke="#b8c5cd" stroke-width="8"/>
+          <path d="M468 248v44l36-22-36-22Z" fill="#a5b4bd"/>
+          <circle cx="260" cy="170" r="58" fill="#dbe4e9"/>
+          <circle cx="632" cy="362" r="40" fill="#dbe4e9"/>
+        </svg>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Artly AI overview demo",
+  "class": "artly-ai-overview-demo-section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "demo_heading",
+      "label": "Heading",
+      "default": "Commercial-scale automation without the training bottleneck."
+    },
+    {
+      "type": "richtext",
+      "id": "demo_body",
+      "label": "Body",
+      "default": "<p>Artly AI uses imitation learning methodology, specialized sensing rigs, and Vision-Action-Language models to capture the knowledge of domain experts to train robots directly with no code required. A specialist demonstrates a task, Artly AI analyzes the demonstration, and the robot learns the exact motions needed to replicate it with craft-level precision.</p>"
+    },
+    {
+      "type": "video_url",
+      "id": "demo_video_url",
+      "label": "External video URL",
+      "accept": ["youtube", "vimeo"]
+    },
+    {
+      "type": "image_picker",
+      "id": "demo_image",
+      "label": "Demo fallback image"
+    },
+    {
+      "type": "text",
+      "id": "demo_media_alt_text",
+      "label": "Demo image/video alt text",
+      "default": "Artly AI robot training demonstration"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Artly AI overview demo"
+    }
+  ]
+}
+{% endschema %}

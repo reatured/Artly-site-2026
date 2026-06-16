@@ -1,0 +1,218 @@
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+
+<section
+  class="section section--full-width color-{{ section.settings.color_scheme }} spacing-style artly-system artly-ai-l1 artly-ai-l1-hero"
+  aria-labelledby="ArtlyAiHeroTitle-{{ section.id }}"
+  style="{% render 'spacing-style', settings: section.settings %}"
+  {{ section.shopify_attributes }}
+>
+  <div class="artly-ai__hero">
+    <div class="artly-ai__rail artly-ai__hero-inner">
+      {% if section.settings.hero_heading != blank %}
+        <h1 class="artly-ai__hero-heading" id="ArtlyAiHeroTitle-{{ section.id }}">{{ section.settings.hero_heading | escape }}</h1>
+      {% endif %}
+
+      {% if section.settings.hero_body != blank %}
+        <div class="artly-ai__hero-body rte">{{ section.settings.hero_body }}</div>
+      {% endif %}
+
+      {% if section.blocks.size > 0 %}
+        <div class="artly-ai__stat-grid" aria-label="{{ section.settings.stats_label | escape }}">
+          {% for block in section.blocks %}
+            <article class="artly-ai__stat" {{ block.shopify_attributes }}>
+              <span class="artly-ai__stat-icon-wrap" aria-hidden="true">
+                {% render 'icon-or-image',
+                  icon: block.settings.icon,
+                  image_upload: block.settings.icon_image,
+                  width: 22,
+                  class_name: 'artly-ai__stat-icon'
+                %}
+              </span>
+              <span class="artly-ai__stat-content">
+                <strong>{{ block.settings.value | escape }}</strong>
+                <span>{{ block.settings.label | escape }}</span>
+              </span>
+            </article>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <div class="artly-ai__hero-cta">
+        <div class="artly-ai__hero-cta-copy">
+          {% if section.settings.hero_cta_heading != blank %}
+            <p class="artly-ai__cta-heading">{{ section.settings.hero_cta_heading | escape }}</p>
+          {% endif %}
+          {% if section.settings.hero_cta_body != blank %}
+            <div class="artly-ai__cta-body rte">{{ section.settings.hero_cta_body }}</div>
+          {% endif %}
+        </div>
+        <div class="artly-ai__actions">
+          {% if section.settings.contact_label != blank %}
+            <a
+              class="artly-button artly-button--secondary"
+              {% if section.settings.contact_link == blank %}
+                role="link"
+                aria-disabled="true"
+              {% else %}
+                href="{{ section.settings.contact_link }}"
+              {% endif %}
+            >
+              {{ section.settings.contact_label | escape }}
+            </a>
+          {% endif %}
+          {% if section.settings.demo_label != blank %}
+            <a
+              class="artly-button artly-button--primary"
+              {% if section.settings.demo_link == blank %}
+                role="link"
+                aria-disabled="true"
+              {% else %}
+                href="{{ section.settings.demo_link }}"
+              {% endif %}
+            >
+              {{ section.settings.demo_label | escape }}
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Artly AI hero",
+  "class": "artly-ai-hero-section",
+  "max_blocks": 4,
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "hero_heading",
+      "label": "Heading",
+      "default": "The Core Training Layer for Physical AI"
+    },
+    {
+      "type": "richtext",
+      "id": "hero_body",
+      "label": "Subhead",
+      "default": "<p>Artly AI turns expert human knowledge into specialized, production-ready robots. Built on imitation learning and real-world data, our robot training services are the fastest path from concept to deployment.</p>"
+    },
+    {
+      "type": "text",
+      "id": "stats_label",
+      "label": "Stats accessibility label",
+      "default": "Artly AI proof points"
+    },
+    {
+      "type": "text",
+      "id": "hero_cta_heading",
+      "label": "CTA heading",
+      "default": "Get deployment-ready robots fast, no coding required."
+    },
+    {
+      "type": "richtext",
+      "id": "hero_cta_body",
+      "label": "CTA body",
+      "default": "<p>Tell us about your operation, and we'll design a training solution built around it.</p>"
+    },
+    {
+      "type": "text",
+      "id": "contact_label",
+      "label": "Contact button label",
+      "default": "Contact Us"
+    },
+    {
+      "type": "url",
+      "id": "contact_link",
+      "label": "Contact button link"
+    },
+    {
+      "type": "text",
+      "id": "demo_label",
+      "label": "Demo button label",
+      "default": "Book a Demo"
+    },
+    {
+      "type": "url",
+      "id": "demo_link",
+      "label": "Demo button link"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Hero stat",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "stopwatch", "label": "Stopwatch" },
+            { "value": "lightning_bolt", "label": "Lightning" },
+            { "value": "world", "label": "World" },
+            { "value": "check_box", "label": "Checklist" },
+            { "value": "flywheel", "label": "Flywheel" }
+          ],
+          "default": "stopwatch"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon_image",
+          "label": "Icon image"
+        },
+        {
+          "type": "text",
+          "id": "value",
+          "label": "Value",
+          "default": "30-Minute"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Training Time"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Artly AI hero"
+    }
+  ]
+}
+{% endschema %}

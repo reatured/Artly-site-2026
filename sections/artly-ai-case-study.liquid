@@ -1,0 +1,149 @@
+{% liquid
+  assign case_media_alt = section.settings.case_media_alt_text | default: 'Artly AI robot deployment case study'
+%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+
+<section
+  class="section section--full-width color-{{ section.settings.color_scheme }} spacing-style artly-system artly-ai-l1"
+  aria-labelledby="ArtlyAiCaseTitle-{{ section.id }}"
+  style="{% render 'spacing-style', settings: section.settings %}"
+  {{ section.shopify_attributes }}
+>
+  <div class="artly-ai__rail artly-ai__section artly-ai__case">
+    <div class="artly-ai__image-panel" role="img" aria-label="{{ case_media_alt | escape }}">
+      {% if section.settings.case_image != blank %}
+        {{
+          section.settings.case_image
+          | image_url: width: 1400
+          | image_tag:
+            width: section.settings.case_image.width,
+            widths: '416, 600, 768, 1024, 1400',
+            height: section.settings.case_image.height,
+            alt: case_media_alt,
+            loading: 'lazy',
+            class: 'artly-ai__media-image'
+        }}
+      {% else %}
+        <svg class="artly-ai__image-placeholder" viewBox="0 0 560 448" role="img" aria-labelledby="ArtlyAiCasePlaceholderTitle-{{ section.id }}">
+          <title id="ArtlyAiCasePlaceholderTitle-{{ section.id }}">Artly AI case study image placeholder</title>
+          <rect width="560" height="448" rx="8" fill="#dce3e8"/>
+          <rect x="174" y="128" width="212" height="192" fill="#f8fafb"/>
+          <path d="M174 128l212 192M386 128 174 320" stroke="#dce3e8" stroke-width="16"/>
+        </svg>
+      {% endif %}
+    </div>
+
+    <div class="artly-ai__case-copy">
+      {% if section.settings.case_eyebrow != blank %}
+        <p class="artly-ai__eyebrow">{{ section.settings.case_eyebrow | escape }}</p>
+      {% endif %}
+      {% if section.settings.case_heading != blank %}
+        <h2 id="ArtlyAiCaseTitle-{{ section.id }}">{{ section.settings.case_heading | escape }}</h2>
+      {% endif %}
+      {% if section.settings.case_body != blank %}
+        <div class="rte">{{ section.settings.case_body }}</div>
+      {% endif %}
+      {% if section.settings.case_link_label != blank %}
+        <a
+          class="artly-ai__text-link"
+          {% if section.settings.case_link == blank %}
+            role="link"
+            aria-disabled="true"
+          {% else %}
+            href="{{ section.settings.case_link }}"
+          {% endif %}
+        >
+          {{ section.settings.case_link_label | escape }}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Artly AI case study",
+  "class": "artly-ai-case-study-section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "case_eyebrow",
+      "label": "Eyebrow",
+      "default": "Case Study"
+    },
+    {
+      "type": "text",
+      "id": "case_heading",
+      "label": "Heading",
+      "default": "A deployment story belongs here."
+    },
+    {
+      "type": "richtext",
+      "id": "case_body",
+      "label": "Body",
+      "default": "<p>Use this space for the first approved Artly AI deployment proof point, including the operation, task trained, time to readiness, and measurable commercial outcome.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "case_image",
+      "label": "Case study image"
+    },
+    {
+      "type": "text",
+      "id": "case_media_alt_text",
+      "label": "Case study image alt text",
+      "default": "Artly AI robot deployment case study"
+    },
+    {
+      "type": "text",
+      "id": "case_link_label",
+      "label": "Case study link label",
+      "default": "Read the Case Study"
+    },
+    {
+      "type": "url",
+      "id": "case_link",
+      "label": "Case study link"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Artly AI case study"
+    }
+  ]
+}
+{% endschema %}

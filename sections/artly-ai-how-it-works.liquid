@@ -1,0 +1,195 @@
+{% liquid
+  assign how_media_alt = section.settings.how_media_alt_text | default: 'Artly AI deployment planning and robot training workflow'
+%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+
+<section
+  class="section section--full-width color-{{ section.settings.color_scheme }} spacing-style artly-system artly-ai-l1"
+  aria-labelledby="ArtlyAiHowTitle-{{ section.id }}"
+  style="{% render 'spacing-style', settings: section.settings %}"
+  {{ section.shopify_attributes }}
+>
+  <div class="artly-ai__rail artly-ai__section artly-ai__how">
+    <div class="artly-ai__how-content">
+      <div class="artly-ai__section-intro">
+        {% if section.settings.how_heading != blank %}
+          <h2 id="ArtlyAiHowTitle-{{ section.id }}">{{ section.settings.how_heading | escape }}</h2>
+        {% endif %}
+      </div>
+
+      {% if section.blocks.size > 0 %}
+        <div class="artly-ai__steps-grid">
+          {% for block in section.blocks %}
+            <article class="artly-ai__step" {{ block.shopify_attributes }}>
+              <p class="artly-ai__step-number">{{ block.settings.number | escape }}</p>
+              <h3>{{ block.settings.heading | escape }}</h3>
+              {% if block.settings.body != blank %}
+                <div class="rte">{{ block.settings.body }}</div>
+              {% endif %}
+            </article>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <div class="artly-ai__how-cta">
+        {% if section.settings.how_cta_heading != blank %}
+          <h3>{{ section.settings.how_cta_heading | escape }}</h3>
+        {% endif %}
+        {% if section.settings.how_cta_body != blank %}
+          <div class="rte">{{ section.settings.how_cta_body }}</div>
+        {% endif %}
+        {% if section.settings.how_cta_label != blank %}
+          <a
+            class="artly-button artly-button--primary"
+            {% if section.settings.how_cta_link == blank %}
+              role="link"
+              aria-disabled="true"
+            {% else %}
+              href="{{ section.settings.how_cta_link }}"
+            {% endif %}
+          >
+            {{ section.settings.how_cta_label | escape }}
+          </a>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="artly-ai__image-panel" role="img" aria-label="{{ how_media_alt | escape }}">
+      {% if section.settings.how_image != blank %}
+        {{
+          section.settings.how_image
+          | image_url: width: 1400
+          | image_tag:
+            width: section.settings.how_image.width,
+            widths: '416, 600, 768, 1024, 1400',
+            height: section.settings.how_image.height,
+            alt: how_media_alt,
+            loading: 'lazy',
+            class: 'artly-ai__media-image'
+        }}
+      {% else %}
+        <svg class="artly-ai__image-placeholder" viewBox="0 0 560 560" role="img" aria-labelledby="ArtlyAiHowPlaceholderTitle-{{ section.id }}">
+          <title id="ArtlyAiHowPlaceholderTitle-{{ section.id }}">Artly AI deployment image placeholder</title>
+          <rect width="560" height="560" rx="8" fill="#dce3e8"/>
+          <rect x="164" y="164" width="232" height="232" fill="#f8fafb"/>
+          <path d="M164 164l232 232M396 164 164 396" stroke="#dce3e8" stroke-width="18"/>
+        </svg>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Artly AI how it works",
+  "class": "artly-ai-how-it-works-section",
+  "max_blocks": 4,
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "how_heading",
+      "label": "Heading",
+      "default": "How it Works"
+    },
+    {
+      "type": "text",
+      "id": "how_cta_heading",
+      "label": "CTA heading",
+      "default": "See your robots in action."
+    },
+    {
+      "type": "richtext",
+      "id": "how_cta_body",
+      "label": "CTA body",
+      "default": "<p>Whether you're exploring automation for the first time or have a specific operation in mind, our team will get you deployment-ready.</p>"
+    },
+    {
+      "type": "text",
+      "id": "how_cta_label",
+      "label": "CTA button label",
+      "default": "Connect With an Expert"
+    },
+    {
+      "type": "url",
+      "id": "how_cta_link",
+      "label": "CTA button link"
+    },
+    {
+      "type": "image_picker",
+      "id": "how_image",
+      "label": "How it works image"
+    },
+    {
+      "type": "text",
+      "id": "how_media_alt_text",
+      "label": "How it works image alt text",
+      "default": "Artly AI deployment planning and robot training workflow"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "How it works step",
+      "settings": [
+        {
+          "type": "text",
+          "id": "number",
+          "label": "Number",
+          "default": "1"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Tell Us What You Need"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "body",
+          "label": "Body",
+          "default": "Share your operation, your environment, and the tasks you want automated. We'll design a training plan around it."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Artly AI how it works"
+    }
+  ]
+}
+{% endschema %}

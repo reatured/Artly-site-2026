@@ -1,0 +1,106 @@
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+
+<section
+  class="section section--full-width color-{{ section.settings.color_scheme }} spacing-style artly-system artly-ai-l1"
+  aria-labelledby="ArtlyAiFaqTitle-{{ section.id }}"
+  style="{% render 'spacing-style', settings: section.settings %}"
+  {{ section.shopify_attributes }}
+>
+  <div class="artly-ai__rail artly-ai__section artly-ai__faq">
+    <div class="artly-ai__section-intro artly-ai__section-intro--center">
+      {% if section.settings.faq_heading != blank %}
+        <h2 id="ArtlyAiFaqTitle-{{ section.id }}">{{ section.settings.faq_heading | escape }}</h2>
+      {% endif %}
+    </div>
+
+    {% if section.blocks.size > 0 %}
+      <div class="artly-ai__faq-list">
+        {% for block in section.blocks %}
+          <details class="artly-ai__faq-item" {{ block.shopify_attributes }}>
+            <summary>
+              <span>{{ block.settings.question | escape }}</span>
+              <span aria-hidden="true">+</span>
+            </summary>
+            {% if block.settings.answer != blank %}
+              <div class="rte">{{ block.settings.answer }}</div>
+            {% endif %}
+          </details>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Artly AI FAQ",
+  "class": "artly-ai-faq-section",
+  "max_blocks": 12,
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "faq_heading",
+      "label": "Heading",
+      "default": "Frequently Asked Questions"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq_item",
+      "name": "FAQ item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "What is Artly AI?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>Artly AI is a robot training platform that captures expert demonstrations and converts them into deployment-ready robot behavior.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Artly AI FAQ"
+    }
+  ]
+}
+{% endschema %}

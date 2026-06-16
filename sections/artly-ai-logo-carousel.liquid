@@ -1,0 +1,116 @@
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+
+<section
+  class="section section--full-width color-{{ section.settings.color_scheme }} spacing-style artly-system artly-ai-l1 artly-ai__band artly-ai__band--logos"
+  aria-labelledby="ArtlyAiLogosTitle-{{ section.id }}"
+  style="{% render 'spacing-style', settings: section.settings %}"
+  {{ section.shopify_attributes }}
+>
+  <div class="artly-ai__rail artly-ai__logos">
+    {% if section.settings.logos_heading != blank %}
+      <h2 id="ArtlyAiLogosTitle-{{ section.id }}">{{ section.settings.logos_heading | escape }}</h2>
+    {% endif %}
+    {% if section.blocks.size > 0 %}
+      <ul class="artly-ai__logo-list" role="list" aria-label="{{ section.settings.logos_heading | default: 'Trusted by' | escape }}">
+        {% for block in section.blocks %}
+          <li class="artly-ai__logo-item" {{ block.shopify_attributes }}>
+            {% if block.settings.logo_image != blank %}
+              {{
+                block.settings.logo_image
+                | image_url: width: 520
+                | image_tag:
+                  width: block.settings.logo_image.width,
+                  widths: '180, 260, 360, 520',
+                  height: block.settings.logo_image.height,
+                  alt: block.settings.logo_alt_text,
+                  loading: 'lazy',
+                  class: 'artly-ai__logo-image'
+              }}
+            {% else %}
+              <span>{{ block.settings.logo_name | escape }}</span>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Artly AI logo carousel",
+  "class": "artly-ai-logo-carousel-section",
+  "max_blocks": 12,
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "logos_heading",
+      "label": "Heading",
+      "default": "Trusted By"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "logo",
+      "name": "Trusted logo",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "logo_image",
+          "label": "Logo image"
+        },
+        {
+          "type": "text",
+          "id": "logo_name",
+          "label": "Logo name",
+          "default": "Trusted brand"
+        },
+        {
+          "type": "text",
+          "id": "logo_alt_text",
+          "label": "Logo alt text",
+          "default": "Trusted brand logo"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Artly AI logo carousel"
+    }
+  ]
+}
+{% endschema %}

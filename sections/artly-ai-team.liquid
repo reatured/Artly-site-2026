@@ -1,0 +1,135 @@
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+
+<section
+  class="section section--full-width color-{{ section.settings.color_scheme }} spacing-style artly-system artly-ai-l1"
+  aria-labelledby="ArtlyAiTeamTitle-{{ section.id }}"
+  style="{% render 'spacing-style', settings: section.settings %}"
+  {{ section.shopify_attributes }}
+>
+  <div class="artly-ai__rail artly-ai__section artly-ai__team">
+    <div class="artly-ai__section-intro artly-ai__section-intro--center">
+      {% if section.settings.team_heading != blank %}
+        <h2 id="ArtlyAiTeamTitle-{{ section.id }}">{{ section.settings.team_heading | escape }}</h2>
+      {% endif %}
+    </div>
+
+    {% if section.blocks.size > 0 %}
+      <div class="artly-ai__team-grid">
+        {% for block in section.blocks %}
+          <article class="artly-ai__team-card" {{ block.shopify_attributes }}>
+            <div class="artly-ai__team-image">
+              {% if block.settings.image != blank %}
+                {% assign team_alt = block.settings.image_alt_text | default: block.settings.name %}
+                {{
+                  block.settings.image
+                  | image_url: width: 900
+                  | image_tag:
+                    width: block.settings.image.width,
+                    widths: '320, 480, 640, 900',
+                    height: block.settings.image.height,
+                    alt: team_alt,
+                    loading: 'lazy',
+                    class: 'artly-ai__media-image'
+                }}
+              {% else %}
+                <svg class="artly-ai__portrait-placeholder" viewBox="0 0 420 320" role="img" aria-label="{{ block.settings.name | escape }}">
+                  <rect width="420" height="320" rx="8" fill="#e0e7eb"/>
+                  <circle cx="210" cy="132" r="54" fill="#f7fafb"/>
+                  <path d="M118 284c18-62 52-93 92-93s74 31 92 93H118Z" fill="#f7fafb"/>
+                </svg>
+              {% endif %}
+            </div>
+            <h3>{{ block.settings.name | escape }}</h3>
+            {% if block.settings.bio != blank %}
+              <p>{{ block.settings.bio | escape }}</p>
+            {% endif %}
+          </article>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Artly AI team",
+  "class": "artly-ai-team-section",
+  "max_blocks": 6,
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "team_heading",
+      "label": "Heading",
+      "default": "Meet the Team"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "team_member",
+      "name": "Team member",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "image_alt_text",
+          "label": "Image alt text"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name",
+          "default": "Team Member"
+        },
+        {
+          "type": "text",
+          "id": "bio",
+          "label": "Bio",
+          "default": "Role and bio coming soon."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Artly AI team"
+    }
+  ]
+}
+{% endschema %}
