@@ -1,4 +1,10 @@
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
+{% assign is_artly_ai_page = false %}
+{% if template.suffix == 'artly-ai' %}
+  {% assign is_artly_ai_page = true %}
+{% elsif template.name == 'page.artly-ai' %}
+  {% assign is_artly_ai_page = true %}
+{% endif %}
 {% assign strip_alignment = 'flex-start' %}
 {% case section.settings.alignment %}
   {% when 'center' %}
@@ -25,6 +31,10 @@
   "
   {{ section.shopify_attributes }}
 >
+  {% if is_artly_ai_page %}
+    <div class="artly-ai__rail">
+  {% endif %}
+
   {% if section.settings.show_heading and section.settings.heading != blank %}
     <h2 class="trusted-by-logo-strip__heading">{{ section.settings.heading | escape }}</h2>
   {% endif %}
@@ -38,6 +48,10 @@
       >
         {% content_for 'blocks' %}
       </ul>
+    </div>
+  {% endif %}
+
+  {% if is_artly_ai_page %}
     </div>
   {% endif %}
 </section>

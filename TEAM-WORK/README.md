@@ -1,26 +1,26 @@
 # TEAM-WORK
 
-This folder is the local team command center for Artly site work. It keeps the operating rules, active task boards, agent registry, work logs, deliverables, visual QA, conversion queue, and temporary artifacts in one place.
+This folder is the local command center for Artly site agent work. The active workflow is intentionally simple: one Planning Agent records tasks in JSON, Worker Agents claim tasks from that JSON, finished work moves to review, and Review Agents or Richard move accepted work to done.
 
 ## Start Here
 
-- [Agent instructions](AGENTS.md)
-- [Team Overview](00%20Command%20Center/Team%20Overview.md)
-- [Agent Roster](00%20Command%20Center/Agent%20Roster.md)
-- [Team Work Log](01%20Work%20Logs/Team%20Work%20Log.md)
-- [Current Task Board](02%20Task%20Boards/agent-task-board.md)
-- [Agent Registry](03%20Agent%20Registry/agent-registry.md)
-- [Conversion Queue](06%20Conversion%20Queue/Conversion%20Queue.md)
+- [Root agent instructions](../AGENTS.md)
+- [Simple Agent Workflow](00%20Command%20Center/Simple%20Agent%20Workflow.md)
+- [Planning Agent](00%20Command%20Center/Planning%20Agent.md)
+- [Worker Agent](00%20Command%20Center/Worker%20Agent.md)
+- [Review Agent](00%20Command%20Center/Review%20Agent.md)
+- [JSON Task Board](02%20Task%20Boards/task-board.json)
+- [Trello-style Board Viewer](02%20Task%20Boards/task-board.html) for Richard's read-only view
 
 ## Folder Map
 
 | Folder | Purpose |
 | --- | --- |
-| `00 Command Center` | Team overview, standing roster, operating model, and session startup rules. |
-| `01 Work Logs` | Append-only chronological logs for team activity and project execution. |
-| `02 Task Boards` | Kanban boards, whiteboards, progress trackers, and active review lanes. |
-| `03 Agent Registry` | Traceability records for spawned managers, workers, and converter agents. |
-| `04 Project Deliverables` | Markdown and HTML planning docs, design packets, audits, and approved outputs. |
+| `00 Command Center` | Active workflow overview and role files for Planning Agents, Worker Agents, and Review Agents. |
+| `01 Work Logs` | Legacy chronological logs for earlier team activity. |
+| `02 Task Boards` | Active JSON task board, Richard's HTML board viewer, and legacy boards. |
+| `03 Agent Registry` | Legacy traceability records from the previous multi-layer workflow. |
+| `04 Project Deliverables` | Existing planning docs, design packets, audits, and approved outputs. |
 | `05 Visual QA` | Screenshots and visual inspection evidence. |
 | `06 Conversion Queue` | Markdown-to-HTML conversion queue and conversion status. |
 | `90 Temporary` | Temporary runtime files, diagnostic output, and throwaway screenshots kept for review. |
@@ -28,11 +28,14 @@ This folder is the local team command center for Artly site work. It keeps the o
 
 ## Operating Loop
 
-1. Intake the request and classify it as Command Center, Life OS, Files & Archives, Knowledge, Finance & Admin, or Archive.
-2. Add or update the relevant task card in `02 Task Boards`.
-3. Record spawned agents in `03 Agent Registry`.
-4. Log lifecycle events in `01 Work Logs`.
-5. Produce markdown deliverables first, then queue HTML conversion in `06 Conversion Queue`.
-6. Keep screenshots and QA proof in `05 Visual QA`.
-7. Move superseded material to `99 Archive` only when it is clearly no longer active.
+1. Planning Agent records Richard's requirements in `02 Task Boards/task-board.json`.
+2. Worker Agent reads the board, claims exactly one `todo` task, and moves it to `claimed`.
+3. Worker Agent completes the claimed task without touching conflicting claimed work.
+4. Worker Agent moves completed work to `review`, then continues to the next safe `todo` task if available.
+5. Review Agent claims one `review` task into `reviewing`, then moves to `done` (approved) or back to `review` with follow-up `todo` tasks when needed.
+6. Review Agents use `reviewing` so only one review owner works each task at a time.
+7. Richard may also review `review` tasks and move accepted work to `done`.
 
+Agents update `task-board.json` only for task coordination. The HTML board is settled as Richard's display layer.
+
+Planning Agent, Worker Agent, and Review Agent are separate agents. A Planning Agent never switches into Worker Agent or Review Agent behavior, never claims tasks, and never makes code changes. A Review Agent never switches into Planning Agent or Worker Agent behavior and never implements fixes.

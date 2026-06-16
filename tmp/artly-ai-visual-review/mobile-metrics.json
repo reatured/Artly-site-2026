@@ -1,0 +1,232 @@
+{
+  "url": "https://kpdtdw-1m.myshopify.com/pages/artly-ai",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "scrollWidth": 390,
+  "clientWidth": 390,
+  "overflowX": 0,
+  "overflow": [
+    {
+      "tag": "A",
+      "className": "skip-to-content-link button-secondary",
+      "text": "Skip to content",
+      "left": -99999,
+      "right": -99845,
+      "width": 154
+    },
+    {
+      "tag": "DIV",
+      "className": "\n        menu-drawer\n        color-scheme-4\n      ",
+      "text": "",
+      "left": -343,
+      "right": 27,
+      "width": 371
+    },
+    {
+      "tag": "BUTTON",
+      "className": "button close-button menu-drawer__close-button",
+      "text": "",
+      "left": -343,
+      "right": -291,
+      "width": 52
+    },
+    {
+      "tag": "SPAN",
+      "className": "svg-wrapper header-drawer-icon header-drawer-icon--close",
+      "text": "",
+      "left": -327,
+      "right": -307,
+      "width": 20
+    },
+    {
+      "tag": "svg",
+      "className": "[object SVGAnimatedString]",
+      "left": -324,
+      "right": -311,
+      "width": 14
+    },
+    {
+      "tag": "path",
+      "className": "[object SVGAnimatedString]",
+      "left": -322,
+      "right": -313,
+      "width": 10
+    },
+    {
+      "tag": "path",
+      "className": "[object SVGAnimatedString]",
+      "left": -322,
+      "right": -313,
+      "width": 10
+    },
+    {
+      "tag": "NAV",
+      "className": "menu-drawer__navigation",
+      "text": "",
+      "left": -343,
+      "right": 27,
+      "width": 371
+    },
+    {
+      "tag": "UL",
+      "className": "menu-drawer__menu has-submenu",
+      "text": "",
+      "left": -343,
+      "right": 27,
+      "width": 371
+    },
+    {
+      "tag": "LI",
+      "className": "menu-drawer__list-item--flat",
+      "text": "",
+      "left": -325,
+      "right": 9,
+      "width": 334
+    },
+    {
+      "tag": "A",
+      "className": "menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element focus-inset",
+      "text": "",
+      "left": -325,
+      "right": 9,
+      "width": 334
+    },
+    {
+      "tag": "SPAN",
+      "className": "menu-drawer__menu-item-text wrap-text",
+      "text": "",
+      "left": -325,
+      "right": -228,
+      "width": 98
+    },
+    {
+      "tag": "LI",
+      "className": "menu-drawer__list-item--flat",
+      "text": "",
+      "left": -325,
+      "right": 9,
+      "width": 334
+    },
+    {
+      "tag": "A",
+      "className": "menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element focus-inset",
+      "text": "",
+      "left": -325,
+      "right": 9,
+      "width": 334
+    },
+    {
+      "tag": "SPAN",
+      "className": "menu-drawer__menu-item-text wrap-text",
+      "text": "",
+      "left": -325,
+      "right": -174,
+      "width": 151
+    },
+    {
+      "tag": "UL",
+      "className": "menu-drawer__menu menu-drawer__menu--childlist",
+      "text": "",
+      "left": -325,
+      "right": 9,
+      "width": 334
+    },
+    {
+      "tag": "LI",
+      "className": "menu-drawer__list-item",
+      "text": "",
+      "left": -325,
+      "right": 9,
+      "width": 334
+    },
+    {
+      "tag": "A",
+      "className": "menu-drawer__menu-item menu-drawer__menu-item--child menu-drawer__animated-element focus-inset",
+      "text": "",
+      "left": -325,
+      "right": 9,
+      "width": 334
+    },
+    {
+      "tag": "SPAN",
+      "className": "menu-drawer__menu-item-text wrap-text",
+      "text": "",
+      "left": -325,
+      "right": -250,
+      "width": 76
+    },
+    {
+      "tag": "LI",
+      "className": "menu-drawer__list-item",
+      "text": "",
+      "left": -325,
+      "right": 9,
+      "width": 334
+    }
+  ],
+  "sections": [
+    {
+      "selector": ".artly-ai__hero",
+      "exists": true,
+      "width": 390,
+      "height": 977
+    },
+    {
+      "selector": ".artly-ai__band--demo",
+      "exists": true,
+      "width": 390,
+      "height": 691
+    },
+    {
+      "selector": ".artly-ai__advantage",
+      "exists": true,
+      "width": 358,
+      "height": 1019
+    },
+    {
+      "selector": ".artly-ai__how",
+      "exists": true,
+      "width": 358,
+      "height": 1209
+    },
+    {
+      "selector": ".artly-ai__case",
+      "exists": true,
+      "width": 358,
+      "height": 633
+    },
+    {
+      "selector": ".artly-ai__band--logos",
+      "exists": true,
+      "width": 390,
+      "height": 198
+    },
+    {
+      "selector": ".artly-ai__team",
+      "exists": true,
+      "width": 358,
+      "height": 1240
+    },
+    {
+      "selector": ".artly-ai__press",
+      "exists": true,
+      "width": 358,
+      "height": 949
+    },
+    {
+      "selector": ".artly-ai__faq",
+      "exists": true,
+      "width": 358,
+      "height": 615
+    },
+    {
+      "selector": ".artly-ai__band--closing",
+      "exists": true,
+      "width": 390,
+      "height": 953
+    }
+  ],
+  "label": "mobile"
+}

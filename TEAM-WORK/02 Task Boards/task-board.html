@@ -1,0 +1,1022 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Artly Agent Task Board</title>
+  <style>
+    :root {
+      --page: #f6f4ef;
+      --ink: #191816;
+      --muted: #69645d;
+      --line: #d8d2c7;
+      --panel: #ffffff;
+      --todo: #3f6f8f;
+      --claimed: #9b5b25;
+      --review: #6f5aa8;
+      --done: #34785d;
+      --archived: #5f6872;
+      --archive-tab-height: 132px;
+      --archive-tab-width: 40px;
+      --shadow: 0 14px 34px rgba(25, 24, 22, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--page);
+      color: var(--ink);
+      font: 14px/1.45 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .shell {
+      width: min(1480px, calc(100vw - 32px));
+      margin: 0 auto;
+      padding: 24px 0 84px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    .meta {
+      margin-top: 8px;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .button,
+    .file-label {
+      min-height: 36px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      color: var(--ink);
+      padding: 8px 12px;
+      cursor: pointer;
+      box-shadow: 0 1px 0 rgba(25, 24, 22, 0.04);
+    }
+
+    .button:hover,
+    .file-label:hover {
+      border-color: #aaa197;
+    }
+
+    .file-label input {
+      display: none;
+    }
+
+    .status {
+      width: 100%;
+      min-height: 28px;
+      margin: 0 0 14px;
+      color: var(--muted);
+    }
+
+    .board {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(220px, 1fr));
+      gap: 14px;
+      align-items: start;
+    }
+
+    .archive-board {
+      position: fixed;
+      inset: 0 auto 0 0;
+      z-index: 6;
+      pointer-events: none;
+      isolation: isolate;
+    }
+
+    .archive-tab {
+      pointer-events: auto;
+      position: fixed;
+      left: 0;
+      top: 50%;
+      width: var(--archive-tab-width);
+      min-height: var(--archive-tab-height);
+      border: 1px solid var(--line);
+      border-left: 0;
+      border-radius: 0 8px 8px 0;
+      background: var(--panel);
+      color: var(--ink);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 6px;
+      font-size: 13px;
+      font-weight: 760;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      transform: translateY(-50%);
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      z-index: 9;
+    }
+
+    .archive-tab:hover {
+      border-color: #aaa197;
+      background: #fbfaf7;
+    }
+
+    .archive-tab .count {
+      color: #ffffff;
+      writing-mode: horizontal-tb;
+    }
+
+    .archive-tab .dot {
+      --lane-color: var(--archived);
+    }
+
+    .archive-tray {
+      pointer-events: auto;
+      position: fixed;
+      left: 0;
+      top: 0;
+      height: 100vh;
+      width: min(980px, calc(100vw - var(--archive-tab-width)));
+      background: rgba(246, 244, 239, 0.96);
+      transform: translateX(calc(-100% - 8px));
+      transition: transform 220ms ease;
+      z-index: 7;
+      overflow: hidden;
+      display: block;
+      align-items: stretch;
+      padding: 16px 16px 16px calc(var(--archive-tab-width) + 12px);
+      box-sizing: border-box;
+      box-shadow: 18px 0 42px rgba(25, 24, 22, 0.16);
+    }
+
+    .archive-tray > .lane {
+      height: calc(100vh - 32px);
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      background: rgba(255, 255, 255, 0.78);
+    }
+
+    .archive-tray .lane-body {
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow: auto;
+      padding-right: 6px;
+    }
+
+    .archive-tray .lane-body .field,
+    .archive-tray .lane-body .summary,
+    .archive-tray .lane-body .chips {
+      max-width: 100%;
+      overflow-wrap: anywhere;
+    }
+
+    .archive-tray .lane-body .ticket {
+      min-width: 0;
+    }
+
+    .archive-tray .lane-actions {
+      justify-content: flex-end;
+      gap: 6px;
+      flex-wrap: nowrap;
+    }
+
+    .archive-close {
+      margin-left: auto;
+    }
+
+    .archive-board.is-open .archive-tray {
+      transform: translateX(0);
+    }
+
+    .lane {
+      min-width: 0;
+      background: rgba(255, 255, 255, 0.62);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .lane-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 12px 12px 10px;
+      border-top: 5px solid var(--lane-color);
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.8);
+    }
+
+    .lane-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      font-weight: 760;
+    }
+
+    .lane-actions {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      flex: 0 0 auto;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--lane-color);
+      flex: 0 0 auto;
+    }
+
+    .count {
+      min-width: 28px;
+      text-align: center;
+      border-radius: 999px;
+      padding: 2px 8px;
+      color: #ffffff;
+      background: var(--lane-color);
+      font-weight: 720;
+      font-size: 12px;
+    }
+
+    .icon-button {
+      width: 30px;
+      height: 30px;
+      display: inline-grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--panel);
+      color: var(--ink);
+      cursor: pointer;
+      font-weight: 760;
+      line-height: 1;
+      box-shadow: 0 1px 0 rgba(25, 24, 22, 0.04);
+    }
+
+    .icon-button:hover {
+      border-color: #aaa197;
+      background: #fbfaf7;
+    }
+
+    .icon-button:disabled {
+      cursor: default;
+      opacity: 0.45;
+    }
+
+    .lane-body {
+      display: grid;
+      gap: 10px;
+      padding: 12px;
+    }
+
+    .empty {
+      min-height: 78px;
+      display: grid;
+      place-items: center;
+      border: 1px dashed var(--line);
+      border-radius: 8px;
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.54);
+      text-align: center;
+      padding: 12px;
+    }
+
+    .ticket {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      box-shadow: 0 8px 22px rgba(25, 24, 22, 0.06);
+    }
+
+    .ticket.is-collapsed {
+      padding: 10px 12px;
+    }
+
+    .ticket-title-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .ticket-main {
+      min-width: 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 6px;
+    }
+
+    .ticket-title-actions {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      flex: 0 0 auto;
+      min-width: max-content;
+    }
+
+    .ticket-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .ticket-id {
+      color: var(--muted);
+      font-size: 12px;
+      overflow-wrap: anywhere;
+    }
+
+    .priority {
+      flex: 0 0 auto;
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 11px;
+      font-weight: 760;
+      text-transform: uppercase;
+      color: #ffffff;
+      background: #5f6872;
+    }
+
+    .priority.high {
+      background: #a43f37;
+    }
+
+    .priority.low {
+      background: #58736b;
+    }
+
+    .ticket h2 {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.22;
+      letter-spacing: 0;
+      overflow-wrap: anywhere;
+      min-width: 0;
+      flex: 1 1 auto;
+      word-break: break-word;
+    }
+
+    .ticket-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .redo-badge {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 2px 8px;
+      background: #f5f5f1;
+      color: #444038;
+      font-size: 11px;
+      font-weight: 760;
+      white-space: nowrap;
+    }
+
+    .ticket-details {
+      margin-top: 8px;
+    }
+
+    .ticket-details[hidden] {
+      display: none;
+    }
+
+    .ticket-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--line);
+    }
+
+    .text-button {
+      min-height: 32px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #fbfaf7;
+      color: var(--ink);
+      padding: 6px 10px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 760;
+      white-space: nowrap;
+    }
+
+    .text-button:hover {
+      border-color: #aaa197;
+    }
+
+    .summary {
+      margin: 0 0 10px;
+      color: #37332e;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .chip {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 3px 8px;
+      background: #fbfaf7;
+      color: #3d3934;
+      font-size: 12px;
+      overflow-wrap: anywhere;
+    }
+
+    .field {
+      margin-top: 9px;
+    }
+
+    .field strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    li + li {
+      margin-top: 3px;
+    }
+
+    code {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-size: 12px;
+      overflow-wrap: anywhere;
+    }
+
+    .todo {
+      --lane-color: var(--todo);
+    }
+
+    .claimed {
+      --lane-color: var(--claimed);
+    }
+
+    .review {
+      --lane-color: var(--review);
+    }
+
+    .reviewing {
+      --lane-color: #7f6cae;
+    }
+
+    .done {
+      --lane-color: var(--done);
+    }
+
+    .archived {
+      --lane-color: var(--archived);
+    }
+
+    @media (max-width: 1280px) {
+      .board {
+        grid-template-columns: repeat(4, minmax(220px, 1fr));
+      }
+    }
+
+    @media (max-width: 1120px) {
+      .board {
+        grid-template-columns: repeat(3, minmax(260px, 1fr));
+      }
+    }
+
+    @media (max-width: 680px) {
+      .shell {
+        width: min(100vw - 20px, 640px);
+        padding-top: 16px;
+        padding-bottom: 68px;
+      }
+
+      .topbar {
+        display: block;
+      }
+
+      .toolbar {
+        justify-content: flex-start;
+        margin-top: 14px;
+      }
+
+      .board {
+        grid-template-columns: 1fr;
+      }
+
+      .archive-tab {
+        left: 10px;
+        right: 10px;
+      }
+
+      .archive-tray {
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div>
+        <h1 id="boardName">Artly Agent Task Board</h1>
+        <div class="meta">
+          <span id="updatedAt">Updated: unknown</span>
+          <span id="sourceName">Source: task-board.json</span>
+        </div>
+      </div>
+      <div class="toolbar">
+        <button class="button" type="button" id="reloadButton">Reload JSON</button>
+        <button class="button" type="button" id="autoRefreshButton" aria-pressed="false">Auto refresh: Off</button>
+        <label class="file-label">
+          Load JSON file
+          <input type="file" id="fileInput" accept="application/json,.json">
+        </label>
+      </div>
+    </header>
+
+    <p class="status" id="status"></p>
+
+    <section class="board" id="board" aria-label="Agent task board"></section>
+    <section class="archive-board" id="archiveBoard" aria-label="Archived task board"></section>
+  </main>
+
+  <script>
+    const columns = [
+      ["todo", "To Do"],
+      ["claimed", "Claimed / In Progress"],
+      ["review", "Review"],
+      ["reviewing", "Reviewing"],
+      ["done", "Done"]
+    ];
+
+    const fallbackBoard = {
+      boardName: "Artly Agent Task Board",
+      updatedAt: "",
+      columns: {
+        todo: [],
+        claimed: [],
+        review: [],
+        reviewing: [],
+        done: [],
+        archived: []
+      }
+    };
+
+    const boardEl = document.getElementById("board");
+    const archiveEl = document.getElementById("archiveBoard");
+    const statusEl = document.getElementById("status");
+    const boardNameEl = document.getElementById("boardName");
+    const updatedAtEl = document.getElementById("updatedAt");
+    const sourceNameEl = document.getElementById("sourceName");
+    const reloadButton = document.getElementById("reloadButton");
+    const autoRefreshButton = document.getElementById("autoRefreshButton");
+    const fileInput = document.getElementById("fileInput");
+    const collapsedTasks = new Set();
+    let archiveTrayOpen = false;
+    let currentBoard = fallbackBoard;
+    let currentSourceLabel = "fallback";
+    let autoRefreshTimer = null;
+    let autoRefreshInFlight = false;
+
+    function escapeText(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function listItems(items, formatter = escapeText) {
+      if (!Array.isArray(items) || items.length === 0) return "";
+      return `<ul>${items.map((item) => `<li>${formatter(item)}</li>`).join("")}</ul>`;
+    }
+
+    function renderFiles(files) {
+      return listItems(files, (file) => `<code>${escapeText(file)}</code>`);
+    }
+
+    function field(label, content) {
+      if (!content) return "";
+      return `<div class="field"><strong>${escapeText(label)}</strong>${content}</div>`;
+    }
+
+    function taskKey(task) {
+      return String(task.id || `${task.project || "task"}-${task.title || "untitled"}-${task.createdAt || ""}`);
+    }
+
+    function timestampValue(task) {
+      const fields = ["archivedAt", "doneAt", "reviewedAt", "reviewRequestedAt", "claimedAt", "createdAt"];
+      for (const fieldName of fields) {
+        const value = Date.parse(task[fieldName] || "");
+        if (!Number.isNaN(value)) return value;
+      }
+      return 0;
+    }
+
+    function columnTasks(tasks, columnKey) {
+      const safeTasks = Array.isArray(tasks) ? [...tasks] : [];
+      if (columnKey !== "done" && columnKey !== "archived") return safeTasks;
+      return safeTasks.sort((a, b) => timestampValue(b) - timestampValue(a));
+    }
+
+    function taskRedoCount(task) {
+      const parsed = Number.parseInt(task?.redoCount, 10);
+      if (Number.isNaN(parsed) || parsed <= 0) return 0;
+      return parsed;
+    }
+
+    function ticketCard(task, columnKey) {
+      const priority = escapeText(task.priority || "normal");
+      const key = taskKey(task);
+      const isCollapsed = collapsedTasks.has(key);
+      const toggleLabel = isCollapsed ? "Expand task" : "Collapse task";
+      const redoCount = taskRedoCount(task);
+      const chips = [
+        task.project,
+        task.type,
+        task.claimedBy ? `Claimed: ${task.claimedBy}` : "",
+        task.requestedBy ? `Requested: ${task.requestedBy}` : ""
+      ].filter(Boolean);
+      const redoBadge = redoCount > 0 ? `<span class="redo-badge">Redo x${redoCount}</span>` : "";
+      const archiveButton = columnKey === "done"
+        ? `<button class="text-button archive-task" type="button" data-archive-task="${escapeText(key)}">Archive</button>`
+        : "";
+
+      return `
+        <article class="ticket ${isCollapsed ? "is-collapsed" : ""}" data-task-id="${escapeText(key)}">
+          <div class="ticket-title-row">
+            <div class="ticket-main">
+              <h2>${escapeText(task.title || "Untitled task")}</h2>
+              <div class="ticket-meta">${redoBadge}</div>
+            </div>
+            <div class="ticket-title-actions">
+              ${archiveButton}
+              <button class="icon-button ticket-toggle" type="button" data-task-toggle="${escapeText(key)}" aria-label="${toggleLabel}" title="${toggleLabel}">${isCollapsed ? "+" : "-"}</button>
+            </div>
+          </div>
+          <div class="ticket-details" ${isCollapsed ? "hidden" : ""}>
+            <div class="ticket-head">
+              <div class="ticket-id">${escapeText(task.id || "No ID")}</div>
+              <div class="priority ${priority.toLowerCase()}">${priority}</div>
+            </div>
+            ${task.summary ? `<p class="summary">${escapeText(task.summary)}</p>` : ""}
+            ${chips.length ? `<div class="chips">${chips.map((chip) => `<span class="chip">${escapeText(chip)}</span>`).join("")}</div>` : ""}
+            ${field("Requirements", listItems(task.requirements))}
+            ${field("Acceptance", listItems(task.acceptanceCriteria))}
+            ${field("Files", renderFiles(task.files))}
+            ${field("Blockers", listItems(task.blockers))}
+            ${task.notes ? field("Notes", `<p class="summary">${escapeText(task.notes)}</p>`) : ""}
+          </div>
+        </article>
+      `;
+    }
+
+    function archiveCloseButton() {
+      return `<button class="icon-button archive-close" type="button" data-archive-close aria-label="Close archived panel" title="Close archived panel">&times;</button>`;
+    }
+
+    function normalizeBoard(board) {
+      const normalized = { ...fallbackBoard, ...board };
+      normalized.columns = { ...fallbackBoard.columns, ...(board.columns || {}) };
+      return normalized;
+    }
+
+    async function loadJson(url) {
+      if (typeof window.fetch === "function") {
+        const response = await window.fetch(url, { cache: "no-store" });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return response.json();
+      }
+
+      return new Promise((resolve, reject) => {
+        const request = new XMLHttpRequest();
+        request.open("GET", url, true);
+        request.overrideMimeType("application/json");
+        request.onload = () => {
+          if (request.status >= 200 && request.status < 300) {
+            try {
+              resolve(JSON.parse(request.responseText));
+            } catch (error) {
+              reject(error);
+            }
+            return;
+          }
+          reject(new Error(`HTTP ${request.status}`));
+        };
+        request.onerror = () => reject(new Error("Could not load JSON"));
+        request.send();
+      });
+    }
+
+    function postJson(url, payload) {
+      if (typeof window.fetch === "function") {
+        return window.fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        }).then(async (response) => {
+          const data = await response.json().catch(() => ({}));
+          if (!response.ok) throw new Error(data.error || `HTTP ${response.status}`);
+          return data;
+        });
+      }
+
+      return new Promise((resolve, reject) => {
+        const request = new XMLHttpRequest();
+        request.open("POST", url, true);
+        request.setRequestHeader("Content-Type", "application/json");
+        request.onload = () => {
+          let data = {};
+          try {
+            data = JSON.parse(request.responseText || "{}");
+          } catch (error) {
+            reject(error);
+            return;
+          }
+          if (request.status >= 200 && request.status < 300) {
+            resolve(data);
+            return;
+          }
+          reject(new Error(data.error || `HTTP ${request.status}`));
+        };
+        request.onerror = () => reject(new Error("Could not persist archive action"));
+        request.send(JSON.stringify(payload));
+      });
+    }
+
+    async function archiveTask(taskId) {
+      statusEl.textContent = `Archiving ${taskId}...`;
+      try {
+        const board = await postJson("/api/archive", {
+          taskId,
+          archivedBy: "Task board viewer"
+        });
+        collapsedTasks.delete(taskId);
+        renderBoard(board, "task-board.json");
+        statusEl.textContent = `Archived ${taskId} and updated task-board.json.`;
+      } catch (error) {
+        statusEl.textContent = `Archive failed for ${taskId}: ${error.message}`;
+      }
+    }
+
+    function laneMarkup(key, label, tasks, options = {}) {
+      const allCollapsed = tasks.length > 0 && tasks.every((task) => collapsedTasks.has(taskKey(task)));
+      const laneToggleLabel = allCollapsed ? `Expand all ${label} tasks` : `Collapse all ${label} tasks`;
+      const extraActions = options.extraActions || "";
+      const body = tasks.length
+        ? tasks.map((task) => ticketCard(task, key)).join("")
+        : `<div class="empty">No ${escapeText(label.toLowerCase())} tasks</div>`;
+      const addlClass = options.extraClass ? ` ${options.extraClass}` : "";
+
+      return `
+        <section class="lane ${key}${addlClass}" aria-label="${escapeText(label)}">
+          <div class="lane-header">
+            <div class="lane-title"><span class="dot"></span><span>${escapeText(label)}</span></div>
+            <div class="lane-actions">
+              <span class="count">${tasks.length}</span>
+              <button class="icon-button lane-toggle" type="button" data-lane-toggle="${escapeText(key)}" aria-label="${laneToggleLabel}" title="${laneToggleLabel}" ${tasks.length ? "" : "disabled"}>${allCollapsed ? "+" : "-"}</button>
+              ${extraActions}
+            </div>
+          </div>
+          <div class="lane-body">${body}</div>
+        </section>
+      `;
+    }
+
+    function renderBoard(board, sourceLabel) {
+      const normalized = normalizeBoard(board);
+      currentBoard = normalized;
+      currentSourceLabel = sourceLabel;
+      boardNameEl.textContent = normalized.boardName || "Artly Agent Task Board";
+      updatedAtEl.textContent = `Updated: ${normalized.updatedAt || "unknown"}`;
+      sourceNameEl.textContent = `Source: ${sourceLabel}`;
+
+      boardEl.innerHTML = columns.map(([key, label]) => {
+        const tasks = columnTasks(normalized.columns[key], key);
+        return laneMarkup(key, label, tasks);
+      }).join("");
+
+      const archivedTasks = columnTasks(normalized.columns.archived, "archived");
+      archiveEl.classList.toggle("is-open", archiveTrayOpen);
+      archiveEl.innerHTML = `
+        <button class="archive-tab" type="button" data-archive-toggle aria-expanded="${archiveTrayOpen ? "true" : "false"}" aria-controls="archived-panel">
+          <span class="dot" aria-hidden="true"></span>
+          <span>Archived (${archivedTasks.length})</span>
+        </button>
+        <div class="archive-tray" id="archived-panel" aria-hidden="${archiveTrayOpen ? "false" : "true"}">
+          ${laneMarkup("archived", "Archived", archivedTasks, {
+            extraClass: "archived-tray-lane",
+            extraActions: archiveCloseButton()
+          })}
+        </div>
+      `;
+    }
+
+    function toggleArchiveTray(forceOpen) {
+      if (typeof forceOpen === "boolean") {
+        archiveTrayOpen = forceOpen;
+      } else {
+        archiveTrayOpen = !archiveTrayOpen;
+      }
+      renderBoard(currentBoard, currentSourceLabel);
+    }
+
+    boardEl.addEventListener("click", (event) => {
+      const archiveButton = event.target.closest("[data-archive-task]");
+      if (archiveButton) {
+        archiveTask(archiveButton.dataset.archiveTask);
+        return;
+      }
+
+      const taskButton = event.target.closest("[data-task-toggle]");
+      if (taskButton) {
+        const key = taskButton.dataset.taskToggle;
+        if (collapsedTasks.has(key)) {
+          collapsedTasks.delete(key);
+        } else {
+          collapsedTasks.add(key);
+        }
+        renderBoard(currentBoard, currentSourceLabel);
+        return;
+      }
+
+      const laneButton = event.target.closest("[data-lane-toggle]");
+      if (!laneButton) return;
+
+      const columnKey = laneButton.dataset.laneToggle;
+      const tasks = columnTasks(currentBoard.columns[columnKey], columnKey);
+      const keys = tasks.map(taskKey);
+      const allCollapsed = keys.length > 0 && keys.every((key) => collapsedTasks.has(key));
+
+      keys.forEach((key) => {
+        if (allCollapsed) {
+          collapsedTasks.delete(key);
+        } else {
+          collapsedTasks.add(key);
+        }
+      });
+
+      renderBoard(currentBoard, currentSourceLabel);
+    });
+
+    archiveEl.addEventListener("click", (event) => {
+      const archiveToggleButton = event.target.closest("[data-archive-toggle]");
+      if (archiveToggleButton) {
+        toggleArchiveTray();
+        return;
+      }
+
+      const archiveCloseButton = event.target.closest("[data-archive-close]");
+      if (archiveCloseButton) {
+        toggleArchiveTray(false);
+        return;
+      }
+
+      const taskButton = event.target.closest("[data-task-toggle]");
+      if (taskButton) {
+        const key = taskButton.dataset.taskToggle;
+        if (collapsedTasks.has(key)) {
+          collapsedTasks.delete(key);
+        } else {
+          collapsedTasks.add(key);
+        }
+        renderBoard(currentBoard, currentSourceLabel);
+        return;
+      }
+
+      const laneButton = event.target.closest("[data-lane-toggle]");
+      if (!laneButton) return;
+
+      const columnKey = laneButton.dataset.laneToggle;
+      const tasks = columnTasks(currentBoard.columns[columnKey], columnKey);
+      const keys = tasks.map(taskKey);
+      const allCollapsed = keys.length > 0 && keys.every((key) => collapsedTasks.has(key));
+
+      keys.forEach((key) => {
+        if (allCollapsed) {
+          collapsedTasks.delete(key);
+        } else {
+          collapsedTasks.add(key);
+        }
+      });
+
+      renderBoard(currentBoard, currentSourceLabel);
+    });
+
+    async function loadDefaultBoard(options = {}) {
+      const silent = Boolean(options.silent);
+      if (!silent) {
+        statusEl.textContent = "Loading task-board.json...";
+      }
+      try {
+        const board = await loadJson("task-board.json");
+        renderBoard(board, "task-board.json");
+        statusEl.textContent = silent
+          ? `Auto refreshed ${new Date().toLocaleTimeString()}.`
+          : "Loaded task-board.json.";
+      } catch (error) {
+        if (silent) {
+          statusEl.textContent = `Auto refresh failed: ${error.message}`;
+          return;
+        }
+        renderBoard(fallbackBoard, "fallback");
+        statusEl.textContent = "Could not auto-load task-board.json. Use Load JSON file if the browser blocks local file access.";
+      }
+    }
+
+    function setAutoRefresh(enabled) {
+      if (enabled && !autoRefreshTimer) {
+        autoRefreshButton.textContent = "Auto refresh: On";
+        autoRefreshButton.setAttribute("aria-pressed", "true");
+        autoRefreshTimer = window.setInterval(async () => {
+          if (autoRefreshInFlight) return;
+          autoRefreshInFlight = true;
+          try {
+            await loadDefaultBoard({ silent: true });
+          } finally {
+            autoRefreshInFlight = false;
+          }
+        }, 1000);
+        loadDefaultBoard({ silent: true });
+        return;
+      }
+
+      if (!enabled && autoRefreshTimer) {
+        window.clearInterval(autoRefreshTimer);
+        autoRefreshTimer = null;
+        autoRefreshButton.textContent = "Auto refresh: Off";
+        autoRefreshButton.setAttribute("aria-pressed", "false");
+        statusEl.textContent = "Auto refresh stopped.";
+      }
+    }
+
+    fileInput.addEventListener("change", async (event) => {
+      const [file] = event.target.files;
+      if (!file) return;
+
+      try {
+        const text = await file.text();
+        const board = JSON.parse(text);
+        renderBoard(board, file.name);
+        statusEl.textContent = `Loaded ${file.name}.`;
+      } catch (error) {
+        statusEl.textContent = `Could not load ${file.name}: ${error.message}`;
+      }
+    });
+
+    reloadButton.addEventListener("click", () => loadDefaultBoard());
+    autoRefreshButton.addEventListener("click", () => setAutoRefresh(!autoRefreshTimer));
+    loadDefaultBoard();
+  </script>
+</body>
+</html>
+

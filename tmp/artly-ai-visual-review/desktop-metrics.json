@@ -1,0 +1,179 @@
+{
+  "url": "https://kpdtdw-1m.myshopify.com/pages/artly-ai",
+  "viewport": {
+    "width": 1440,
+    "height": 1000
+  },
+  "scrollWidth": 1440,
+  "clientWidth": 1440,
+  "overflowX": 0,
+  "overflow": [
+    {
+      "tag": "A",
+      "className": "skip-to-content-link button-secondary",
+      "text": "Skip to content",
+      "left": -99999,
+      "right": -99845,
+      "width": 154
+    },
+    {
+      "tag": "DIV",
+      "className": "floating-contact__panel",
+      "text": "",
+      "left": 1424,
+      "right": 1470,
+      "width": 45
+    },
+    {
+      "tag": "DIV",
+      "className": "floating-contact__header",
+      "text": "",
+      "left": 1447,
+      "right": 1488,
+      "width": 41
+    },
+    {
+      "tag": "H2",
+      "className": "floating-contact__heading",
+      "text": "",
+      "left": 1447,
+      "right": 1447,
+      "width": 0
+    },
+    {
+      "tag": "P",
+      "className": "floating-contact__text",
+      "text": "",
+      "left": 1447,
+      "right": 1447,
+      "width": 0
+    },
+    {
+      "tag": "FORM",
+      "className": "floating-contact__form",
+      "text": "",
+      "left": 1447,
+      "right": 1447,
+      "width": 0
+    },
+    {
+      "tag": "DIV",
+      "className": "floating-contact__field",
+      "text": "",
+      "left": 1447,
+      "right": 1447,
+      "width": 0
+    },
+    {
+      "tag": "LABEL",
+      "className": "floating-contact__label",
+      "text": "",
+      "left": 1447,
+      "right": 1447,
+      "width": 0
+    },
+    {
+      "tag": "INPUT",
+      "className": "floating-contact__input",
+      "text": "",
+      "left": 1447,
+      "right": 1474,
+      "width": 27
+    },
+    {
+      "tag": "DIV",
+      "className": "floating-contact__field",
+      "text": "",
+      "left": 1447,
+      "right": 1447,
+      "width": 0
+    },
+    {
+      "tag": "LABEL",
+      "className": "floating-contact__label",
+      "text": "",
+      "left": 1447,
+      "right": 1447,
+      "width": 0
+    },
+    {
+      "tag": "INPUT",
+      "className": "floating-contact__input",
+      "text": "",
+      "left": 1447,
+      "right": 1474,
+      "width": 27
+    },
+    {
+      "tag": "BUTTON",
+      "className": "button floating-contact__submit",
+      "text": "",
+      "left": 1447,
+      "right": 1494,
+      "width": 47
+    }
+  ],
+  "sections": [
+    {
+      "selector": ".artly-ai__hero",
+      "exists": true,
+      "width": 1440,
+      "height": 622
+    },
+    {
+      "selector": ".artly-ai__band--demo",
+      "exists": true,
+      "width": 1440,
+      "height": 894
+    },
+    {
+      "selector": ".artly-ai__advantage",
+      "exists": true,
+      "width": 1180,
+      "height": 748
+    },
+    {
+      "selector": ".artly-ai__how",
+      "exists": true,
+      "width": 1180,
+      "height": 755
+    },
+    {
+      "selector": ".artly-ai__case",
+      "exists": true,
+      "width": 1180,
+      "height": 573
+    },
+    {
+      "selector": ".artly-ai__band--logos",
+      "exists": true,
+      "width": 1440,
+      "height": 140
+    },
+    {
+      "selector": ".artly-ai__team",
+      "exists": true,
+      "width": 1180,
+      "height": 638
+    },
+    {
+      "selector": ".artly-ai__press",
+      "exists": true,
+      "width": 1180,
+      "height": 500
+    },
+    {
+      "selector": ".artly-ai__faq",
+      "exists": true,
+      "width": 1180,
+      "height": 700
+    },
+    {
+      "selector": ".artly-ai__band--closing",
+      "exists": true,
+      "width": 1440,
+      "height": 470
+    }
+  ],
+  "label": "desktop"
+}

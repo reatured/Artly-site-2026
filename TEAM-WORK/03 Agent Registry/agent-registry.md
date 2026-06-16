@@ -1671,3 +1671,79 @@
 | Quality score | 8/10 |
 | Reuse recommendation | Yes for narrow Shopify/Liquid header edits. |
 | Notes/lessons | Duplicate Vault IDs should be checked before assignment. Interpreted "shopping card" as shopping cart. |
+
+### Zeno
+
+| Property | Value |
+| --- | --- |
+| Vault ID | PV-W-20260616-001 |
+| Tool agent ID | 019ed16f-7241-7273-a851-c28085f26dbc |
+| Nickname | Zeno |
+| Role/type | Worker - read-only visual screenshot reviewer |
+| Spawned by | Leader Agent |
+| Date spawned | 2026-06-16 |
+| Mission | Perform read-only mobile visual QA for the homepage at 390x844 and 360x740 and capture blocking regressions on `http://127.0.0.1:9292/`. |
+| Skills/knowledge provided | Visual QA review, screenshot interpretation, mobile viewport assessment, layout overlap detection. |
+| Files or domains touched | `tmp/mobile-review-1781630010124`, `tmp/mobile-review-360-1781630120872`, `tmp/mobile-menu-wait-1781630164193`, local homepage preview `http://127.0.0.1:9292/`. |
+| Status | Complete |
+| Outputs | Logged mobile findings: dominant cookie preferences panel, sticky header overlap, floating contact overlap, clipped trusted-by strip, menu bleed-through, and excessive footer label spacing; provided artifact set for implementation follow-up. |
+| Quality score | 4/5 |
+| Reuse recommendation | Reuse for quick read-only mobile screenshot triage in the short term. |
+| Notes/lessons | Completed review with no file edits; follow-up implementation records are required before next storefront pass. |
+
+### Curie Source-Mapping Explorer
+
+| Property | Value |
+| --- | --- |
+| Vault ID | PV-W-20260616-002 |
+| Tool agent ID | 019ed16f-9fcd-79a1-a13d-9dc702e3c482 |
+| Nickname | Curie |
+| Role/type | Worker - source-mapping explorer |
+| Spawned by | Leader Agent |
+| Date spawned | 2026-06-16 |
+| Mission | Review source-map context for mobile QA artifacts and map findings to likely theme sections. |
+| Skills/knowledge provided | Source mapping and file traceability. |
+| Files or domains touched | `tmp/mobile-review-1781630010124`, `tmp/mobile-review-360-1781630120872`, local storefront `http://127.0.0.1:9292/`. |
+| Status | Blocked |
+| Outputs | No reviewed output due tool availability interruption. |
+| Quality score | 1/5 |
+| Reuse recommendation | Low; avoid for time-sensitive QA when runtime stability is required. |
+| Notes/lessons | Subagent became unavailable before returning reviewed mapping output. |
+
+### Nietzsche
+
+| Property | Value |
+| --- | --- |
+| Vault ID | PV-W-20260616-003 |
+| Tool agent ID | 019ed199-45ea-71a2-9b0b-02ea18ff29c3 |
+| Nickname | Nietzsche |
+| Role/type | Worker - source-mapping explorer |
+| Spawned by | Leader Agent |
+| Date spawned | 2026-06-16 |
+| Mission | Assist with source-mapping and component ownership checks for mobile layout regressions. |
+| Skills/knowledge provided | Source tracing, component-level review, issue-to-file mapping. |
+| Files or domains touched | `tmp/mobile-review-1781630010124`, `tmp/mobile-review-360-1781630120872`, `tmp/mobile-menu-wait-1781630164193`, local homepage preview `http://127.0.0.1:9292/`. |
+| Status | Blocked |
+| Outputs | No reviewed output; session ended after timeout. |
+| Quality score | 1/5 |
+| Reuse recommendation | Avoid for critical handoff paths without stronger completion guarantees. |
+| Notes/lessons | Model `gpt-5.3-codex-spark` session ended early; no mapped output delivered. |
+
+### Mobile QA Registry Recorder
+
+| Property | Value |
+| --- | --- |
+| Vault ID | PV-W-20260616-004 |
+| Tool agent ID | 019ed1ec-2630-72b0-985d-7af2f5d2d84d |
+| Nickname | Hegel |
+| Role/type | Worker - documentation/workflow record keeper |
+| Spawned by | Leader Agent |
+| Date spawned | 2026-06-16 |
+| Mission | Record the read-only mobile QA results and implement traceability updates across team work log, task board, and agent registry. |
+| Skills/knowledge provided | Documentation maintenance, workflow logging, registry traceability updates. |
+| Files or domains touched | `TEAM-WORK/01 Work Logs/Team Work Log.md`, `TEAM-WORK/02 Task Boards/agent-task-board.md`, `TEAM-WORK/03 Agent Registry/agent-registry.md` |
+| Status | Complete |
+| Outputs | Added mobile QA row in Team Work Log, added To Do task card for the QA regressions, and appended worker records for subagents PV-W-20260616-001 through PV-W-20260616-004. |
+| Quality score | 5/5 |
+| Reuse recommendation | Reuse this logging pattern for future visual QA handoff documentation before implementation. |
+| Notes/lessons | No source theme files were edited during this pass; all records reflect read-only findings plus required workflow updates. |

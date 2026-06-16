@@ -2,7 +2,7 @@
 
 - Visual board: [agent-task-board.html](agent-task-board.html)
 - Local storefront command: `shopify theme dev --path . --environment default --port 9292 --open`
-- Last updated: 2026-06-08
+- Last updated: 2026-06-16
 - Board type: Static local board, not connected to Trello or any external service.
 - Primary use: Track delegated sub-agent work across To Do, Pending / Claimed, Review, Done, and Blocked lanes.
 - Related historical tracker: [homepage-layout-delivery-whiteboard.md](homepage-layout-delivery-whiteboard.md)
@@ -66,6 +66,13 @@ These cards track the current Shopify storefront redesign direction from the 202
 - Files/domains: `sections/footer-group.json`, footer sections/snippets, newsletter form settings
 - Acceptance criteria: Footer supports Company, Solutions, Resources, contact/demo paths, clean newsletter styling, and no leftover starter-theme or commerce language.
 - Latest update: Current footer is closer than the body but still reads like a large starter-theme block with weak navigation detail.
+
+#### Fix Mobile Layout QA Regressions
+
+- Description: Resolve read-only mobile viewport regressions found at 390x844 and 360x740 from local homepage QA.
+- Files/domains: `assets/cookie-consent.css`, `sections/header.liquid`, `assets/artly-style-system.css`, `sections/floating-contact.liquid`, `sections/trusted-by-logo-strip.liquid`, `snippets/header-drawer.liquid`, footer sections, `tmp/mobile-review-1781630010124`, `tmp/mobile-review-360-1781630120872`, `tmp/mobile-menu-wait-1781630164193`
+- Acceptance criteria: At both breakpoints, content is not hidden under sticky header, floating contact does not overlap content or mobile menu, trusted-by strip fits (or is intentionally horizontally scrollable), cookie panel is less obstructive, header height/spacing is less dominant, footer labels/menu are visually clean, and all checks are reverified from local screenshots.
+- Latest update: QA findings recorded; implementation pending by Spark workers with no code changes yet.
 
 ### Pending / Claimed
 

@@ -20,3 +20,6 @@ Thumbs.db
 # Keep the TEAM-WORK operating folder versionable.
 !TEAM-WORK/**/*.md
 !TEAM-WORK/**/*.html
+
+# Keep root agent instructions versionable.
+!/AGENTS.md

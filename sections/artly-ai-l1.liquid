@@ -1,0 +1,20 @@
+{% if request.design_mode %}
+  <div class="section section--full-width artly-system artly-ai-l1 artly-ai__rail artly-ai__section" {{ section.shopify_attributes }}>
+    <div class="artly-ai__section-intro artly-ai__section-intro--center">
+      <h2>Legacy Artly AI section</h2>
+      <div class="rte">
+        <p>This legacy wrapper has been replaced by the split Artly AI page sections. Use the Artly AI page template sections instead.</p>
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Artly AI legacy wrapper",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": []
+}
+{% endschema %}

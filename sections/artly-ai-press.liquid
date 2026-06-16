@@ -1,0 +1,136 @@
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+
+<section
+  class="section section--full-width color-{{ section.settings.color_scheme }} spacing-style artly-system artly-ai-l1"
+  aria-labelledby="ArtlyAiPressTitle-{{ section.id }}"
+  style="{% render 'spacing-style', settings: section.settings %}"
+  {{ section.shopify_attributes }}
+>
+  <div class="artly-ai__rail artly-ai__section artly-ai__press">
+    <div class="artly-ai__section-intro artly-ai__section-intro--center">
+      {% if section.settings.press_heading != blank %}
+        <h2 id="ArtlyAiPressTitle-{{ section.id }}">{{ section.settings.press_heading | escape }}</h2>
+      {% endif %}
+    </div>
+
+    {% if section.blocks.size > 0 %}
+      <div class="artly-ai__press-grid">
+        {% for block in section.blocks limit: 2 %}
+          <article class="artly-ai__press-card" {{ block.shopify_attributes }}>
+            {% if block.settings.source != blank %}
+              <p class="artly-ai__press-source">{{ block.settings.source | escape }}</p>
+            {% endif %}
+            <h3>{{ block.settings.heading | escape }}</h3>
+            {% if block.settings.body != blank %}
+              <p>{{ block.settings.body | escape }}</p>
+            {% endif %}
+            {% if block.settings.link_label != blank %}
+              <a
+                class="artly-ai__text-link"
+                {% if block.settings.link == blank %}
+                  role="link"
+                  aria-disabled="true"
+                {% else %}
+                  href="{{ block.settings.link }}"
+                {% endif %}
+              >
+                {{ block.settings.link_label | escape }}
+              </a>
+            {% endif %}
+          </article>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Artly AI press",
+  "class": "artly-ai-press-section",
+  "max_blocks": 2,
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "press_heading",
+      "label": "Heading",
+      "default": "Press"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "press_item",
+      "name": "Press item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "source",
+          "label": "Source",
+          "default": "Publication"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Press headline coming soon"
+        },
+        {
+          "type": "textarea",
+          "id": "body",
+          "label": "Body",
+          "default": "Add a short summary of the article or announcement here."
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Link label",
+          "default": "Read the Article"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Artly AI press"
+    }
+  ]
+}
+{% endschema %}
