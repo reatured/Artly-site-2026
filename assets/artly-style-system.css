@@ -866,6 +866,51 @@ footer .section > .utilities {
   margin-inline: auto;
 }
 
+footer .section > .footer-content,
+footer .section > .utilities {
+  width: min(var(--artly-rail-width, 100%), calc(100% - 32px));
+}
+
+footer .footer-content,
+footer .footer-content p,
+footer .footer-content h3,
+footer .footer-content ul,
+footer .footer-content li,
+footer .footer-content a {
+  margin-block-start: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+footer .footer-content ul {
+  list-style: none;
+  margin: 0.45rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+}
+
+footer .footer-content ul li {
+  margin: 0;
+}
+
+footer .footer-content ul a {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+footer .footer-content ul a:hover,
+footer .footer-content ul a:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+footer .footer-content p + p {
+  margin-top: 0.45rem;
+}
+
+
 .artly-hero {
   --artly-hero-copy-offset: max(16px, calc((100% - var(--artly-rail-width)) / 2));
   position: relative;

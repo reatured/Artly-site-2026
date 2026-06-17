@@ -19,9 +19,9 @@
         "hero_cta_heading": "Get deployment-ready robots fast, no coding required.",
         "hero_cta_body": "<p>Tell us about your operation, and we'll design a training solution built around it.</p>",
         "contact_label": "Contact Us",
-        "contact_link": "shopify://pages/contact",
+        "contact_link": "",
         "demo_label": "Book a Demo",
-        "demo_link": "shopify://pages/contact",
+        "demo_link": "",
         "color_scheme": "scheme-1",
         "padding-block-start": 0,
         "padding-block-end": 0
@@ -73,6 +73,8 @@
       "settings": {
         "demo_heading": "Commercial-scale automation without the training bottleneck.",
         "demo_body": "<p>Artly AI uses imitation learning methodology, specialized sensing rigs, and Vision-Action-Language models to capture the knowledge of domain experts to train robots directly with no code required. A specialist demonstrates a task, Artly AI analyzes the demonstration, and the robot learns the exact motions needed to replicate it with craft-level precision.</p>",
+        "demo_video": "shopify://files/videos/Artly Campaign V2.mp4",
+        "demo_video_url": "https://www.youtube.com/watch?v=gZD3YzRf7HA",
         "demo_media_alt_text": "Artly AI robot training demonstration",
         "color_scheme": "scheme-1",
         "padding-block-start": 0,
@@ -155,7 +157,7 @@
         "how_cta_heading": "See your robots in action.",
         "how_cta_body": "<p>Whether you're exploring automation for the first time or have a specific operation in mind, our team will get you deployment-ready.</p>",
         "how_cta_label": "Connect With an Expert",
-        "how_cta_link": "shopify://pages/contact",
+        "how_cta_link": "",
         "how_media_alt_text": "Artly AI deployment planning and robot training workflow",
         "color_scheme": "scheme-1",
         "padding-block-start": 0,
@@ -216,56 +218,81 @@
         "padding-block-end": 0
       }
     },
-    "artly_ai_logo_carousel": {
-      "type": "artly-ai-logo-carousel",
-      "name": "Logo Carousel",
+    "artly_ai_trusted_by_strip": {
+      "type": "trusted-by-logo-strip",
+      "name": "Trusted By",
       "settings": {
-        "logos_heading": "Trusted By",
+        "show_heading": true,
+        "heading": "Trusted By",
+        "alignment": "center",
+        "strip_mode": "static",
+        "logo_height": 32,
+        "logo_gap": 22,
+        "open_in_new_tab": false,
+        "section_width": "page-width",
         "color_scheme": "scheme-1",
-        "padding-block-start": 0,
-        "padding-block-end": 0
+        "padding-block-start": 36,
+        "padding-block-end": 36
       },
       "blocks": {
         "logo-cisco": {
-          "type": "logo",
+          "type": "trusted-by-logo",
           "settings": {
+            "external_image_url": "https://cdn.prod.website-files.com/6940345f6b3af1c307f31054/69498a836676fd41f6e612eb_Cisco_logo.svg",
             "logo_name": "Cisco",
-            "logo_alt_text": "Cisco logo"
+            "logo_alt_text": "Logo of Cisco",
+            "display_height": 32,
+            "open_in_new_tab": "inherit"
           }
         },
         "logo-intel": {
-          "type": "logo",
+          "type": "trusted-by-logo",
           "settings": {
+            "external_image_url": "https://cdn.prod.website-files.com/6940345f6b3af1c307f31054/69498a83421924871d87e1b7_Intel_logo_2023.svg",
             "logo_name": "Intel",
-            "logo_alt_text": "Intel logo"
+            "logo_alt_text": "Logo of Intel",
+            "display_height": 32,
+            "open_in_new_tab": "inherit"
           }
         },
         "logo-microsoft": {
-          "type": "logo",
+          "type": "trusted-by-logo",
           "settings": {
+            "external_image_url": "https://cdn.prod.website-files.com/6940345f6b3af1c307f31054/694182b3507a72f097f18b00_microsoft.webp",
             "logo_name": "Microsoft",
-            "logo_alt_text": "Microsoft logo"
+            "logo_alt_text": "Logo of Microsoft",
+            "display_height": 32,
+            "open_in_new_tab": "inherit"
           }
         },
         "logo-salesforce": {
-          "type": "logo",
+          "type": "trusted-by-logo",
           "settings": {
+            "external_image_url": "https://cdn.prod.website-files.com/6940345f6b3af1c307f31054/694182b39f0f8063084d6177_salesforce.webp",
             "logo_name": "Salesforce",
-            "logo_alt_text": "Salesforce logo"
+            "logo_alt_text": "Logo of Salesforce",
+            "display_height": 32,
+            "open_in_new_tab": "inherit"
           }
         },
         "logo-skydio": {
-          "type": "logo",
+          "type": "trusted-by-logo",
           "settings": {
+            "external_image_url": "https://cdn.prod.website-files.com/6940345f6b3af1c307f31054/6953a77cf3baee8c6622e710_skydio-logo-2.png",
             "logo_name": "Skydio",
-            "logo_alt_text": "Skydio logo"
+            "logo_alt_text": "Logo of Skydio, an Artly partner",
+            "display_height": 32,
+            "open_in_new_tab": "inherit"
           }
         },
         "logo-nvidia": {
-          "type": "logo",
+          "type": "trusted-by-logo",
           "settings": {
+            "external_image_url": "https://upload.wikimedia.org/wikipedia/sco/thumb/2/21/Nvidia_logo.svg/500px-Nvidia_logo.svg.png",
             "logo_name": "Nvidia",
-            "logo_alt_text": "Nvidia logo"
+            "logo_alt_text": "Logo of Nvidia",
+            "display_height": 32,
+            "open_in_new_tab": "inherit"
           }
         }
       },
@@ -495,10 +522,12 @@
     "artly_ai_advantage",
     "artly_ai_how_it_works",
     "artly_ai_case_study",
-    "artly_ai_logo_carousel",
+    "artly_ai_trusted_by_strip",
     "artly_ai_team",
     "artly_ai_press",
     "artly_ai_faq",
     "artly_ai_catch_all"
   ]
 }
+
+

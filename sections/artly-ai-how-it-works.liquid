@@ -40,17 +40,15 @@
           <div class="rte">{{ section.settings.how_cta_body }}</div>
         {% endif %}
         {% if section.settings.how_cta_label != blank %}
-          <a
+          <button
             class="artly-button artly-button--primary"
-            {% if section.settings.how_cta_link == blank %}
-              role="link"
-              aria-disabled="true"
-            {% else %}
-              href="{{ section.settings.how_cta_link }}"
-            {% endif %}
+            type="button"
+            data-artly-ai-contact-trigger="true"
+            aria-expanded="false"
+            aria-controls="artly-ai-contact-modal"
           >
             {{ section.settings.how_cta_label | escape }}
-          </a>
+          </button>
         {% endif %}
       </div>
     </div>
@@ -79,6 +77,115 @@
     </div>
   </div>
 </section>
+
+{% comment %}
+  Fallback binding for contact modal when the shared hero modal script is not available.
+{% endcomment %}
+<script>
+(function () {
+  const trigger = document.querySelector(
+    '.artly-ai-how-it-works-section [data-artly-ai-contact-trigger="true"]'
+  );
+  if (!trigger) return;
+  if (window.__artlyAiContactModalController?.open) return;
+  if (window.__artlyAiContactHowItWorksFallbackInitialized) return;
+
+  const modal = document.getElementById('artly-ai-contact-modal');
+  if (!modal) return;
+
+  window.__artlyAiContactHowItWorksFallbackInitialized = true;
+  const closeTargets = Array.from(modal.querySelectorAll('[data-artly-ai-contact-close]'));
+  const focusableSelector = [
+    'a[href]',
+    'button:not([disabled])',
+    'input:not([disabled])',
+    'select:not([disabled])',
+    'textarea:not([disabled])',
+    '[tabindex]:not([tabindex="-1"])'
+  ].join(',');
+  let lastTrigger = null;
+
+  function getFocusableElements() {
+    return Array.from(modal.querySelectorAll(focusableSelector))
+      .filter((element) => element.offsetParent !== null);
+  }
+
+  function setOpenState(open, clickedTrigger) {
+    const formMessage = modal.querySelector('.artly-ai__demo-message');
+    if (open) {
+      lastTrigger = clickedTrigger || trigger;
+      modal.hidden = false;
+      modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('artly-ai-modal-open');
+      const focusables = getFocusableElements();
+      const initialFocus = focusables[0] || modal;
+      window.requestAnimationFrame(() => {
+        initialFocus.focus({ preventScroll: true });
+      });
+      if (formMessage) {
+        formMessage.textContent = '';
+        formMessage.hidden = true;
+      }
+      return;
+    }
+
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('artly-ai-modal-open');
+    if (lastTrigger && lastTrigger.focus) {
+      lastTrigger.focus({ preventScroll: true });
+    }
+    modal.hidden = true;
+  }
+
+  function handleBackdropClose(event) {
+    if (event.target.closest('.artly-ai__demo-panel')) return;
+    setOpenState(false, trigger);
+  }
+
+  function handleKeydown(event) {
+    if (!modal.classList.contains('is-open')) return;
+    if (event.key === 'Escape') {
+      setOpenState(false);
+      return;
+    }
+    if (event.key !== 'Tab') return;
+
+    const focusable = getFocusableElements();
+    if (!focusable.length) {
+      event.preventDefault();
+      modal.focus();
+      return;
+    }
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  }
+
+  trigger.addEventListener('click', function (event) {
+    event.preventDefault();
+    if (modal.classList.contains('is-open')) {
+      setOpenState(false, trigger);
+      return;
+    }
+    setOpenState(true, trigger);
+  });
+
+  closeTargets.forEach((button) => {
+    button.addEventListener('click', () => setOpenState(false, trigger));
+  });
+  modal.addEventListener('click', handleBackdropClose);
+  document.addEventListener('keydown', handleKeydown);
+})();
+</script>
 
 {% schema %}
 {

@@ -1,5 +1,57 @@
 {% liquid
   assign demo_media_alt = section.settings.demo_media_alt_text | default: 'Artly AI robot training demonstration'
+  assign demo_media_state = section.settings.demo_media_mode | default: 'auto'
+  assign has_demo_video = false
+  assign has_demo_video_url = false
+  assign has_demo_image = false
+
+  if demo_media_state == 'uploaded'
+    if section.settings.demo_video != blank
+      assign has_demo_video = true
+      assign demo_media_state = 'uploaded_video'
+    else
+      assign demo_media_state = 'placeholder'
+    endif
+  elsif demo_media_state == 'external'
+    if section.settings.demo_video_url != blank
+      assign has_demo_video_url = true
+      assign demo_media_state = 'external_video'
+    else
+      assign demo_media_state = 'placeholder'
+    endif
+  elsif demo_media_state == 'image'
+    if section.settings.demo_image != blank
+      assign has_demo_image = true
+      assign demo_media_state = 'image'
+    else
+      assign demo_media_state = 'placeholder'
+    endif
+  elsif demo_media_state == 'placeholder'
+    assign demo_media_state = 'placeholder'
+  elsif section.settings.demo_video != blank
+    assign has_demo_video = true
+    assign demo_media_state = 'uploaded_video'
+  elsif section.settings.demo_video_url != blank
+    assign has_demo_video_url = true
+    assign demo_media_state = 'external_video'
+  elsif section.settings.demo_image != blank
+    assign has_demo_image = true
+    assign demo_media_state = 'image'
+  else
+    assign demo_media_state = 'placeholder'
+  endif
+
+  if has_demo_video
+    assign demo_media_object = section.settings.demo_video
+    assign demo_media_poster = section.settings.demo_image | default: section.settings.demo_video.preview_image
+    assign demo_media_alt_text = demo_media_alt | default: section.settings.demo_video.alt
+  elsif has_demo_video_url
+    assign demo_media_object = section.settings.demo_video_url
+    assign demo_media_poster = section.settings.demo_image
+    assign demo_media_alt_text = demo_media_alt | default: section.settings.demo_video_url.alt
+  elsif has_demo_image
+    assign demo_media_alt_text = demo_media_alt | default: section.settings.demo_image.alt
+  endif
 %}
 
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
@@ -20,20 +72,36 @@
       {% endif %}
     </div>
 
-    <div class="artly-ai__video-shell" role="img" aria-label="{{ demo_media_alt | escape }}">
-      {% if section.settings.demo_video_url != blank %}
+    <div
+      class="artly-ai__video-shell"
+      role="img"
+      aria-label="{{ demo_media_alt | escape }}"
+      data-demo-media-state="{{ demo_media_state }}"
+    >
+      {% if demo_media_state == 'uploaded_video' %}
+        {{
+          demo_media_object
+          | video_tag:
+            autoplay: false,
+            loop: false,
+            muted: true,
+            controls: true,
+            poster: demo_media_poster,
+            class: 'artly-ai__demo-video'
+        }}
+      {% elsif demo_media_state == 'external_video' %}
         {% render 'video',
           video_from_url: true,
-          video: section.settings.demo_video_url.id,
-          video_type: section.settings.demo_video_url.type,
-          disable_controls: section.settings.demo_video_url.type == 'youtube',
+          video: demo_media_object.id,
+          video_type: demo_media_object.type,
+          disable_controls: demo_media_object.type == 'youtube',
           video_class: 'artly-ai__external-video',
           video_autoplay: false,
           video_loop: false,
-          video_alt: demo_media_alt,
-          video_preview_image: section.settings.demo_image
+          video_alt: demo_media_alt_text,
+          video_preview_image: demo_media_poster
         %}
-      {% elsif section.settings.demo_image != blank %}
+      {% elsif demo_media_state == 'image' %}
         {{
           section.settings.demo_image
           | image_url: width: 1800
@@ -41,7 +109,7 @@
             width: section.settings.demo_image.width,
             widths: '416, 600, 768, 1024, 1440, 1800',
             height: section.settings.demo_image.height,
-            alt: demo_media_alt,
+            alt: demo_media_alt_text,
             loading: 'lazy',
             class: 'artly-ai__media-image'
         }}
@@ -81,6 +149,40 @@
       "id": "demo_body",
       "label": "Body",
       "default": "<p>Artly AI uses imitation learning methodology, specialized sensing rigs, and Vision-Action-Language models to capture the knowledge of domain experts to train robots directly with no code required. A specialist demonstrates a task, Artly AI analyzes the demonstration, and the robot learns the exact motions needed to replicate it with craft-level precision.</p>"
+    },
+    {
+      "type": "video",
+      "id": "demo_video",
+      "label": "Uploaded demo video",
+      "info": "Uploaded video takes precedence when set with External video URL."
+    },
+    {
+      "type": "select",
+      "id": "demo_media_mode",
+      "label": "Demo media mode",
+      "options": [
+        {
+          "value": "auto",
+          "label": "Auto (uploaded, URL, image, placeholder)"
+        },
+        {
+          "value": "uploaded",
+          "label": "Uploaded video only"
+        },
+        {
+          "value": "external",
+          "label": "External video only"
+        },
+        {
+          "value": "image",
+          "label": "Image only"
+        },
+        {
+          "value": "placeholder",
+          "label": "Placeholder"
+        }
+      ],
+      "default": "auto"
     },
     {
       "type": "video_url",

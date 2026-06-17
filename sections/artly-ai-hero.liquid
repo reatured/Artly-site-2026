@@ -48,36 +48,260 @@
         </div>
         <div class="artly-ai__actions">
           {% if section.settings.contact_label != blank %}
-            <a
+            <button
               class="artly-button artly-button--secondary"
-              {% if section.settings.contact_link == blank %}
-                role="link"
-                aria-disabled="true"
-              {% else %}
-                href="{{ section.settings.contact_link }}"
-              {% endif %}
+              type="button"
+              data-artly-ai-contact-trigger="true"
+              aria-expanded="false"
+              aria-controls="artly-ai-contact-modal"
             >
               {{ section.settings.contact_label | escape }}
-            </a>
+            </button>
           {% endif %}
           {% if section.settings.demo_label != blank %}
-            <a
+            <button
               class="artly-button artly-button--primary"
-              {% if section.settings.demo_link == blank %}
-                role="link"
-                aria-disabled="true"
-              {% else %}
-                href="{{ section.settings.demo_link }}"
-              {% endif %}
+              type="button"
+              data-artly-ai-contact-trigger="true"
+              aria-expanded="false"
+              aria-controls="artly-ai-contact-modal"
             >
               {{ section.settings.demo_label | escape }}
-            </a>
+            </button>
           {% endif %}
         </div>
       </div>
     </div>
   </div>
 </section>
+
+{% assign artly_ai_contact_form_id = 'ArtlyAiContactForm-' | append: section.id %}
+{% assign artly_ai_contact_return_to = request.path | default: routes.root_url | append: '#artly-ai-contact-modal' %}
+
+<div
+  id="artly-ai-contact-modal"
+  class="artly-ai__demo-modal"
+  role="dialog"
+  aria-modal="true"
+  aria-hidden="true"
+  aria-labelledby="ArtlyAiContactModalTitle"
+  aria-describedby="ArtlyAiContactModalDescription"
+  hidden
+>
+  <button
+    type="button"
+    class="artly-ai__demo-backdrop"
+    aria-label="Close contact popup"
+    data-artly-ai-contact-close
+  ></button>
+  <div class="artly-ai__demo-panel-wrap">
+    <div class="artly-ai__demo-panel">
+      <div class="artly-ai__demo-header">
+        <div>
+          <h2 id="ArtlyAiContactModalTitle" class="artly-ai__demo-title">Contact the Artly Team</h2>
+          <p id="ArtlyAiContactModalDescription" class="artly-ai__demo-description">
+            Tell us about your operation and we'll reply with a recommended deployment approach.
+          </p>
+        </div>
+        <button
+          type="button"
+          class="artly-ai__demo-close"
+          aria-label="Close contact popup"
+          data-artly-ai-contact-close
+        >
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+
+      {%- form 'contact', id: artly_ai_contact_form_id, return_to: artly_ai_contact_return_to -%}
+        {% if form.errors %}
+          <div class="artly-ai__demo-message artly-ai__demo-message--error" role="alert">
+            {{ form.errors | default_errors }}
+          </div>
+        {% elsif form.posted_successfully? %}
+          <div class="artly-ai__demo-message artly-ai__demo-message--success" role="status">
+            Thanks for reaching out. One of our specialists will get in touch shortly.
+          </div>
+        {% endif %}
+
+        <input type="hidden" name="contact[tags]" value="Artly AI Contact Request">
+
+        <div class="artly-ai__demo-field">
+          <label for="ArtlyAiContactName-{{ section.id }}">Name</label>
+          <input
+            id="ArtlyAiContactName-{{ section.id }}"
+            class="artly-ai__demo-input"
+            type="text"
+            name="contact[name]"
+            autocomplete="name"
+            required
+          >
+        </div>
+
+        <div class="artly-ai__demo-field">
+          <label for="ArtlyAiContactEmail-{{ section.id }}">Email</label>
+          <input
+            id="ArtlyAiContactEmail-{{ section.id }}"
+            class="artly-ai__demo-input"
+            type="email"
+            name="contact[email]"
+            autocomplete="email"
+            required
+          >
+        </div>
+
+        <div class="artly-ai__demo-field">
+          <label for="ArtlyAiContactCompany-{{ section.id }}">Company</label>
+          <input
+            id="ArtlyAiContactCompany-{{ section.id }}"
+            class="artly-ai__demo-input"
+            type="text"
+            name="contact[company]"
+            autocomplete="organization"
+          >
+        </div>
+
+        <div class="artly-ai__demo-field">
+          <label for="ArtlyAiContactMessage-{{ section.id }}">Project goals</label>
+          <textarea
+            id="ArtlyAiContactMessage-{{ section.id }}"
+            class="artly-ai__demo-textarea"
+            name="contact[body]"
+            rows="5"
+            required
+          ></textarea>
+        </div>
+
+        <button class="artly-button artly-button--primary artly-ai__demo-submit" type="submit">
+          Send request
+        </button>
+      {%- endform -%}
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  if (window.__artlyAiContactModalInitialized) return;
+  window.__artlyAiContactModalInitialized = true;
+
+  const modal = document.getElementById('artly-ai-contact-modal');
+  if (!modal) return;
+
+  const triggerSelector = '[data-artly-ai-contact-trigger]';
+  const closeTargets = Array.from(modal.querySelectorAll('[data-artly-ai-contact-close]'));
+  const focusableSelector = [
+    'a[href]',
+    'button:not([disabled])',
+    'input:not([disabled])',
+    'select:not([disabled])',
+    'textarea:not([disabled])',
+    '[tabindex]:not([tabindex=\"-1\"])'
+  ].join(',');
+  let lastTrigger = null;
+
+  function getTriggers() {
+    return Array.from(document.querySelectorAll(triggerSelector));
+  }
+
+  function getFocusableElements() {
+    return Array.from(modal.querySelectorAll(focusableSelector))
+      .filter((element) => element.offsetParent !== null);
+  }
+
+  function setOpenState(open, trigger) {
+    if (!modal) return;
+    const formMessage = modal.querySelector('.artly-ai__demo-message');
+    if (open) {
+      lastTrigger = trigger;
+      modal.hidden = false;
+      modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('artly-ai-modal-open');
+      getTriggers().forEach((button) => button.setAttribute('aria-expanded', button === trigger ? 'true' : 'false'));
+      const focusables = getFocusableElements();
+      const initialFocus = focusables[0] || modal;
+      window.requestAnimationFrame(() => {
+        initialFocus.focus({ preventScroll: true });
+      });
+      if (formMessage) {
+        formMessage.textContent = '';
+        formMessage.hidden = true;
+      }
+    } else {
+      modal.classList.remove('is-open');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('artly-ai-modal-open');
+      getTriggers().forEach((button) => button.setAttribute('aria-expanded', 'false'));
+      if (lastTrigger && lastTrigger.focus) {
+        lastTrigger.focus({ preventScroll: true });
+      }
+      modal.hidden = true;
+    }
+  }
+
+  window.__artlyAiContactModalController = window.__artlyAiContactModalController || {};
+  window.__artlyAiContactModalController.open = function (trigger) {
+    setOpenState(true, trigger);
+  };
+  window.__artlyAiContactModalController.close = function () {
+    setOpenState(false);
+  };
+  window.__artlyAiContactModalController.isOpen = function () {
+    return modal.classList.contains('is-open');
+  };
+
+  function handleBackdropClose(event) {
+    if (event.target.closest('.artly-ai__demo-panel')) return;
+    setOpenState(false);
+  }
+
+  function handleKeydown(event) {
+    if (!modal.classList.contains('is-open')) return;
+    if (event.key === 'Escape') {
+      setOpenState(false);
+      return;
+    }
+    if (event.key !== 'Tab') return;
+
+    const focusable = getFocusableElements();
+    if (!focusable.length) {
+      event.preventDefault();
+      modal.focus();
+      return;
+    }
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  }
+
+  document.addEventListener('click', function (event) {
+    const trigger = event.target.closest(triggerSelector);
+    if (!trigger) return;
+
+    event.preventDefault();
+    if (modal.classList.contains('is-open')) {
+      setOpenState(false);
+      return;
+    }
+    setOpenState(true, trigger);
+  });
+
+  closeTargets.forEach((button) => {
+    button.addEventListener('click', () => setOpenState(false));
+  });
+
+  modal.addEventListener('click', handleBackdropClose);
+  document.addEventListener('keydown', handleKeydown);
+})();
+</script>
 
 {% schema %}
 {

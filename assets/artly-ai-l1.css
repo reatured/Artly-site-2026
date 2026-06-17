@@ -220,6 +220,10 @@
 .artly-ai__external-video iframe,
 .artly-ai__external-video video,
 .artly-ai__external-video img,
+.artly-ai__demo-video,
+.artly-ai__demo-video iframe,
+.artly-ai__demo-video video,
+.artly-ai__demo-video img,
 .artly-ai__media-image,
 .artly-ai__media-placeholder,
 .artly-ai__image-placeholder,
@@ -232,6 +236,9 @@
 .artly-ai__external-video iframe,
 .artly-ai__external-video video,
 .artly-ai__external-video img,
+.artly-ai__demo-video iframe,
+.artly-ai__demo-video video,
+.artly-ai__demo-video img,
 .artly-ai__media-image {
   object-fit: cover;
 }
@@ -397,6 +404,160 @@
 .artly-ai__text-link:focus-visible {
   text-decoration: underline;
   text-underline-offset: 3px;
+}
+
+.artly-ai__demo-modal {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  inset: 0;
+  position: fixed;
+  z-index: 50;
+  padding: 20px;
+  justify-items: center;
+  align-items: center;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 180ms ease,
+    visibility 180ms linear;
+}
+
+.artly-ai__demo-modal.is-open {
+  pointer-events: auto;
+  opacity: 1;
+  visibility: visible;
+}
+
+.artly-ai__demo-backdrop {
+  position: absolute;
+  inset: 0;
+  border: none;
+  margin: 0;
+  padding: 0;
+  background: rgb(12 18 28 / 58%);
+  cursor: default;
+}
+
+.artly-ai__demo-panel-wrap {
+  position: relative;
+  width: min(760px, calc(100vw - 24px));
+  max-height: min(90vh, 90vh);
+  overflow: auto;
+  pointer-events: auto;
+}
+
+.artly-ai__demo-panel {
+  position: relative;
+  background: var(--artly-ink);
+  color: var(--artly-surface);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--artly-radius);
+  box-shadow: 0 26px 74px rgb(0 0 0 / 28%);
+  display: grid;
+  gap: 14px;
+  padding: 26px;
+}
+
+.artly-ai__demo-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.artly-ai__demo-title {
+  margin: 0;
+  color: #ffffff;
+  font-size: clamp(1.2rem, 2.1vw, 1.45rem);
+  line-height: 1.2;
+  letter-spacing: 0;
+  font-family: var(--artly-font-heading);
+}
+
+.artly-ai__demo-description {
+  margin: 0;
+  color: rgb(255 255 255 / 85%);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.artly-ai__demo-close {
+  border: none;
+  padding: 0;
+  width: 34px;
+  height: 34px;
+  color: #ffffff;
+  background: transparent;
+  cursor: pointer;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+}
+
+.artly-ai__demo-close span {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.artly-ai__demo-field {
+  display: grid;
+  gap: 6px;
+}
+
+.artly-ai__demo-field label {
+  font-size: 0.9rem;
+  color: rgb(255 255 255 / 88%);
+}
+
+.artly-ai__demo-input,
+.artly-ai__demo-textarea {
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgb(12 18 28 / 54%);
+  color: #fff;
+  border-radius: 8px;
+  min-height: 44px;
+  padding: 11px 13px;
+  font: inherit;
+}
+
+.artly-ai__demo-input:focus-visible,
+.artly-ai__demo-textarea:focus-visible {
+  outline: 2px solid rgb(255 255 255 / 75%);
+  outline-offset: 1px;
+}
+
+.artly-ai__demo-textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.artly-ai__demo-submit {
+  min-width: 170px;
+  justify-self: start;
+}
+
+.artly-ai__demo-message {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+
+.artly-ai__demo-message--error {
+  color: #ffccd5;
+  background: rgb(255 82 128 / 16%);
+}
+
+.artly-ai__demo-message--success {
+  color: #dbffcc;
+  background: rgb(118 255 158 / 18%);
+}
+
+body.artly-ai-modal-open {
+  overflow: hidden;
 }
 
 .artly-ai__logos {
