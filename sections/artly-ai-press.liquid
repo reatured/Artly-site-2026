@@ -25,17 +25,15 @@
               <p>{{ block.settings.body | escape }}</p>
             {% endif %}
             {% if block.settings.link_label != blank %}
-              <a
-                class="artly-ai__text-link"
-                {% if block.settings.link == blank %}
-                  role="link"
-                  aria-disabled="true"
-                {% else %}
-                  href="{{ block.settings.link }}"
-                {% endif %}
-              >
-                {{ block.settings.link_label | escape }}
-              </a>
+              {% if block.settings.link == blank %}
+                <span class="artly-ai__text-link artly-ai__text-link--disabled" aria-disabled="true">
+                  {{ block.settings.link_label | escape }}
+                </span>
+              {% else %}
+                <a class="artly-ai__text-link" href="{{ block.settings.link }}">
+                  {{ block.settings.link_label | escape }}
+                </a>
+              {% endif %}
             {% endif %}
           </article>
         {% endfor %}

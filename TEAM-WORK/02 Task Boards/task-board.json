@@ -1,7 +1,7 @@
 ﻿{
     "schemaVersion":  "1.0",
     "boardName":  "Artly Agent Task Board",
-    "updatedAt":  "2026-06-18T10:41:41-07:00",
+    "updatedAt":  "2026-06-18T11:11:34-07:00",
     "workflowDocs":  {
                          "overview":  "../00 Command Center/Simple Agent Workflow.md",
                          "planningAgent":  "../00 Command Center/Planning Agent.md",
@@ -58,60 +58,55 @@
 
                              ],
                     "claimed":  [
+                                    {
+                                        "id":  "TASK-20260618-010",
+                                        "title":  "Strengthen Trusted By section visual proof",
+                                        "project":  "Artly AI page",
+                                        "priority":  "high",
+                                        "type":  "design-fix",
+                                        "status":  "claimed",
+                                        "requestedBy":  "Richard",
+                                        "createdBy":  "Planning Agent",
+                                        "createdAt":  "2026-06-18T11:06:08-07:00",
+                                        "claimedBy":  "Codex Worker Agent",
+                                        "claimedAt":  "2026-06-18T11:11:34-07:00",
+                                        "reviewRequestedAt":  "",
+                                        "doneAt":  "",
+                                        "relatedTaskIds":  [
+                                                               "TASK-20260617-002",
+                                                               "TASK-20260618-001"
+                                                           ],
+                                        "summary":  "Redesign the Artly AI Trusted By section so it reads as credible proof instead of a quiet spacer, while preserving the correct home-page logo set.",
+                                        "requirements":  [
+                                                             "Review the current Artly AI Trusted By section in full-page context, not only the DOM or isolated section.",
+                                                             "Make the section feel like proof/credibility rather than a low-emphasis spacer between sections.",
+                                                             "Preserve the correct logo set and order that matches the home page Trusted By section.",
+                                                             "Improve visual weight through layout, spacing, background treatment, typography, logo scale/contrast, and section framing as appropriate.",
+                                                             "Keep the design aligned with the Artly AI page style and avoid making it look like a marketing hero or unrelated card block.",
+                                                             "Ensure logos remain clear, balanced, and readable on desktop and mobile.",
+                                                             "Do not introduce broken images, duplicate logo strips, marquee behavior, or horizontal overflow."
+                                                         ],
+                                        "acceptanceCriteria":  [
+                                                                   "In a full-page desktop view, the Trusted By section clearly reads as a credibility/proof section, not a weak spacer.",
+                                                                   "The Trusted By heading, logo sizing, logo contrast, and surrounding spacing create stronger visual presence than the current implementation.",
+                                                                   "The section still uses the same logo count, logo assets, and order as the home page Trusted By section.",
+                                                                   "The section remains visually balanced with adjacent Artly AI sections and does not overpower the page.",
+                                                                   "Mobile layout keeps logos readable and proof-oriented without horizontal overflow.",
+                                                                   "No duplicate trusted sections, broken images, or regressions to previously fixed heading/logo spacing."
+                                                               ],
+                                        "files":  [
+                                                      "templates/page.artly-ai.json",
+                                                      "sections/trusted-by-logo-strip.liquid",
+                                                      "assets/artly-style-system.css",
+                                                      "assets/artly-ai-l1.css"
+                                                  ],
+                                        "blockers":  [
 
+                                                     ],
+                                        "notes":  "Created from Richard\u0027s 2026-06-18 feedback: the trust section is visually underpowered; even with logos present, the full-page read is weak and Trusted By should feel like proof, not a quiet spacer."
+                                    }
                                 ],
                     "review":  [
-                                   {
-                                       "id":  "TASK-20260618-007",
-                                       "title":  "Wire Artly AI popup to Shopify newsletter subscription workflow",
-                                       "project":  "Artly AI page",
-                                       "priority":  "high",
-                                       "type":  "implementation",
-                                       "status":  "review",
-                                       "requestedBy":  "Richard",
-                                       "createdBy":  "Planning Agent",
-                                       "createdAt":  "2026-06-18T10:30:29-07:00",
-                                       "claimedBy":  "Codex Worker Agent",
-                                       "claimedAt":  "2026-06-18T10:37:09-07:00",
-                                       "reviewRequestedAt":  "2026-06-18T10:39:36-07:00",
-                                       "doneAt":  "",
-                                       "relatedTaskIds":  [
-                                                              "TASK-20260617-001",
-                                                              "TASK-20260618-002",
-                                                              "TASK-20260618-003"
-                                                          ],
-                                       "summary":  "Update the Artly AI popup form so submissions use the theme standard Shopify customer/newsletter subscription workflow instead of only a contact form submission.",
-                                       "requirements":  [
-                                                            "Inspect the Artly AI popup in sections/artly-ai-hero.liquid around the current contact form implementation.",
-                                                            "Replace or adapt the popup submission flow so it uses the standard newsletter/customer subscription pattern used by sections/floating-contact.liquid, including form \u0027customer\u0027 where appropriate.",
-                                                            "Ensure submitted popup emails create or update Shopify customers in the newsletter/subscribed-customer workflow rather than only sending a standard contact form message.",
-                                                            "Carry over the appropriate newsletter tag/hidden fields used by the theme standard subscription workflow, such as the newsletter/customer subscription tag pattern already present in floating-contact.liquid.",
-                                                            "Preserve the popup visual design, white theme spacing, modal open/close behavior, focus handling, and CTA triggers from the completed popup tasks.",
-                                                            "Decide how to handle existing popup fields Name, Email, Company, and Project goals under the customer/newsletter workflow; do not silently drop important visible inputs if Shopify customer forms cannot store them.",
-                                                            "If a marketing consent checkbox is needed for the standard workflow or compliance, add it in a clean way that matches the modal design and is not preselected unless the existing theme pattern clearly does so.",
-                                                            "Keep validation, success state, and error state clear to the user after submission."
-                                                        ],
-                                       "acceptanceCriteria":  [
-                                                                  "Submitting the Artly AI popup with a valid email uses Shopify customer/newsletter subscription handling, not only form \u0027contact\u0027.",
-                                                                  "The submitted email appears in the Shopify subscribed/newsletter customer workflow according to the theme standard pattern.",
-                                                                  "The popup still opens from all existing Artly AI CTA triggers and does not navigate away unexpectedly.",
-                                                                  "Close button, Escape key, backdrop close, focus into dialog, and focus return still work after the form change.",
-                                                                  "The modal keeps the approved polished white visual design and tightened field spacing.",
-                                                                  "Existing visible fields are either submitted meaningfully or the UI is adjusted so users are not asked for data that is discarded.",
-                                                                  "Submission success and error states are visible and styled consistently.",
-                                                                  "No regressions to the floating-contact section newsletter form."
-                                                              ],
-                                       "files":  [
-                                                     "sections/artly-ai-hero.liquid",
-                                                     "sections/floating-contact.liquid",
-                                                     "templates/page.artly-ai.json",
-                                                     "assets/artly-ai-l1.css"
-                                                 ],
-                                       "blockers":  [
-
-                                                    ],
-                                       "notes":  "Created from Richard\u0027s 2026-06-18 request: Artly AI popup currently uses form \u0027contact\u0027 with contact[name/email/company/body], but it should connect to the standard subscription workflow like floating-contact.liquid form \u0027customer\u0027."
-                                   },
                                    {
                                        "id":  "TASK-20260618-008",
                                        "title":  "Polish footer signup logo, text scale, and divider",
@@ -160,10 +155,106 @@
 
                                                     ],
                                        "notes":  "Created from Richard\u0027s 2026-06-18 footer screenshot feedback: make the top-left logo bigger, make the signup text smaller and lower, and remove the small bottom line in the left footer signup area."
+                                   },
+                                   {
+                                       "id":  "TASK-20260618-009",
+                                       "title":  "Fix disabled case study and press card link styling",
+                                       "project":  "Artly AI page",
+                                       "priority":  "high",
+                                       "type":  "bugfix",
+                                       "status":  "review",
+                                       "requestedBy":  "Richard",
+                                       "createdBy":  "Planning Agent",
+                                       "createdAt":  "2026-06-18T11:03:00-07:00",
+                                       "claimedBy":  "Codex Worker Agent",
+                                       "claimedAt":  "2026-06-18T11:10:20-07:00",
+                                       "reviewRequestedAt":  "2026-06-18T11:11:26-07:00",
+                                       "doneAt":  "",
+                                       "summary":  "Make case study and press cards with blank URLs stop looking like active clickable links.",
+                                       "requirements":  [
+                                                            "Inspect sections/artly-ai-case-study.liquid around line 50 and sections/artly-ai-press.liquid around line 30.",
+                                                            "When a case study or press card URL is blank, do not style the disabled action as a normal active link.",
+                                                            "Remove misleading link affordances for disabled states, including active link color, underline/hover treatment, pointer cursor, and arrow treatment if it implies navigation.",
+                                                            "Use semantic markup for disabled/non-clickable actions where possible instead of an href-less or fake clickable link.",
+                                                            "Keep cards with valid URLs styled and behaving as real clickable links.",
+                                                            "Preserve the existing card layout, spacing, typography, and responsive behavior except for the disabled-link affordance.",
+                                                            "Ensure keyboard navigation does not focus disabled/non-clickable actions as if they were real links."
+                                                        ],
+                                       "acceptanceCriteria":  [
+                                                                  "Case study cards with blank URLs are visually distinguishable from active links and do not look clickable.",
+                                                                  "Press cards with blank URLs are visually distinguishable from active links and do not look clickable.",
+                                                                  "Cards with valid URLs still render as accessible links and retain the intended active styling.",
+                                                                  "Disabled/non-clickable card actions do not navigate, do not show pointer/hover link affordances, and are not keyboard-focusable as links.",
+                                                                  "No layout regressions occur in the case study or press sections on desktop or mobile."
+                                                              ],
+                                       "files":  [
+                                                     "sections/artly-ai-case-study.liquid",
+                                                     "sections/artly-ai-press.liquid",
+                                                     "assets/artly-ai-l1.css"
+                                                 ],
+                                       "blockers":  [
+
+                                                    ],
+                                       "notes":  "Created from Richard\u0027s 2026-06-18 feedback: disabled links are styled as real links; case study and press cards look clickable when URLs are blank. Source refs: sections/artly-ai-case-study.liquid line 50 and sections/artly-ai-press.liquid line 30."
                                    }
                                ],
                     "reviewing":  [
+                                      {
+                                          "id":  "TASK-20260618-007",
+                                          "title":  "Wire Artly AI popup to Shopify newsletter subscription workflow",
+                                          "project":  "Artly AI page",
+                                          "priority":  "high",
+                                          "type":  "implementation",
+                                          "status":  "review",
+                                          "requestedBy":  "Richard",
+                                          "createdBy":  "Planning Agent",
+                                          "createdAt":  "2026-06-18T10:30:29-07:00",
+                                          "claimedBy":  "Codex Worker Agent",
+                                          "claimedAt":  "2026-06-18T10:37:09-07:00",
+                                          "reviewRequestedAt":  "2026-06-18T10:39:36-07:00",
+                                          "doneAt":  "",
+                                          "relatedTaskIds":  [
+                                                                 "TASK-20260617-001",
+                                                                 "TASK-20260618-002",
+                                                                 "TASK-20260618-003"
+                                                             ],
+                                          "summary":  "Update the Artly AI popup form so submissions use the theme standard Shopify customer/newsletter subscription workflow instead of only a contact form submission.",
+                                          "requirements":  [
+                                                               "Inspect the Artly AI popup in sections/artly-ai-hero.liquid around the current contact form implementation.",
+                                                               "Replace or adapt the popup submission flow so it uses the standard newsletter/customer subscription pattern used by sections/floating-contact.liquid, including form \u0027customer\u0027 where appropriate.",
+                                                               "Ensure submitted popup emails create or update Shopify customers in the newsletter/subscribed-customer workflow rather than only sending a standard contact form message.",
+                                                               "Carry over the appropriate newsletter tag/hidden fields used by the theme standard subscription workflow, such as the newsletter/customer subscription tag pattern already present in floating-contact.liquid.",
+                                                               "Preserve the popup visual design, white theme spacing, modal open/close behavior, focus handling, and CTA triggers from the completed popup tasks.",
+                                                               "Decide how to handle existing popup fields Name, Email, Company, and Project goals under the customer/newsletter workflow; do not silently drop important visible inputs if Shopify customer forms cannot store them.",
+                                                               "If a marketing consent checkbox is needed for the standard workflow or compliance, add it in a clean way that matches the modal design and is not preselected unless the existing theme pattern clearly does so.",
+                                                               "Keep validation, success state, and error state clear to the user after submission."
+                                                           ],
+                                          "acceptanceCriteria":  [
+                                                                     "Submitting the Artly AI popup with a valid email uses Shopify customer/newsletter subscription handling, not only form \u0027contact\u0027.",
+                                                                     "The submitted email appears in the Shopify subscribed/newsletter customer workflow according to the theme standard pattern.",
+                                                                     "The popup still opens from all existing Artly AI CTA triggers and does not navigate away unexpectedly.",
+                                                                     "Close button, Escape key, backdrop close, focus into dialog, and focus return still work after the form change.",
+                                                                     "The modal keeps the approved polished white visual design and tightened field spacing.",
+                                                                     "Existing visible fields are either submitted meaningfully or the UI is adjusted so users are not asked for data that is discarded.",
+                                                                     "Submission success and error states are visible and styled consistently.",
+                                                                     "No regressions to the floating-contact section newsletter form."
+                                                                 ],
+                                          "files":  [
+                                                        "sections/artly-ai-hero.liquid",
+                                                        "sections/floating-contact.liquid",
+                                                        "templates/page.artly-ai.json",
+                                                        "assets/artly-ai-l1.css"
+                                                    ],
+                                          "blockers":  [
 
+                                                       ],
+                                          "notes":  "Created from Richard\u0027s 2026-06-18 request: Artly AI popup currently uses form \u0027contact\u0027 with contact[name/email/company/body], but it should connect to the standard subscription workflow like floating-contact.liquid form \u0027customer\u0027.\nRichard feedback for re-review: CTAs are semantically confused. Contact Us / Book a Demo currently open a modal that says Join updates and only asks for name/email, which burns high-intent users. The high-intent CTAs should open a contact/demo-appropriate flow, while newsletter subscription language and minimal signup fields should be reserved for newsletter/signup entry points. Source refs: sections/artly-ai-hero.liquid line 102 and line 163.",
+                                          "richardFeedback":  "Richard feedback for re-review: CTAs are semantically confused. Contact Us / Book a Demo currently open a modal that says Join updates and only asks for name/email, which burns high-intent users. The high-intent CTAs should open a contact/demo-appropriate flow, while newsletter subscription language and minimal signup fields should be reserved for newsletter/signup entry points. Source refs: sections/artly-ai-hero.liquid line 102 and line 163.",
+                                          "richardFeedbackAt":  "2026-06-18T11:02:13-07:00",
+                                          "reviewFocus":  "Verify CTA intent and modal semantics, not just subscription plumbing.",
+                                          "reviewClaimedBy":  "Codex Review Agent",
+                                          "reviewStartedAt":  "2026-06-18T11:10:25"
+                                      }
                                   ],
                     "done":  [
                                  {

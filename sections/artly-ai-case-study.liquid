@@ -45,17 +45,15 @@
         <div class="rte">{{ section.settings.case_body }}</div>
       {% endif %}
       {% if section.settings.case_link_label != blank %}
-        <a
-          class="artly-ai__text-link"
-          {% if section.settings.case_link == blank %}
-            role="link"
-            aria-disabled="true"
-          {% else %}
-            href="{{ section.settings.case_link }}"
-          {% endif %}
-        >
-          {{ section.settings.case_link_label | escape }}
-        </a>
+        {% if section.settings.case_link == blank %}
+          <span class="artly-ai__text-link artly-ai__text-link--disabled" aria-disabled="true">
+            {{ section.settings.case_link_label | escape }}
+          </span>
+        {% else %}
+          <a class="artly-ai__text-link" href="{{ section.settings.case_link }}">
+            {{ section.settings.case_link_label | escape }}
+          </a>
+        {% endif %}
       {% endif %}
     </div>
   </div>
