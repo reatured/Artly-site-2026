@@ -95,6 +95,7 @@
 
   window.__artlyAiContactHowItWorksFallbackInitialized = true;
   const closeTargets = Array.from(modal.querySelectorAll('[data-artly-ai-contact-close]'));
+  const dialogPanel = modal.querySelector('.artly-ai__demo-panel');
   const focusableSelector = [
     'a[href]',
     'button:not([disabled])',
@@ -107,22 +108,43 @@
 
   function getFocusableElements() {
     return Array.from(modal.querySelectorAll(focusableSelector))
-      .filter((element) => element.offsetParent !== null);
+      .filter((element) => element.offsetParent !== null && element.tabIndex >= 0);
+  }
+
+  function getInitialFocusElement() {
+    const preferredElements = Array.from(modal.querySelectorAll('.artly-ai__demo-input, .artly-ai__demo-textarea, .artly-ai__demo-close'))
+      .filter((element) => element.offsetParent !== null && element.tabIndex >= 0);
+    return preferredElements[0] || dialogPanel || modal;
+  }
+
+  function focusInitialElement(attempt) {
+    const retryCount = attempt || 0;
+    if (dialogPanel) {
+      dialogPanel.setAttribute('tabindex', '-1');
+    }
+    const initialFocus = getInitialFocusElement();
+    initialFocus.focus({ preventScroll: true });
+    if (modal.contains(document.activeElement) && document.activeElement !== lastTrigger) return;
+    if (retryCount >= 4) return;
+
+    window.setTimeout(() => {
+      if (modal.classList.contains('is-open')) {
+        focusInitialElement(retryCount + 1);
+      }
+    }, 25);
   }
 
   function setOpenState(open, clickedTrigger) {
     const formMessage = modal.querySelector('.artly-ai__demo-message');
     if (open) {
       lastTrigger = clickedTrigger || trigger;
+      modal.removeAttribute('inert');
+      modal.setAttribute('tabindex', '-1');
       modal.hidden = false;
       modal.classList.add('is-open');
       modal.setAttribute('aria-hidden', 'false');
       document.body.classList.add('artly-ai-modal-open');
-      const focusables = getFocusableElements();
-      const initialFocus = focusables[0] || modal;
-      window.requestAnimationFrame(() => {
-        initialFocus.focus({ preventScroll: true });
-      });
+      focusInitialElement();
       if (formMessage) {
         formMessage.textContent = '';
         formMessage.hidden = true;
@@ -136,6 +158,7 @@
     if (lastTrigger && lastTrigger.focus) {
       lastTrigger.focus({ preventScroll: true });
     }
+    modal.setAttribute('inert', '');
     modal.hidden = true;
   }
 

@@ -49,6 +49,10 @@
     grid-column: 1 / -1;
   }
 
+  .footer-content--has-intro > :first-child .divider {
+    display: none;
+  }
+
   @media screen and (min-width: 750px) and (max-width: 989px) {
     .footer-content {
       grid-template-columns: repeat(min(var(--grid-columns), 3), 1fr);
@@ -69,13 +73,71 @@
       grid-template-columns: repeat(var(--grid-columns), 1fr);
     }
 
+    .footer-content--has-intro {
+      grid-template-columns: minmax(300px, 32%) repeat(var(--grid-columns), minmax(112px, 1fr));
+      column-gap: clamp(28px, 4vw, var(--footer-gap));
+      row-gap: var(--footer-gap);
+    }
+
     /* Single item centered */
     .footer-content[style*='--grid-columns: 1'] {
       justify-items: center;
     }
 
     .footer-content--has-intro > :first-child {
-      grid-column: 1 / -1;
+      grid-column: auto;
+      max-width: 380px;
+      min-width: 0;
+    }
+
+    .footer-content--has-intro > :not(:first-child) {
+      min-width: 0;
+    }
+
+    .footer-content--has-intro > :first-child .group-block-content {
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    .footer-content--has-intro > :first-child .logo-block {
+      --logo-width: clamp(68px, 6vw, 92px);
+
+      margin-bottom: 12px;
+    }
+
+    .footer-content--has-intro > :first-child .logo-block + .text-block {
+      margin-top: 8px;
+    }
+
+    .footer-content--has-intro > :first-child .text-block h2 {
+      font-size: clamp(1.04rem, 1.2vw, 1.18rem);
+      line-height: 1.22;
+    }
+
+    .footer-content--has-intro > :first-child .text-block p {
+      font-size: 0.86rem;
+      line-height: 1.5;
+    }
+
+    .footer-content--has-intro > :first-child .email-signup-block {
+      width: 100%;
+      min-width: 0;
+      margin-top: 4px;
+    }
+
+    .footer-content--has-intro > :first-child .email-signup__input-group {
+      width: 100%;
+      gap: 8px;
+      align-items: stretch;
+    }
+
+    .footer-content--has-intro > :first-child .email-signup__input {
+      min-width: 0;
+    }
+
+    .footer-content--has-intro > :first-child .email-signup__button--text {
+      flex: 0 0 auto;
+      padding-inline: 18px;
     }
   }
 {% endstylesheet %}

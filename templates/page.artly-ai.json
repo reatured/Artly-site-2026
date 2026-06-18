@@ -235,74 +235,203 @@
         "padding-block-end": 36
       },
       "blocks": {
+        "logo-alexandria": {
+          "type": "trusted-by-logo",
+          "settings": {
+            "external_image_url": "https://cdn.prod.website-files.com/6940345f6b3af1c307f31054/6953a7b10a5fe7a7eca55d1e_logo.gif",
+            "logo_name": "Alexandria Real Estate Equities",
+            "logo_url": "",
+            "logo_alt_text": "Alexandria Real Estate Equities logo",
+            "display_height": 32,
+            "open_in_new_tab": "inherit"
+          },
+          "blocks": {}
+        },
         "logo-cisco": {
           "type": "trusted-by-logo",
           "settings": {
             "external_image_url": "https://cdn.prod.website-files.com/6940345f6b3af1c307f31054/69498a836676fd41f6e612eb_Cisco_logo.svg",
             "logo_name": "Cisco",
+            "logo_url": "",
             "logo_alt_text": "Logo of Cisco",
             "display_height": 32,
             "open_in_new_tab": "inherit"
-          }
+          },
+          "blocks": {}
+        },
+        "logo-fortune": {
+          "type": "trusted-by-logo",
+          "settings": {
+            "external_image_url": "https://cdn.prod.website-files.com/6940345f6b3af1c307f31054/6953a7d58f783f392138f6f8_FORTUNE-LOGO-2016.webp",
+            "logo_name": "Fortune",
+            "logo_url": "",
+            "logo_alt_text": "Logo of Fortune, an Artly partner",
+            "display_height": 32,
+            "open_in_new_tab": "inherit"
+          },
+          "blocks": {}
         },
         "logo-intel": {
           "type": "trusted-by-logo",
           "settings": {
             "external_image_url": "https://cdn.prod.website-files.com/6940345f6b3af1c307f31054/69498a83421924871d87e1b7_Intel_logo_2023.svg",
             "logo_name": "Intel",
+            "logo_url": "",
             "logo_alt_text": "Logo of Intel",
             "display_height": 32,
             "open_in_new_tab": "inherit"
-          }
+          },
+          "blocks": {}
+        },
+        "logo-jump-trading": {
+          "type": "trusted-by-logo",
+          "settings": {
+            "external_image_url": "https://cdn.prod.website-files.com/6940345f6b3af1c307f31054/69498a83def55b1ede133543_Jump-trading-primary-jump-trading-logo-red-and-black-full-color-rgb.svg.webp",
+            "logo_name": "Jump Trading",
+            "logo_url": "",
+            "logo_alt_text": "Logo of Jump Trading",
+            "display_height": 32,
+            "open_in_new_tab": "inherit"
+          },
+          "blocks": {}
+        },
+        "logo-mayo-clinic": {
+          "type": "trusted-by-logo",
+          "settings": {
+            "external_image_url": "https://cdn.prod.website-files.com/6940345f6b3af1c307f31054/69498a83e49ee88fb79a540f_Mayo_Clinic_Logo_2023.webp",
+            "logo_name": "Mayo Clinic",
+            "logo_url": "",
+            "logo_alt_text": "Logo of Mayo Clinic",
+            "display_height": 32,
+            "open_in_new_tab": "inherit"
+          },
+          "blocks": {}
+        },
+        "logo-mckinsey": {
+          "type": "trusted-by-logo",
+          "settings": {
+            "external_image_url": "https://cdn.prod.website-files.com/6940345f6b3af1c307f31054/69498a83efb29f24bdf52b39_McKinsey_Script_Mark_2019.svg",
+            "logo_name": "McKinsey & Company",
+            "logo_url": "",
+            "logo_alt_text": "Logo of McKinsey & Company",
+            "display_height": 32,
+            "open_in_new_tab": "inherit"
+          },
+          "blocks": {}
         },
         "logo-microsoft": {
           "type": "trusted-by-logo",
           "settings": {
             "external_image_url": "https://cdn.prod.website-files.com/6940345f6b3af1c307f31054/694182b3507a72f097f18b00_microsoft.webp",
             "logo_name": "Microsoft",
+            "logo_url": "",
             "logo_alt_text": "Logo of Microsoft",
             "display_height": 32,
             "open_in_new_tab": "inherit"
-          }
+          },
+          "blocks": {}
+        },
+        "logo-muji": {
+          "type": "trusted-by-logo",
+          "settings": {
+            "external_image_url": "https://cdn.prod.website-files.com/6940345f6b3af1c307f31054/694182b3c9328da65342da90_muji.webp",
+            "logo_name": "Muji",
+            "logo_url": "",
+            "logo_alt_text": "Logo of Muji",
+            "display_height": 32,
+            "open_in_new_tab": "inherit"
+          },
+          "blocks": {}
+        },
+        "logo-pure-storage": {
+          "type": "trusted-by-logo",
+          "settings": {
+            "external_image_url": "https://cdn.prod.website-files.com/6940345f6b3af1c307f31054/6953a80276940c71003c16e8_Pure-storage-vector-logo.svg.webp",
+            "logo_name": "Pure Storage",
+            "logo_url": "",
+            "logo_alt_text": "Logo of Pure Storage, an Artly partner",
+            "display_height": 32,
+            "open_in_new_tab": "inherit"
+          },
+          "blocks": {}
         },
         "logo-salesforce": {
           "type": "trusted-by-logo",
           "settings": {
             "external_image_url": "https://cdn.prod.website-files.com/6940345f6b3af1c307f31054/694182b39f0f8063084d6177_salesforce.webp",
             "logo_name": "Salesforce",
+            "logo_url": "",
             "logo_alt_text": "Logo of Salesforce",
             "display_height": 32,
             "open_in_new_tab": "inherit"
-          }
+          },
+          "blocks": {}
         },
         "logo-skydio": {
           "type": "trusted-by-logo",
           "settings": {
             "external_image_url": "https://cdn.prod.website-files.com/6940345f6b3af1c307f31054/6953a77cf3baee8c6622e710_skydio-logo-2.png",
             "logo_name": "Skydio",
+            "logo_url": "",
             "logo_alt_text": "Logo of Skydio, an Artly partner",
             "display_height": 32,
             "open_in_new_tab": "inherit"
-          }
+          },
+          "blocks": {}
+        },
+        "logo-tesla": {
+          "type": "trusted-by-logo",
+          "settings": {
+            "external_image_url": "https://cdn.prod.website-files.com/6940345f6b3af1c307f31054/694182b37bc5c6e9d01aedd3_tesla.webp",
+            "logo_name": "Tesla",
+            "logo_url": "",
+            "logo_alt_text": "Logo of Tesla",
+            "display_height": 32,
+            "open_in_new_tab": "inherit"
+          },
+          "blocks": {}
         },
         "logo-nvidia": {
           "type": "trusted-by-logo",
           "settings": {
             "external_image_url": "https://upload.wikimedia.org/wikipedia/sco/thumb/2/21/Nvidia_logo.svg/500px-Nvidia_logo.svg.png",
             "logo_name": "Nvidia",
+            "logo_url": "",
             "logo_alt_text": "Logo of Nvidia",
             "display_height": 32,
             "open_in_new_tab": "inherit"
-          }
+          },
+          "blocks": {}
+        },
+        "logo-workday": {
+          "type": "trusted-by-logo",
+          "settings": {
+            "external_image_url": "https://cdn.prod.website-files.com/6940345f6b3af1c307f31054/6953a76f15fd0ba50965be1c_Workday_logo.svg.webp",
+            "logo_name": "Workday",
+            "logo_url": "",
+            "logo_alt_text": "Logo of Workday, an Artly partner",
+            "display_height": 32,
+            "open_in_new_tab": "inherit"
+          },
+          "blocks": {}
         }
       },
       "block_order": [
+        "logo-alexandria",
         "logo-cisco",
+        "logo-fortune",
         "logo-intel",
+        "logo-jump-trading",
+        "logo-mayo-clinic",
+        "logo-mckinsey",
         "logo-microsoft",
+        "logo-muji",
+        "logo-pure-storage",
         "logo-salesforce",
         "logo-skydio",
-        "logo-nvidia"
+        "logo-tesla",
+        "logo-nvidia",
+        "logo-workday"
       ]
     },
     "artly_ai_team": {

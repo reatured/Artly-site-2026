@@ -4,6 +4,7 @@
   assign has_demo_video = false
   assign has_demo_video_url = false
   assign has_demo_image = false
+  assign demo_media_poster_url = blank
 
   if demo_media_state == 'uploaded'
     if section.settings.demo_video != blank
@@ -43,7 +44,10 @@
 
   if has_demo_video
     assign demo_media_object = section.settings.demo_video
-    assign demo_media_poster = section.settings.demo_image | default: section.settings.demo_video.preview_image
+    assign demo_media_poster = section.settings.demo_image
+    if demo_media_poster != blank
+      assign demo_media_poster_url = demo_media_poster | image_url: width: 1800
+    endif
     assign demo_media_alt_text = demo_media_alt | default: section.settings.demo_video.alt
   elsif has_demo_video_url
     assign demo_media_object = section.settings.demo_video_url
@@ -79,16 +83,21 @@
       data-demo-media-state="{{ demo_media_state }}"
     >
       {% if demo_media_state == 'uploaded_video' %}
-        {{
-          demo_media_object
-          | video_tag:
-            autoplay: false,
-            loop: false,
-            muted: true,
-            controls: true,
-            poster: demo_media_poster,
-            class: 'artly-ai__demo-video'
-        }}
+        <video
+          class="artly-ai__demo-video"
+          controls
+          muted
+          playsinline
+          preload="metadata"
+          aria-label="{{ demo_media_alt_text | escape }}"
+          {% if demo_media_poster_url != blank %}
+            poster="{{ demo_media_poster_url }}"
+          {% endif %}
+        >
+          {% for source in demo_media_object.sources %}
+            <source src="{{ source.url }}" type="{{ source.mime_type }}">
+          {% endfor %}
+        </video>
       {% elsif demo_media_state == 'external_video' %}
         {% render 'video',
           video_from_url: true,

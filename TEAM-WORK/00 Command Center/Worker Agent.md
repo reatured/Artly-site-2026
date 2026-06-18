@@ -13,7 +13,7 @@ After each completed task, reload `task-board.json` and check the live board aga
 1. Read `TEAM-WORK/00 Command Center/Simple Agent Workflow.md`.
 2. Read `TEAM-WORK/02 Task Boards/task-board.json`.
 3. Choose one task from `columns.todo`.
-4. Before touching implementation files, claim the task:
+4. Before touching implementation files, claim the task. If the local backend is running, prefer `POST /api/claim-task`; otherwise update `task-board.json` directly:
    - Move the whole task object from `columns.todo` to `columns.claimed`.
    - Set `status` to `claimed`.
    - Set `claimedBy` to your agent name or thread ID.
@@ -47,7 +47,7 @@ After each completed task, reload `task-board.json` and check the live board aga
 
 When the task is complete:
 
-1. Move the task from `columns.claimed` to `columns.review`.
+1. Move the task from `columns.claimed` to `columns.review`. If the local backend is running, prefer `POST /api/move-to-review`; otherwise update `task-board.json` directly.
 2. Set `status` to `review`.
 3. Set `reviewRequestedAt` to the current timestamp.
 4. Add a concise completion note to `notes`.

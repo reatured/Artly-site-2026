@@ -30,12 +30,14 @@ If a fix is needed, the Review Agent records the issue in `task-board.json` and 
 2. Read `TEAM-WORK/00 Command Center/Review Agent.md`.
 3. Read `TEAM-WORK/02 Task Boards/task-board.json`.
 4. Identify the specific task in `columns.review` and Richard's review question.
-5. Move the target task to `columns.reviewing`, set `status: "reviewing"`, `reviewClaimedBy`, and `reviewClaimedAt`.
+5. Move the target task to `columns.reviewing`, set `status: "reviewing"`, `reviewClaimedBy`, and `reviewClaimedAt`. If the local backend is running, prefer `POST /api/claim-review`; otherwise update `task-board.json` directly.
 6. Use the browser to visually inspect the relevant page, section, state, or interaction.
 
 Claim only tasks currently in `columns.review`. A task already in `columns.reviewing` is claimed by another Review Agent; do not claim it, review it, move it, or duplicate its review work unless Richard explicitly reassigns it.
 
 Do not use `TEAM-WORK/02 Task Boards/task-board.html` as an agent input. It is Richard's display-only board.
+
+If the task includes `richardFeedback`, `returnedToReviewAt`, or notes beginning with `Richard feedback for re-review`, treat that feedback as Richard's active review question. Use it as a primary input when deciding whether to create or update follow-up `todo` tasks. Do not ignore older Richard feedback just because the task was previously in `done`.
 
 ## Review Standard
 
@@ -55,7 +57,7 @@ Approve only when:
 
 ## If Approved
 
-1. Move the reviewed task from `columns.reviewing` to `columns.done`.
+1. Move the reviewed task from `columns.reviewing` to `columns.done`. If the local backend is running, prefer `POST /api/approve-review`; otherwise update `task-board.json` directly.
 2. Set `status` to `done`.
 3. Set `doneAt` to the current timestamp.
 4. Add `reviewedBy`, `reviewedAt`, and `reviewDecision: "approved"`.
@@ -66,10 +68,10 @@ Approve only when:
 
 ## If Not Approved
 
-1. Move the reviewed task from `columns.reviewing` back to `columns.review`.
+1. Move the reviewed task from `columns.reviewing` back to `columns.review`. If the local backend is running, prefer `POST /api/request-changes`; otherwise update `task-board.json` directly.
 2. Add `reviewedBy`, `reviewedAt`, and `reviewDecision: "changes_requested"` to the reviewed task.
 3. Add concise review notes explaining what failed and why.
-4. Create a follow-up task in `columns.todo` and set/update `sourceReviewTaskId` to the reviewed task id.
+4. Create a follow-up task in `columns.todo` and set/update `sourceReviewTaskId` to the reviewed task id. If Richard returned the task from `done` with `richardFeedback`, convert that feedback into concrete requirements and acceptance criteria for the follow-up task.
 5. If a follow-up already exists for the same `sourceReviewTaskId`, update it instead of creating another. In that case, increment `redoCount` (initialize to `1` on first feedback pass).
 6. Include specific requirements, acceptance criteria, files, and visual feedback.
 7. Do not claim or implement the follow-up task.

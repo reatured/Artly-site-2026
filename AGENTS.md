@@ -10,6 +10,19 @@ The active workflow is a simple JSON-backed task board with three separate agent
 - Review Agent role: `TEAM-WORK/00 Command Center/Review Agent.md`
 - Task board source of truth: `TEAM-WORK/02 Task Boards/task-board.json`
 
+When `TEAM-WORK/02 Task Boards/task-board-server.py` is running, use its task board API instead of manually editing or moving tasks in JSON:
+
+- `POST /api/add-task`
+- `POST /api/update-task`
+- `POST /api/claim-task`
+- `POST /api/move-to-review`
+- `POST /api/claim-review`
+- `POST /api/approve-review`
+- `POST /api/request-changes`
+- `POST /api/return-to-review`
+- `POST /api/archive`
+- `POST /api/delete-task` cleanup only for duplicate/test tasks, not normal workflow
+
 The HTML board at `TEAM-WORK/02 Task Boards/task-board.html` is for Richard to read. Agents do not need to read it, parse it, or update it during normal work.
 
 ## Roles
@@ -36,9 +49,13 @@ A Review Agent may update only `TEAM-WORK/02 Task Boards/task-board.json`. It mu
 
 The Planning Agent records requirements and updates tasks. It may edit `task-board.json` and workflow planning docs when asked. It does not write product code and does not review completed work.
 
+If the local task-board backend is running, Planning Agents should create and edit cards through `/api/add-task` and `/api/update-task`. Use `/api/delete-task` only to remove duplicate or test tasks when Richard asks for cleanup. If the backend is not running, update `task-board.json` directly using the same planning rules.
+
 ## Worker Agent Rule
 
 A Worker Agent must read `task-board.json`, claim one `todo` task by moving it to `claimed`, complete only that task, then move it to `review`. A Worker Agent never moves its own task to `done`.
+
+If the local task-board backend is running, Worker Agents should claim and move tasks through `/api/claim-task` and `/api/move-to-review` so the transition is atomic. If the backend is not running, update `task-board.json` directly using the same status rules.
 
 After moving a task to `review`, a Worker Agent must reload `task-board.json` and check the current `todo` list again. If another safe unclaimed task exists and Richard has not asked the agent to stop, the Worker Agent should claim the next task and continue; otherwise it reports that the list is clear or no safe task is available.
 
@@ -48,6 +65,10 @@ Worker Agents coordinate only through `task-board.json`; the HTML board is not a
 
 A Review Agent must read `task-board.json`, claim only a task currently in `columns.review` by moving it to `columns.reviewing`, use the browser to answer Richard's specific review question, then move it to `done` (approved) or back to `review` with feedback.
 A Review Agent never implements fixes or plans unrelated work.
+
+If the local task-board backend is running, Review Agents should use `/api/claim-review`, `/api/approve-review`, and `/api/request-changes` so review ownership and follow-up creation are atomic. If the backend is not running, update `task-board.json` directly using the same status rules.
+
+If a reviewed task contains `richardFeedback`, `returnedToReviewAt`, or notes beginning with `Richard feedback for re-review`, the Review Agent must treat that feedback as Richard's active review question. Use it when deciding whether to create or update follow-up `todo` tasks for Worker Agents.
 
 A task already in `columns.reviewing` is claimed by another Review Agent. Do not claim it, review it, move it, or duplicate its review work unless Richard explicitly reassigns it.
 
@@ -62,6 +83,7 @@ All Review Agent writes must be limited to `task-board.json`.
 - `review`: work is complete and waiting for review.
 - `reviewing`: currently claimed by a Review Agent for active review.
 - `done`: Review Agent or Richard accepted the work.
+- `archived`: completed work hidden from the main board.
 
 ## Conflict Rule
 

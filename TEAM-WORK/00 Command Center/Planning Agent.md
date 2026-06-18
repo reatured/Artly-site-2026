@@ -24,6 +24,12 @@ Primary file:
 
 Normal planning work updates only this JSON file. The HTML board is Richard's reader view and is not part of agent task coordination.
 
+If the local task-board backend is running, prefer the API instead of direct JSON edits:
+
+- `POST /api/add-task` for new `todo` cards.
+- `POST /api/update-task` for edits to allowed task fields.
+- `POST /api/delete-task` only for duplicate or test-task cleanup when Richard asks.
+
 Supporting workflow docs may be edited only when Richard asks to change the workflow:
 
 - `TEAM-WORK/00 Command Center/Simple Agent Workflow.md`

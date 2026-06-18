@@ -64,7 +64,12 @@
               "name": "Logo",
               "settings": {
                 "unit": "pixel",
-                "pixel_height": 48
+                "percent_width": 100,
+                "pixel_height": 24,
+                "custom_mobile_size": false,
+                "unit_mobile": "percent",
+                "percent_width_mobile": 100,
+                "pixel_height_mobile": 120
               }
             },
             "text_newsletter_heading": {
@@ -141,7 +146,7 @@
           "type": "text",
           "name": "Company",
           "settings": {
-            "text": "<h3>Company</h3>\n<ul><li><a href=\"/pages/platform\">About us</a></li>\n<li><a href=\"/pages/investors\">Investors</a></li>\n<li><a href=\"/contact\">Contact us</a></li></ul>",
+            "text": "<h3>Company</h3>\n<ul>\n  <li><a href=\"/pages/platform\">About us</a></li>\n  <li><a href=\"/pages/investors\">Investors</a></li>\n  <li><a href=\"/contact\">Contact us</a></li>\n</ul>",
             "width": "100%",
             "max_width": "normal",
             "alignment": "left",
@@ -166,7 +171,7 @@
           "type": "text",
           "name": "Solutions",
           "settings": {
-            "text": "<h3>Solutions</h3>\n<ul><li><a href=\"/pages/barista-bot\">Barista Bot</a></li>\n<li><a href=\"/pages/platform\">Platform</a></li>\n<li><a href=\"/collections/all\">Automation Solutions</a></li></ul>",
+            "text": "<h3>Solutions</h3>\n<ul>\n  <li><a href=\"/pages/barista-bot\">Barista Bot</a></li>\n  <li><a href=\"/pages/platform\">Platform</a></li>\n  <li><a href=\"/collections/all\">Automation Solutions</a></li>\n</ul>",
             "width": "100%",
             "max_width": "normal",
             "alignment": "left",
@@ -191,7 +196,7 @@
           "type": "text",
           "name": "Resources",
           "settings": {
-            "text": "<h3>Resources</h3>\n<ul><li><a href=\"/blogs/news\">Blogs &amp; Resources</a></li>\n<li><a href=\"/blogs/news/physical-ai\">Physical AI</a></li>\n<li><a href=\"/blogs/news/deployment-reliability\">Deployment Reliability</a></li></ul>",
+            "text": "<h3>Resources</h3>\n<ul>\n  <li><a href=\"/blogs/news\">Blogs &amp; Resources</a></li>\n  <li><a href=\"/blogs/news/physical-ai\">Physical AI</a></li>\n  <li><a href=\"/blogs/news/deployment-reliability\">Deployment Reliability</a></li>\n</ul>",
             "width": "100%",
             "max_width": "normal",
             "alignment": "left",
@@ -216,7 +221,7 @@
           "type": "text",
           "name": "Invest or Partner",
           "settings": {
-            "text": "<h3>Invest or Partner</h3>\n<ul><li><a href=\"/pages/partners\">Join Us</a></li>\n<li><a href=\"https://www.linkedin.com/company/artly\" target=\"_blank\" rel=\"noopener\">LinkedIn</a></li>\n<li><a href=\"https://www.twitter.com/artly_ai\" target=\"_blank\" rel=\"noopener\">X</a></li></ul>",
+            "text": "<h3>Invest or Partner</h3>\n<ul>\n  <li><a href=\"/pages/partners\">Join Us</a></li>\n  <li><a href=\"https://www.linkedin.com/company/artly\" target=\"_blank\" rel=\"noopener\">LinkedIn</a></li>\n  <li><a href=\"https://www.twitter.com/artly_ai\" target=\"_blank\" rel=\"noopener\">X</a></li>\n</ul>",
             "width": "100%",
             "max_width": "normal",
             "alignment": "left",
