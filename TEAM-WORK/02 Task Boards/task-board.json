@@ -1,7 +1,7 @@
 ﻿{
     "schemaVersion":  "1.0",
     "boardName":  "Artly Agent Task Board",
-    "updatedAt":  "2026-06-18T10:39:47-07:00",
+    "updatedAt":  "2026-06-18T10:41:41-07:00",
     "workflowDocs":  {
                          "overview":  "../00 Command Center/Simple Agent Workflow.md",
                          "planningAgent":  "../00 Command Center/Planning Agent.md",
@@ -58,55 +58,7 @@
 
                              ],
                     "claimed":  [
-                                    {
-                                        "id":  "TASK-20260618-008",
-                                        "title":  "Polish footer signup logo, text scale, and divider",
-                                        "project":  "Artly AI page",
-                                        "priority":  "high",
-                                        "type":  "design-fix",
-                                        "status":  "claimed",
-                                        "requestedBy":  "Richard",
-                                        "createdBy":  "Planning Agent",
-                                        "createdAt":  "2026-06-18T10:36:20-07:00",
-                                        "claimedBy":  "Codex Worker Agent",
-                                        "claimedAt":  "2026-06-18T10:39:47-07:00",
-                                        "reviewRequestedAt":  "",
-                                        "doneAt":  "",
-                                        "relatedTaskIds":  [
-                                                               "TASK-20260618-004",
-                                                               "TASK-20260618-006"
-                                                           ],
-                                        "summary":  "Refine the left newsletter block in the footer: enlarge the robot logo, make the signup text smaller and lower, and remove the short divider line under the module.",
-                                        "requirements":  [
-                                                             "Use Richard\u0027s latest footer screenshot as the visual target.",
-                                                             "Make the robot/logo mark at the top-left of the footer signup block larger and more visible.",
-                                                             "Reduce the size of the signup heading/text so it does not overpower the logo or crowd the left column.",
-                                                             "Move the signup heading and supporting text lower so the top-left logo has breathing room and the content stack feels intentional.",
-                                                             "Remove the small short horizontal line/divider under the left signup module near the email form.",
-                                                             "Do not remove the full-width footer legal divider unless it is the same element causing the short line issue.",
-                                                             "Preserve the desktop left/right footer split: signup module on the left, link columns on the right.",
-                                                             "Preserve existing footer link groups, dark style, email input, Get Updates button, copyright, and Terms and Policies content.",
-                                                             "Keep tablet/mobile responsive layouts clean without overflow or overlapping text."
-                                                         ],
-                                        "acceptanceCriteria":  [
-                                                                   "The top-left footer logo appears larger and clearly visible in the signup module.",
-                                                                   "The signup heading/body text is smaller than before and positioned lower beneath/near the logo with balanced spacing.",
-                                                                   "The short divider line under the signup module/email form is gone.",
-                                                                   "The full footer legal row remains readable and properly separated at the bottom.",
-                                                                   "Desktop still shows newsletter/signup on the left and link columns on the right.",
-                                                                   "The email input and Get Updates button remain aligned and usable.",
-                                                                   "No text overlaps, clipping, or horizontal overflow appears on desktop or mobile."
-                                                               ],
-                                        "files":  [
-                                                      "sections/footer.liquid",
-                                                      "assets/artly-style-system.css",
-                                                      "assets/artly-ai-l1.css"
-                                                  ],
-                                        "blockers":  [
 
-                                                     ],
-                                        "notes":  "Created from Richard\u0027s 2026-06-18 footer screenshot feedback: make the top-left logo bigger, make the signup text smaller and lower, and remove the small bottom line in the left footer signup area."
-                                    }
                                 ],
                     "review":  [
                                    {
@@ -159,6 +111,55 @@
 
                                                     ],
                                        "notes":  "Created from Richard\u0027s 2026-06-18 request: Artly AI popup currently uses form \u0027contact\u0027 with contact[name/email/company/body], but it should connect to the standard subscription workflow like floating-contact.liquid form \u0027customer\u0027."
+                                   },
+                                   {
+                                       "id":  "TASK-20260618-008",
+                                       "title":  "Polish footer signup logo, text scale, and divider",
+                                       "project":  "Artly AI page",
+                                       "priority":  "high",
+                                       "type":  "design-fix",
+                                       "status":  "review",
+                                       "requestedBy":  "Richard",
+                                       "createdBy":  "Planning Agent",
+                                       "createdAt":  "2026-06-18T10:36:20-07:00",
+                                       "claimedBy":  "Codex Worker Agent",
+                                       "claimedAt":  "2026-06-18T10:39:47-07:00",
+                                       "reviewRequestedAt":  "2026-06-18T10:41:41-07:00",
+                                       "doneAt":  "",
+                                       "relatedTaskIds":  [
+                                                              "TASK-20260618-004",
+                                                              "TASK-20260618-006"
+                                                          ],
+                                       "summary":  "Refine the left newsletter block in the footer: enlarge the robot logo, make the signup text smaller and lower, and remove the short divider line under the module.",
+                                       "requirements":  [
+                                                            "Use Richard\u0027s latest footer screenshot as the visual target.",
+                                                            "Make the robot/logo mark at the top-left of the footer signup block larger and more visible.",
+                                                            "Reduce the size of the signup heading/text so it does not overpower the logo or crowd the left column.",
+                                                            "Move the signup heading and supporting text lower so the top-left logo has breathing room and the content stack feels intentional.",
+                                                            "Remove the small short horizontal line/divider under the left signup module near the email form.",
+                                                            "Do not remove the full-width footer legal divider unless it is the same element causing the short line issue.",
+                                                            "Preserve the desktop left/right footer split: signup module on the left, link columns on the right.",
+                                                            "Preserve existing footer link groups, dark style, email input, Get Updates button, copyright, and Terms and Policies content.",
+                                                            "Keep tablet/mobile responsive layouts clean without overflow or overlapping text."
+                                                        ],
+                                       "acceptanceCriteria":  [
+                                                                  "The top-left footer logo appears larger and clearly visible in the signup module.",
+                                                                  "The signup heading/body text is smaller than before and positioned lower beneath/near the logo with balanced spacing.",
+                                                                  "The short divider line under the signup module/email form is gone.",
+                                                                  "The full footer legal row remains readable and properly separated at the bottom.",
+                                                                  "Desktop still shows newsletter/signup on the left and link columns on the right.",
+                                                                  "The email input and Get Updates button remain aligned and usable.",
+                                                                  "No text overlaps, clipping, or horizontal overflow appears on desktop or mobile."
+                                                              ],
+                                       "files":  [
+                                                     "sections/footer.liquid",
+                                                     "assets/artly-style-system.css",
+                                                     "assets/artly-ai-l1.css"
+                                                 ],
+                                       "blockers":  [
+
+                                                    ],
+                                       "notes":  "Created from Richard\u0027s 2026-06-18 footer screenshot feedback: make the top-left logo bigger, make the signup text smaller and lower, and remove the small bottom line in the left footer signup area."
                                    }
                                ],
                     "reviewing":  [
