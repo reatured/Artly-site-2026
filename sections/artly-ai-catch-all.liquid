@@ -46,20 +46,37 @@
     {% if section.blocks.size > 0 %}
       <div class="artly-ai__closing-grid">
         {% for block in section.blocks %}
-          <article class="artly-ai__closing-card" {{ block.shopify_attributes }}>
-            <div class="artly-ai__closing-icon" aria-hidden="true">
-              {% render 'icon-or-image',
-                icon: block.settings.icon,
-                image_upload: block.settings.icon_image,
-                width: 34,
-                class_name: 'artly-ai__closing-icon-svg'
-              %}
-            </div>
-            <h3>{{ block.settings.heading | escape }}</h3>
-            {% if block.settings.body != blank %}
-              <div class="rte">{{ block.settings.body }}</div>
+          {% if block.settings.link != blank %}
+            <a class="artly-ai__closing-card artly-ai__closing-card--link" href="{{ block.settings.link }}" {{ block.shopify_attributes }}>
+              <div class="artly-ai__closing-icon" aria-hidden="true">
+                {% render 'icon-or-image',
+                  icon: block.settings.icon,
+                  image_upload: block.settings.icon_image,
+                  width: 34,
+                  class_name: 'artly-ai__closing-icon-svg'
+                %}
+              </div>
+              <h3>{{ block.settings.heading | escape }}</h3>
+              {% if block.settings.body != blank %}
+                <div class="rte">{{ block.settings.body | strip_html | escape }}</div>
+              {% endif %}
+            </a>
+          {% else %}
+            <article class="artly-ai__closing-card" {{ block.shopify_attributes }}>
+              <div class="artly-ai__closing-icon" aria-hidden="true">
+                {% render 'icon-or-image',
+                  icon: block.settings.icon,
+                  image_upload: block.settings.icon_image,
+                  width: 34,
+                  class_name: 'artly-ai__closing-icon-svg'
+                %}
+              </div>
+              <h3>{{ block.settings.heading | escape }}</h3>
+              {% if block.settings.body != blank %}
+                <div class="rte">{{ block.settings.body }}</div>
+              {% endif %}
+            </article>
             {% endif %}
-          </article>
         {% endfor %}
       </div>
     {% endif %}

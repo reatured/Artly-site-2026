@@ -17,8 +17,21 @@
       <div class="artly-ai__press-grid">
         {% for block in section.blocks %}
           <article class="artly-ai__press-card" {{ block.shopify_attributes }}>
-            {% if block.settings.source != blank %}
-              <p class="artly-ai__press-source">{{ block.settings.source | escape }}</p>
+            {% if block.settings.card_image != blank %}
+              {% assign press_image_alt = block.settings.card_image_alt_text | default: block.settings.heading %}
+              <div class="artly-ai__press-media">
+                {{
+                  block.settings.card_image
+                  | image_url: width: 960
+                  | image_tag:
+                    width: block.settings.card_image.width,
+                    widths: '320, 480, 640, 960',
+                    height: block.settings.card_image.height,
+                    alt: press_image_alt,
+                    loading: 'lazy',
+                    class: 'artly-ai__press-image'
+                }}
+              </div>
             {% endif %}
             <h3>{{ block.settings.heading | escape }}</h3>
             {% if block.settings.body != blank %}
@@ -94,10 +107,14 @@
       "name": "Press item",
       "settings": [
         {
+          "type": "image_picker",
+          "id": "card_image",
+          "label": "Card image"
+        },
+        {
           "type": "text",
-          "id": "source",
-          "label": "Source",
-          "default": "Publication"
+          "id": "card_image_alt_text",
+          "label": "Card image alt text"
         },
         {
           "type": "text",

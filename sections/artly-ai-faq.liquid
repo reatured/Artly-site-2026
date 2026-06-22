@@ -18,8 +18,8 @@
         {% for block in section.blocks %}
           <details class="artly-ai__faq-item" {{ block.shopify_attributes }}>
             <summary>
-              <span>{{ block.settings.question | escape }}</span>
-              <span aria-hidden="true">+</span>
+              <span class="artly-ai__faq-question">{{ block.settings.question | escape }}</span>
+              <span class="artly-ai__faq-toggle" aria-hidden="true">+</span>
             </summary>
             {% if block.settings.answer != blank %}
               <div class="rte">{{ block.settings.answer }}</div>
