@@ -54,6 +54,10 @@ When `TEAM-WORK/02 Task Boards/task-board-server.py` is running, use its task bo
 
 - `GET /api/board`
 - `GET /api/task?taskId=TASK-YYYYMMDD-###`
+- `GET /api/agents`
+- `POST /api/register-agent`
+- `POST /api/heartbeat-agent`
+- `POST /api/unregister-agent`
 - `POST /api/add-task`
 - `POST /api/update-task`
 - `POST /api/claim-task`
@@ -70,6 +74,8 @@ For payload shapes, examples, and error handling, read `TEAM-WORK/00 Command Cen
 Every agent must choose a stable `agentName` at the start of its chat and include that exact `agentName` in every task board API payload. Use a name that identifies the role and thread, for example `Planning Agent - Artly 01`, `Worker Agent - Artly 02`, or `Review Agent - Artly 03`. The backend records the name in `lastApiActor`, `apiHistory`, and `apiAuditLog`.
 
 The backend also appends every API request, including `GET` reads, to `TEAM-WORK/02 Task Boards/task-board-api.log` as JSON Lines with timestamp, method, endpoint, task ID, agent name, status, and error details. This log is audit history only; agents still coordinate through `task-board.json`.
+
+Worker Agents and Review Agents must register active presence with `/api/register-agent` at chat start, heartbeat with `/api/heartbeat-agent` after claiming or moving a task, and deregister with `/api/unregister-agent` before ending for any reason. The board viewer uses `/api/agents` to show active Worker Agents in the To Do header and active Review Agents in the Review header.
 
 Every task must have a real, nonblank title. Do not create or update tasks with `Untitled`, `Untitled task`, or a blank title; the API rejects those titles and the viewer hides malformed records.
 
@@ -129,6 +135,8 @@ When moving a task to `review`, a Worker Agent must add `inspectionTargets` to t
 
 Worker Agents coordinate only through `task-board.json`; the HTML board is not an agent input.
 
+When the backend is running, Worker Agents must register with `role: "worker"` before reading the board, heartbeat with `currentTaskId` after claim and after moving work to review, and unregister before ending the chat whether the list is clear, blocked, or Richard asked them to stop.
+
 ## Review Agent Rule
 
 A Review Agent must read `task-board.json`, claim only a task currently in `columns.review` by moving it to `columns.reviewing`, use the browser to answer Richard's specific review question, then move it to `done` as approved or close it into `done` as replaced by a follow-up `todo` task.
@@ -148,6 +156,8 @@ After finishing a review decision, a Review Agent must reload `task-board.json` 
 
 All Review Agent writes must be limited to `task-board.json`, except for saving screenshots or reference images to `TEAM-WORK/05 Visual QA/Reference Images/` when those paths are recorded on a follow-up task for Worker Agent handoff.
 
+When the backend is running, Review Agents must register with `role: "review"` before reading the board, heartbeat with `currentTaskId` after claim and after approval or request-changes, and unregister before ending the chat whether the review list is clear, blocked, or Richard asked them to stop.
+
 ## Board Columns
 
 - `todo`: planned, unclaimed work.
@@ -156,6 +166,8 @@ All Review Agent writes must be limited to `task-board.json`, except for saving 
 - `reviewing`: currently claimed by a Review Agent for active review.
 - `done`: Review Agent or Richard accepted the work, or Review Agent closed a failed task as replaced by a follow-up.
 - `archived`: completed work hidden from the main board.
+
+The HTML board keeps those six columns in JSON for coordination but displays the main interface as three visual columns: To Do combines `claimed` above `todo`, Review combines `reviewing` above `review`, and Done shows `done`. Claimed and Reviewing cards are highlighted inside those combined columns.
 
 ## Conflict Rule
 
