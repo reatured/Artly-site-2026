@@ -1,12 +1,28 @@
 {% assign floating_contact_form_id = 'FloatingContactForm-' | append: section.id %}
 {% assign floating_contact_return_to = request.path | default: routes.root_url | append: '#floating-contact' %}
+{% assign floating_contact_is_artly_ai = false %}
+{% if template.name == 'page' and template.suffix == 'artly-ai' %}
+  {% assign floating_contact_is_artly_ai = true %}
+{% endif %}
+{% assign floating_contact_trigger_text = 'sections.floating_contact.trigger' | t %}
+{% assign floating_contact_heading = 'sections.floating_contact.heading' | t %}
+{% assign floating_contact_text = 'sections.floating_contact.text' | t %}
+{% assign floating_contact_submit = 'sections.floating_contact.submit' | t %}
+{% assign floating_contact_success = 'sections.floating_contact.success' | t %}
+{% if floating_contact_is_artly_ai %}
+  {% assign floating_contact_trigger_text = 'sections.floating_contact.trigger' | t %}
+  {% assign floating_contact_heading = 'Talk with Artly AI' %}
+  {% assign floating_contact_text = 'Tell us what you want to automate, and our team will follow up about contact or demo next steps.' %}
+  {% assign floating_contact_submit = 'Send request' %}
+  {% assign floating_contact_success = 'Thanks. The Artly AI team will follow up about your request.' %}
+{% endif %}
 
 <floating-contact class="floating-contact" data-floating-contact>
   <section id="floating-contact" class="floating-contact__section">
     <details class="floating-contact__details">
       <summary class="floating-contact__summary">
         <span class="floating-contact__summary-label floating-contact__summary-label--closed">
-          {{- 'sections.floating_contact.trigger' | t -}}
+          {{- floating_contact_trigger_text -}}
         </span>
         <span class="floating-contact__summary-label floating-contact__summary-label--open visually-hidden">
           {{- 'sections.floating_contact.close' | t -}}
@@ -24,92 +40,184 @@
       >
         <div class="floating-contact__header">
           <h2 class="floating-contact__heading" id="FloatingContactHeading-{{ section.id }}">
-            {{- 'sections.floating_contact.heading' | t -}}
+            {{- floating_contact_heading -}}
           </h2>
           <p class="floating-contact__text">
-            {{- 'sections.floating_contact.text' | t -}}
+            {{- floating_contact_text -}}
           </p>
         </div>
 
-        {%- form 'customer', id: floating_contact_form_id, class: 'floating-contact__form', return_to: floating_contact_return_to -%}
-          <input
-            name="contact[tags]"
-            type="hidden"
-            value="newsletter,floating-contact"
-          >
-
-          {%- if form.errors and form.id == floating_contact_form_id -%}
-            <div
-              class="floating-contact__message floating-contact__message--error"
-              id="FloatingContactError-{{ section.id }}"
-              tabindex="-1"
-              data-floating-contact-message
+        {% if floating_contact_is_artly_ai %}
+          {%- form 'contact', id: floating_contact_form_id, class: 'floating-contact__form', return_to: floating_contact_return_to -%}
+            <input
+              name="contact[tags]"
+              type="hidden"
+              value="artly-ai-contact,floating-contact"
             >
-              {{ form.errors | default_errors }}
+            <input
+              name="contact[request_type]"
+              type="hidden"
+              value="Artly AI contact or demo request"
+            >
+            <input
+              name="contact[body]"
+              type="hidden"
+              value="Artly AI contact or demo request from the floating contact panel."
+            >
+
+            {%- if form.errors and form.id == floating_contact_form_id -%}
+              <div
+                class="floating-contact__message floating-contact__message--error"
+                id="FloatingContactError-{{ section.id }}"
+                tabindex="-1"
+                data-floating-contact-message
+              >
+                {{ form.errors | default_errors }}
+              </div>
+            {%- endif -%}
+
+            {%- if form.posted_successfully? and form.id == floating_contact_form_id -%}
+              <p
+                class="floating-contact__message floating-contact__message--success"
+                tabindex="-1"
+                data-floating-contact-message
+              >
+                {{- floating_contact_success -}}
+              </p>
+            {%- endif -%}
+
+            <div class="floating-contact__field">
+              <label class="floating-contact__label" for="FloatingContactName-{{ section.id }}">
+                {{- 'blocks.contact_form.name' | t -}}
+              </label>
+              <input
+                class="floating-contact__input"
+                id="FloatingContactName-{{ section.id }}"
+                type="text"
+                name="contact[name]"
+                autocomplete="name"
+                value="{% if form.name %}{{ form.name | escape }}{% elsif customer %}{{ customer.name | escape }}{% endif %}"
+                required
+              >
             </div>
-          {%- endif -%}
 
-          {%- if form.posted_successfully? and form.id == floating_contact_form_id -%}
+            <div class="floating-contact__field">
+              <label class="floating-contact__label" for="FloatingContactEmail-{{ section.id }}">
+                {{- 'blocks.contact_form.email' | t -}}
+              </label>
+              <input
+                class="floating-contact__input"
+                id="FloatingContactEmail-{{ section.id }}"
+                type="email"
+                name="contact[email]"
+                autocomplete="email"
+                spellcheck="false"
+                autocapitalize="off"
+                value="{% if form.email %}{{ form.email | escape }}{% elsif customer %}{{ customer.email | escape }}{% endif %}"
+                required
+                aria-required="true"
+                {% if form.errors contains 'email' and form.id == floating_contact_form_id %}
+                  aria-invalid="true"
+                  aria-describedby="FloatingContactError-{{ section.id }}"
+                {% endif %}
+              >
+            </div>
+
+            <button class="button floating-contact__submit" type="submit">
+              {{- floating_contact_submit -}}
+            </button>
+
             <p
-              class="floating-contact__message floating-contact__message--success"
-              tabindex="-1"
-              data-floating-contact-message
+              class="floating-contact__submit-status"
+              data-floating-contact-status
+              data-sending-text="{{ 'blocks.contact_form.sending' | t | escape }}"
+              aria-live="polite"
+              hidden
             >
-              {{- 'sections.floating_contact.success' | t -}}
+              {{- 'blocks.contact_form.sending' | t -}}
             </p>
-          {%- endif -%}
-
-          <div class="floating-contact__field">
-            <label class="floating-contact__label" for="FloatingContactName-{{ section.id }}">
-              {{- 'blocks.contact_form.name' | t -}}
-            </label>
+          {%- endform -%}
+        {% else %}
+          {%- form 'customer', id: floating_contact_form_id, class: 'floating-contact__form', return_to: floating_contact_return_to -%}
             <input
-              class="floating-contact__input"
-              id="FloatingContactName-{{ section.id }}"
-              type="text"
-              name="contact[first_name]"
-              autocomplete="name"
-              value="{% if customer %}{{ customer.first_name }}{% endif %}"
-              required
+              name="contact[tags]"
+              type="hidden"
+              value="newsletter,floating-contact"
             >
-          </div>
 
-          <div class="floating-contact__field">
-            <label class="floating-contact__label" for="FloatingContactEmail-{{ section.id }}">
-              {{- 'blocks.contact_form.email' | t -}}
-            </label>
-            <input
-              class="floating-contact__input"
-              id="FloatingContactEmail-{{ section.id }}"
-              type="email"
-              name="contact[email]"
-              autocomplete="email"
-              spellcheck="false"
-              autocapitalize="off"
-              value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
-              required
-              aria-required="true"
-              {% if form.errors contains 'email' and form.id == floating_contact_form_id %}
-                aria-invalid="true"
-                aria-describedby="FloatingContactError-{{ section.id }}"
-              {% endif %}
+            {%- if form.errors and form.id == floating_contact_form_id -%}
+              <div
+                class="floating-contact__message floating-contact__message--error"
+                id="FloatingContactError-{{ section.id }}"
+                tabindex="-1"
+                data-floating-contact-message
+              >
+                {{ form.errors | default_errors }}
+              </div>
+            {%- endif -%}
+
+            {%- if form.posted_successfully? and form.id == floating_contact_form_id -%}
+              <p
+                class="floating-contact__message floating-contact__message--success"
+                tabindex="-1"
+                data-floating-contact-message
+              >
+                {{- floating_contact_success -}}
+              </p>
+            {%- endif -%}
+
+            <div class="floating-contact__field">
+              <label class="floating-contact__label" for="FloatingContactName-{{ section.id }}">
+                {{- 'blocks.contact_form.name' | t -}}
+              </label>
+              <input
+                class="floating-contact__input"
+                id="FloatingContactName-{{ section.id }}"
+                type="text"
+                name="contact[first_name]"
+                autocomplete="name"
+                value="{% if customer %}{{ customer.first_name }}{% endif %}"
+                required
+              >
+            </div>
+
+            <div class="floating-contact__field">
+              <label class="floating-contact__label" for="FloatingContactEmail-{{ section.id }}">
+                {{- 'blocks.contact_form.email' | t -}}
+              </label>
+              <input
+                class="floating-contact__input"
+                id="FloatingContactEmail-{{ section.id }}"
+                type="email"
+                name="contact[email]"
+                autocomplete="email"
+                spellcheck="false"
+                autocapitalize="off"
+                value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+                required
+                aria-required="true"
+                {% if form.errors contains 'email' and form.id == floating_contact_form_id %}
+                  aria-invalid="true"
+                  aria-describedby="FloatingContactError-{{ section.id }}"
+                {% endif %}
+              >
+            </div>
+
+            <button class="button floating-contact__submit" type="submit">
+              {{- floating_contact_submit -}}
+            </button>
+
+            <p
+              class="floating-contact__submit-status"
+              data-floating-contact-status
+              data-sending-text="{{ 'blocks.contact_form.sending' | t | escape }}"
+              aria-live="polite"
+              hidden
             >
-          </div>
-
-          <button class="button floating-contact__submit" type="submit">
-            {{- 'sections.floating_contact.submit' | t -}}
-          </button>
-
-          <p
-            class="floating-contact__submit-status"
-            data-floating-contact-status
-            data-sending-text="{{ 'blocks.contact_form.sending' | t | escape }}"
-            aria-live="polite"
-            hidden
-          >
-            {{- 'blocks.contact_form.sending' | t -}}
-          </p>
-        {%- endform -%}
+              {{- 'blocks.contact_form.sending' | t -}}
+            </p>
+          {%- endform -%}
+        {% endif %}
       </div>
     </details>
   </section>
@@ -342,6 +450,41 @@
     .floating-contact__panel {
       padding: 20px;
     }
+
+    body:has(.artly-ai-l1) .floating-contact:not(:has(.floating-contact__details[open])) {
+      right: max(4px, calc(env(safe-area-inset-right) + 4px));
+      bottom: max(112px, calc(env(safe-area-inset-bottom) + 112px));
+      width: auto;
+      pointer-events: auto;
+    }
+
+    body:has(.artly-ai-l1) .floating-contact__details:not([open]) .floating-contact__summary {
+      width: 24px;
+      min-width: 24px;
+      min-height: 82px;
+      padding: 8px 2px;
+      border-radius: 999px 0 0 999px;
+      font-size: 0.64rem;
+      letter-spacing: 0.08em;
+      box-shadow: 0 10px 22px rgb(0 0 0 / 16%);
+      text-transform: uppercase;
+      writing-mode: vertical-rl;
+    }
+
+    body:has(.artly-ai-l1) .floating-contact__details:not([open]) .floating-contact__summary-label--closed {
+      max-width: none;
+      max-height: 68px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    body:has(.artly-ai-l1) .floating-contact.floating-contact--mobile-hero-hidden:not(:has(.floating-contact__details[open])) {
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(8px);
+    }
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -404,10 +547,42 @@
         });
       }
 
-      if (!(details instanceof HTMLDetailsElement) || !(message instanceof HTMLElement)) return;
+      if (!(details instanceof HTMLDetailsElement)) return;
+
+      this.setupArtlyAiMobileGuard(details);
+
+      if (!(message instanceof HTMLElement)) return;
 
       details.open = true;
       requestAnimationFrame(() => message.focus({ preventScroll: true }));
+    }
+
+    setupArtlyAiMobileGuard(details) {
+      if (!(details instanceof HTMLDetailsElement)) return;
+      if (this.dataset.mobileGuardInitialized === 'true') return;
+      if (!document.querySelector('.artly-ai-l1')) return;
+
+      this.dataset.mobileGuardInitialized = 'true';
+
+      const hero = document.querySelector('.artly-ai-l1-hero');
+      const mediaQuery = window.matchMedia('(max-width: 749px)');
+      const updateState = () => {
+        const heroRect = hero ? hero.getBoundingClientRect() : null;
+        const heroInView = Boolean(heroRect && heroRect.bottom > 96 && heroRect.top < window.innerHeight - 96);
+        const shouldHide = mediaQuery.matches && !details.open && heroInView;
+        this.classList.toggle('floating-contact--mobile-hero-hidden', shouldHide);
+      };
+
+      updateState();
+      details.addEventListener('toggle', updateState);
+      window.addEventListener('scroll', updateState, { passive: true });
+      window.addEventListener('resize', updateState);
+
+      if (mediaQuery.addEventListener) {
+        mediaQuery.addEventListener('change', updateState);
+      } else if (mediaQuery.addListener) {
+        mediaQuery.addListener(updateState);
+      }
     }
   }
 

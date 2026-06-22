@@ -77,6 +77,13 @@
 
     {% capture children %}
       {% for link in block_settings.menu.links %}
+        {% liquid
+          assign link_title_downcase = link.title | downcase
+          assign is_barista_bot_link = false
+          if link.handle == 'barista-bot' or link_title_downcase == 'barista bot'
+            assign is_barista_bot_link = true
+          endif
+        %}
         <li
           role="presentation"
           class="menu-list__list-item"
@@ -89,7 +96,7 @@
             href="{{ link.url }}"
             data-skip-node-update="true"
             class="menu-list__link{% if link.active %} menu-list__link--active{% endif %}"
-            {%- if link.links != blank -%}
+            {%- if link.links != blank and is_barista_bot_link == false -%}
               aria-controls="submenu-{{ forloop.index }}"
               aria-haspopup="true"
               aria-expanded="false"
@@ -101,7 +108,7 @@
           >
             <span class="menu-list__link-title">{{- link.title -}}</span>
           </a>
-          {%- if link.links != blank -%}
+          {%- if link.links != blank and is_barista_bot_link == false -%}
             <div class="menu-list__submenu{{ color_scheme_classes }}" ref="submenu[]">
               <div
                 id="submenu-{{ forloop.index }}"

@@ -910,6 +910,33 @@ footer .footer-content p + p {
   margin-top: 0.45rem;
 }
 
+footer .footer-content--has-intro .logo-block {
+  --artly-footer-logo-width: clamp(118px, 34vw, 164px);
+  --logo-width: var(--artly-footer-logo-width) !important;
+  --logo-width-mobile: var(--artly-footer-logo-width) !important;
+
+  width: var(--artly-footer-logo-width) !important;
+  max-width: 100% !important;
+  flex: 0 0 auto;
+}
+
+footer .footer-content--has-intro .logo-block__image-wrapper,
+footer .footer-content--has-intro img.logo-block__image {
+  width: var(--artly-footer-logo-width) !important;
+  max-width: 100% !important;
+}
+
+footer .footer-content--has-intro img.logo-block__image {
+  display: block;
+  height: auto !important;
+}
+
+@media screen and (min-width: 990px) {
+  footer .footer-content--has-intro .logo-block {
+    --artly-footer-logo-width: clamp(132px, 12vw, 184px);
+  }
+}
+
 
 .artly-hero {
   --artly-hero-copy-offset: max(16px, calc((100% - var(--artly-rail-width)) / 2));
@@ -1278,4 +1305,261 @@ footer .footer-content p + p {
   .artly-button:focus-visible {
     transform: none;
   }
+}
+
+.artly-site-header--artly-ai {
+  --artly-header-ink: #f4f8f7;
+  --artly-header-muted: #b7c4c2;
+  --artly-header-line: rgba(213, 226, 224, 0.22);
+  --artly-header-glass: transparent;
+  --artly-header-shell: rgba(17, 23, 25, 0.94);
+  --artly-header-hover-bg: rgba(255, 255, 255, 0.08);
+  --artly-header-hover-border: rgba(213, 226, 224, 0.28);
+  --artly-header-surface: rgba(255, 255, 255, 0.055);
+  --artly-header-shadow: rgba(2, 7, 9, 0.18);
+  --artly-header-accent: #42b6b2;
+  --artly-header-pill-height: 36px;
+  --artly-header-pill-radius: 5px;
+}
+
+.artly-site-header--artly-ai .header__row.header__row--top {
+  padding-block: 8px;
+  border-bottom: 0;
+}
+
+.artly-site-header--artly-ai .header__row--top .header__columns {
+  min-height: 56px;
+  padding: 8px 18px;
+  border-color: var(--artly-header-line);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(20, 27, 30, 0.96), rgba(13, 18, 20, 0.94)),
+    repeating-linear-gradient(90deg, rgba(213, 226, 224, 0.06) 0 1px, transparent 1px 72px);
+  box-shadow:
+    0 12px 28px var(--artly-header-shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.artly-site-header--artly-ai .header-logo {
+  height: var(--artly-header-pill-height);
+  min-height: var(--artly-header-pill-height);
+  max-height: var(--artly-header-pill-height);
+  padding: 3px 10px;
+  border-color: transparent;
+  border-radius: var(--artly-header-pill-radius);
+  background: transparent;
+  color: var(--artly-header-ink);
+  box-shadow: none;
+}
+
+.artly-site-header--artly-ai .header-menu .menu-list__link {
+  height: var(--artly-header-pill-height);
+  min-height: var(--artly-header-pill-height);
+  max-height: var(--artly-header-pill-height);
+  padding: 0 12px;
+  border-color: transparent;
+  border-radius: var(--artly-header-pill-radius);
+  background: transparent;
+  color: var(--artly-header-muted);
+  box-shadow: none;
+  font-size: 0.92rem;
+  font-weight: 680;
+}
+
+.artly-site-header--artly-ai .header-menu .menu-list__link:is(:hover, :focus-visible),
+.artly-site-header--artly-ai .header-menu .menu-list__link--active,
+.artly-site-header--artly-ai .menu-list:not(:has(.menu-list__list-item:hover)) .menu-list__link--active,
+.artly-site-header--artly-ai .menu-list .menu-list__list-item:where(:hover, :focus-within) .menu-list__link,
+.artly-site-header--artly-ai .menu-list .menu-list__list-item[slot='overflow'] .menu-list__link[aria-expanded='true'] {
+  border-color: var(--artly-header-hover-border);
+  background: var(--artly-header-hover-bg);
+  color: var(--artly-header-ink);
+  box-shadow: inset 0 -2px 0 var(--artly-header-accent);
+}
+
+.artly-site-header--artly-ai .header__column--right .header-actions__action {
+  min-width: 34px;
+  min-height: 34px;
+  border-color: transparent;
+  border-radius: var(--artly-header-pill-radius);
+  background: transparent;
+  color: var(--artly-header-muted);
+  box-shadow: none;
+}
+
+.artly-site-header--artly-ai .header__column--right .header-actions__action:is(:hover, :focus-visible) {
+  border-color: var(--artly-header-hover-border);
+  background: var(--artly-header-hover-bg);
+  color: var(--artly-header-ink);
+}
+
+@media screen and (max-width: 860px) {
+  .artly-site-header .header__row--top .header__columns {
+    min-height: 52px;
+    padding: 7px 10px;
+    border-radius: 8px;
+  }
+
+  .artly-site-header .header-logo {
+    min-height: 34px;
+    padding-inline: 8px;
+  }
+}
+
+.artly-site-header--artly-ai .header-logo,
+.artly-site-header--artly-ai .header-logo :is(a, span) {
+  color: var(--artly-header-ink) !important;
+}
+
+.artly-site-header--artly-ai .header-menu .menu-list__link {
+  color: var(--artly-header-muted) !important;
+  background-color: transparent !important;
+  border-color: transparent !important;
+}
+
+.artly-site-header--artly-ai .header-menu .menu-list__link-title {
+  color: inherit !important;
+}
+
+.artly-site-header--artly-ai .header-menu .menu-list__link:is(:hover, :focus-visible),
+.artly-site-header--artly-ai .header-menu .menu-list__link--active,
+.artly-site-header--artly-ai .menu-list:not(:has(.menu-list__list-item:hover)) .menu-list__link--active,
+.artly-site-header--artly-ai .menu-list .menu-list__list-item:where(:hover, :focus-within) .menu-list__link,
+.artly-site-header--artly-ai .menu-list .menu-list__list-item[slot='overflow'] .menu-list__link[aria-expanded='true'] {
+  color: var(--artly-header-ink) !important;
+  background-color: var(--artly-header-hover-bg) !important;
+  border-color: var(--artly-header-hover-border) !important;
+}
+
+@media screen and (min-width: 990px) {
+  .artly-site-header .header-menu .menu-list__link[aria-haspopup='true'] .menu-list__link-title::after {
+    content: "";
+    display: inline-block;
+    width: 0.42em;
+    height: 0.42em;
+    margin-left: 0.45em;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    transform: translateY(-0.16em) rotate(45deg);
+    opacity: 0.75;
+  }
+
+  .artly-site-header .header-menu .menu-list__list-item:where(:not([slot='overflow'])) > .menu-list__submenu {
+    display: block !important;
+    visibility: hidden;
+    pointer-events: none;
+    top: calc(100% + 6px) !important;
+    left: 0;
+    width: 100%;
+    padding-inline: 0 !important;
+    clip-path: none !important;
+  }
+
+  .artly-site-header .header-menu .menu-list__list-item:has([aria-expanded='true']) > .menu-list__submenu,
+  .artly-site-header .header-menu .menu-list__submenu[data-active],
+  .artly-site-header .header-menu .menu-list__submenu:is(:hover, :focus-within) {
+    visibility: visible !important;
+    pointer-events: auto;
+  }
+
+  .artly-site-header .header-menu .menu-list__submenu-inner {
+    width: min(1180px, calc(100vw - 32px));
+    max-height: min(72vh, 560px);
+    margin: 8px auto 0;
+    padding: 18px !important;
+    overflow: auto;
+    border: 1px solid rgba(213, 226, 224, 0.2);
+    border-radius: 8px;
+    background:
+      linear-gradient(180deg, rgba(18, 25, 28, 0.98), rgba(10, 15, 17, 0.98)),
+      repeating-linear-gradient(90deg, rgba(213, 226, 224, 0.05) 0 1px, transparent 1px 72px);
+    box-shadow:
+      0 22px 56px rgba(0, 0, 0, 0.28),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    transform: none !important;
+  }
+
+  .artly-site-header .mega-menu {
+    color: var(--artly-header-ink);
+  }
+
+  .artly-site-header .mega-menu__grid {
+    gap: 10px 14px;
+  }
+
+  .artly-site-header .mega-menu__link {
+    min-height: 36px;
+    padding: 8px 10px;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    color: var(--artly-header-muted) !important;
+    text-decoration: none;
+  }
+
+  .artly-site-header .mega-menu__link--parent {
+    color: var(--artly-header-ink) !important;
+    font-weight: 760;
+  }
+
+  .artly-site-header .mega-menu__link:is(:hover, :focus-visible) {
+    border-color: var(--artly-header-hover-border);
+    background: var(--artly-header-hover-bg);
+    color: var(--artly-header-ink) !important;
+    outline: none;
+  }
+
+  .artly-site-header .mega-menu__link:focus-visible,
+  .artly-site-header .header-menu .menu-list__link:focus-visible {
+    outline: 2px solid var(--artly-header-accent);
+    outline-offset: 3px;
+  }
+}
+
+/* TASK-20260618-044: keep the unified dark header while making dark logo assets readable. */
+.artly-site-header--artly-ai :is(.header-logo, .header__heading-link) {
+  color: var(--artly-header-ink, #f4f8f7) !important;
+}
+
+.artly-site-header--artly-ai :is(.header-logo img, .header__heading-logo, .header__heading-logo img, .header__heading-link img, .header-logo svg, .header__heading-link svg) {
+  filter: brightness(0) invert(1) contrast(1.08) !important;
+}
+
+.artly-site-header--artly-ai :is(.header-logo svg, .header__heading-link svg) {
+  color: var(--artly-header-ink, #f4f8f7) !important;
+  fill: currentColor;
+}
+
+.artly-site-header--artly-ai :is(.header-logo svg *, .header__heading-link svg *) {
+  fill: currentColor;
+  stroke: currentColor;
+}
+
+/* TASK-20260618-044 follow-up: logo mark is rendered on the header-logo anchor itself. */
+.artly-site-header--artly-ai .header-logo {
+  filter: brightness(0) invert(1) contrast(1.08) !important;
+  mix-blend-mode: normal !important;
+}
+
+/* TASK-20260618-046: avoid filtering the whole logo hit area; use inverse asset or image-only fallback. */
+.artly-site-header--artly-ai .header-logo {
+  background: transparent !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+}
+
+.artly-site-header--artly-ai .header-logo__image-container {
+  background: transparent !important;
+}
+
+.artly-site-header--artly-ai .header-logo:has(.header-logo__image-container--inverse) {
+  --header-logo-display: none;
+  --header-logo-inverse-display: block;
+}
+
+.artly-site-header--artly-ai .header-logo:has(.header-logo__image-container--inverse) .header-logo__image {
+  filter: none !important;
+}
+
+.artly-site-header--artly-ai .header-logo:not(:has(.header-logo__image-container--inverse)) .header-logo__image {
+  filter: brightness(0) invert(1) contrast(1.08) !important;
 }

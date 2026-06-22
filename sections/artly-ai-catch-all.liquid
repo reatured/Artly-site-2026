@@ -1,3 +1,17 @@
+{% liquid
+  assign closing_primary_label = ''
+  assign closing_primary_link = blank
+
+  for closing_block in section.blocks
+    if closing_primary_label == blank
+      if closing_block.settings.link_label != blank
+        assign closing_primary_label = closing_block.settings.link_label
+        assign closing_primary_link = closing_block.settings.link
+      endif
+    endif
+  endfor
+%}
+
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
 
 <section
@@ -13,6 +27,19 @@
       {% endif %}
       {% if section.settings.closing_body != blank %}
         <div class="rte">{{ section.settings.closing_body }}</div>
+      {% endif %}
+      {% if closing_primary_label != blank %}
+        {% if closing_primary_link != blank %}
+          <a class="artly-button artly-button--primary artly-ai__closing-primary-link" href="{{ closing_primary_link }}">
+            {{ closing_primary_label | escape }}
+          </a>
+        {% else %}
+          <span
+            class="artly-button artly-button--primary artly-ai__closing-primary-link artly-ai__closing-primary-link--disabled"
+          >
+            {{ closing_primary_label | escape }}
+          </span>
+        {% endif %}
       {% endif %}
     </div>
 
@@ -31,19 +58,6 @@
             <h3>{{ block.settings.heading | escape }}</h3>
             {% if block.settings.body != blank %}
               <div class="rte">{{ block.settings.body }}</div>
-            {% endif %}
-            {% if block.settings.link_label != blank %}
-              <a
-                class="artly-ai__text-link"
-                {% if block.settings.link == blank %}
-                  role="link"
-                  aria-disabled="true"
-                {% else %}
-                  href="{{ block.settings.link }}"
-                {% endif %}
-              >
-                {{ block.settings.link_label | escape }}
-              </a>
             {% endif %}
           </article>
         {% endfor %}

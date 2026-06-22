@@ -1,0 +1,908 @@
+{
+  "desktop": {
+    "viewport": {
+      "width": 1280,
+      "height": 900
+    },
+    "documentHeight": 10823,
+    "rows": [
+      {
+        "index": 0,
+        "id": "shopify-section-template--27203712778518__artly_ai_hero",
+        "heading": "The Core Training Layer for Physical AI",
+        "className": "section section--full-width color-scheme-1 spacing-style artly-system artly-ai-l1 artly-ai-l1-hero",
+        "visualSelector": ".artly-ai__rail.artly-ai__hero-inner",
+        "outer": {
+          "top": 218,
+          "bottom": 893,
+          "height": 675,
+          "left": 0,
+          "right": 1270,
+          "width": 1270
+        },
+        "visual": {
+          "top": 278,
+          "bottom": 837,
+          "height": 559,
+          "left": 45,
+          "right": 1225,
+          "width": 1180
+        },
+        "outerStyle": {
+          "marginTop": "0px",
+          "marginBottom": "0px",
+          "paddingTop": "0px",
+          "paddingBottom": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "visualStyle": {
+          "marginTop": "0px",
+          "marginBottom": "0px",
+          "paddingTop": "36px",
+          "paddingBottom": "48px",
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      },
+      {
+        "index": 1,
+        "id": "shopify-section-template--27203712778518__artly_ai_overview_demo",
+        "heading": "Commercial-scale automation without the training bottleneck.",
+        "className": "section section--full-width color-scheme-1 spacing-style artly-system artly-ai-l1 artly-ai__band artly-ai__band--demo",
+        "visualSelector": ".artly-ai__rail.artly-ai__demo",
+        "outer": {
+          "top": 893,
+          "bottom": 1536,
+          "height": 644,
+          "left": 0,
+          "right": 1270,
+          "width": 1270
+        },
+        "visual": {
+          "top": 957,
+          "bottom": 1472,
+          "height": 516,
+          "left": 45,
+          "right": 1225,
+          "width": 1180
+        },
+        "outerStyle": {
+          "marginTop": "0px",
+          "marginBottom": "0px",
+          "paddingTop": "0px",
+          "paddingBottom": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "visualStyle": {
+          "marginTop": "0px",
+          "marginBottom": "0px",
+          "paddingTop": "57.6px",
+          "paddingBottom": "57.6px",
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      },
+      {
+        "index": 2,
+        "id": "shopify-section-template--27203712778518__artly_ai_advantage",
+        "heading": "The Artly Advantage",
+        "className": "section section--full-width color-scheme-1 spacing-style artly-system artly-ai-l1",
+        "visualSelector": ".artly-ai__rail.artly-ai__section.artly-ai__advantage",
+        "outer": {
+          "top": 1536,
+          "bottom": 2459,
+          "height": 922,
+          "left": 0,
+          "right": 1270,
+          "width": 1270
+        },
+        "visual": {
+          "top": 1600,
+          "bottom": 2395,
+          "height": 794,
+          "left": 45,
+          "right": 1225,
+          "width": 1180
+        },
+        "outerStyle": {
+          "marginTop": "0px",
+          "marginBottom": "0px",
+          "paddingTop": "0px",
+          "paddingBottom": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "visualStyle": {
+          "marginTop": "0px",
+          "marginBottom": "0px",
+          "paddingTop": "57.6px",
+          "paddingBottom": "57.6px",
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      },
+      {
+        "index": 3,
+        "id": "shopify-section-template--27203712778518__artly_ai_how_it_works",
+        "heading": "How it Works",
+        "className": "section section--full-width color-scheme-1 spacing-style artly-system artly-ai-l1",
+        "visualSelector": ".artly-ai__rail.artly-ai__section.artly-ai__how",
+        "outer": {
+          "top": 2459,
+          "bottom": 3389,
+          "height": 931,
+          "left": 0,
+          "right": 1270,
+          "width": 1270
+        },
+        "visual": {
+          "top": 2523,
+          "bottom": 3325,
+          "height": 803,
+          "left": 45,
+          "right": 1225,
+          "width": 1180
+        },
+        "outerStyle": {
+          "marginTop": "0px",
+          "marginBottom": "0px",
+          "paddingTop": "0px",
+          "paddingBottom": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "visualStyle": {
+          "marginTop": "0px",
+          "marginBottom": "0px",
+          "paddingTop": "57.6px",
+          "paddingBottom": "57.6px",
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      },
+      {
+        "index": 4,
+        "id": "shopify-section-template--27203712778518__artly_ai_case_study",
+        "heading": "A deployment story belongs here.",
+        "className": "section section--full-width color-scheme-1 spacing-style artly-system artly-ai-l1",
+        "visualSelector": ".artly-ai__rail.artly-ai__section.artly-ai__case",
+        "outer": {
+          "top": 3389,
+          "bottom": 4025,
+          "height": 636,
+          "left": 0,
+          "right": 1270,
+          "width": 1270
+        },
+        "visual": {
+          "top": 3453,
+          "bottom": 3961,
+          "height": 508,
+          "left": 45,
+          "right": 1225,
+          "width": 1180
+        },
+        "outerStyle": {
+          "marginTop": "0px",
+          "marginBottom": "0px",
+          "paddingTop": "0px",
+          "paddingBottom": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "visualStyle": {
+          "marginTop": "0px",
+          "marginBottom": "0px",
+          "paddingTop": "57.6px",
+          "paddingBottom": "57.6px",
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      },
+      {
+        "index": 5,
+        "id": "shopify-section-template--27203712778518__artly_ai_trusted_by_strip",
+        "heading": "Trusted By",
+        "className": "section section--page-width spacing-style color-scheme-1 trusted-by-logo-strip trusted-by-logo-strip--static trusted-by-logo-strip--center trusted-by-logo-strip--artly-ai",
+        "visualSelector": ".section.section--page-width.spacing-style.color-scheme-1.trusted-by-logo-strip.trusted-by-logo-strip--static.trusted-by-logo-strip--center.trusted-by-logo-strip--artly-ai",
+        "outer": {
+          "top": 4025,
+          "bottom": 7337,
+          "height": 3312,
+          "left": 0,
+          "right": 1270,
+          "width": 1270
+        },
+        "visual": {
+          "top": 4025,
+          "bottom": 7337,
+          "height": 3312,
+          "left": 0,
+          "right": 1270,
+          "width": 1270
+        },
+        "outerStyle": {
+          "marginTop": "0px",
+          "marginBottom": "0px",
+          "paddingTop": "0px",
+          "paddingBottom": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "visualStyle": {
+          "marginTop": "0px",
+          "marginBottom": "0px",
+          "paddingTop": "0px",
+          "paddingBottom": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      },
+      {
+        "index": 6,
+        "id": "shopify-section-template--27203712778518__artly_ai_team",
+        "heading": "Meet the Team",
+        "className": "section section--full-width color-scheme-1 spacing-style artly-system artly-ai-l1",
+        "visualSelector": ".artly-ai__rail.artly-ai__section.artly-ai__team",
+        "outer": {
+          "top": 7337,
+          "bottom": 8041,
+          "height": 704,
+          "left": 0,
+          "right": 1270,
+          "width": 1270
+        },
+        "visual": {
+          "top": 7401,
+          "bottom": 7977,
+          "height": 576,
+          "left": 45,
+          "right": 1225,
+          "width": 1180
+        },
+        "outerStyle": {
+          "marginTop": "0px",
+          "marginBottom": "0px",
+          "paddingTop": "0px",
+          "paddingBottom": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "visualStyle": {
+          "marginTop": "0px",
+          "marginBottom": "0px",
+          "paddingTop": "57.6px",
+          "paddingBottom": "57.6px",
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      },
+      {
+        "index": 7,
+        "id": "shopify-section-template--27203712778518__artly_ai_press",
+        "heading": "Press",
+        "className": "section section--full-width color-scheme-1 spacing-style artly-system artly-ai-l1",
+        "visualSelector": ".artly-ai__rail.artly-ai__section.artly-ai__press",
+        "outer": {
+          "top": 8041,
+          "bottom": 8728,
+          "height": 687,
+          "left": 0,
+          "right": 1270,
+          "width": 1270
+        },
+        "visual": {
+          "top": 8105,
+          "bottom": 8664,
+          "height": 559,
+          "left": 45,
+          "right": 1225,
+          "width": 1180
+        },
+        "outerStyle": {
+          "marginTop": "0px",
+          "marginBottom": "0px",
+          "paddingTop": "0px",
+          "paddingBottom": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "visualStyle": {
+          "marginTop": "0px",
+          "marginBottom": "0px",
+          "paddingTop": "57.6px",
+          "paddingBottom": "57.6px",
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      },
+      {
+        "index": 8,
+        "id": "shopify-section-template--27203712778518__artly_ai_faq",
+        "heading": "Frequently Asked Questions",
+        "className": "section section--full-width color-scheme-1 spacing-style artly-system artly-ai-l1",
+        "visualSelector": ".artly-ai__rail.artly-ai__section.artly-ai__faq",
+        "outer": {
+          "top": 8728,
+          "bottom": 9439,
+          "height": 711,
+          "left": 0,
+          "right": 1270,
+          "width": 1270
+        },
+        "visual": {
+          "top": 8792,
+          "bottom": 9375,
+          "height": 583,
+          "left": 45,
+          "right": 1225,
+          "width": 1180
+        },
+        "outerStyle": {
+          "marginTop": "0px",
+          "marginBottom": "0px",
+          "paddingTop": "0px",
+          "paddingBottom": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "visualStyle": {
+          "marginTop": "0px",
+          "marginBottom": "0px",
+          "paddingTop": "57.6px",
+          "paddingBottom": "57.6px",
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      },
+      {
+        "index": 9,
+        "id": "shopify-section-template--27203712778518__artly_ai_catch_all",
+        "heading": "Believe in what we're building?",
+        "className": "section section--full-width color-scheme-1 spacing-style artly-system artly-ai-l1 artly-ai__band artly-ai__band--closing",
+        "visualSelector": ".artly-ai__rail.artly-ai__closing",
+        "outer": {
+          "top": 9439,
+          "bottom": 9988,
+          "height": 549,
+          "left": 0,
+          "right": 1270,
+          "width": 1270
+        },
+        "visual": {
+          "top": 9503,
+          "bottom": 9924,
+          "height": 421,
+          "left": 45,
+          "right": 1225,
+          "width": 1180
+        },
+        "outerStyle": {
+          "marginTop": "0px",
+          "marginBottom": "0px",
+          "paddingTop": "0px",
+          "paddingBottom": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "visualStyle": {
+          "marginTop": "0px",
+          "marginBottom": "0px",
+          "paddingTop": "64px",
+          "paddingBottom": "64px",
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      }
+    ],
+    "gaps": [
+      {
+        "fromIndex": 0,
+        "toIndex": 1,
+        "from": "The Core Training Layer for Physical AI",
+        "to": "Commercial-scale automation without the training bottleneck.",
+        "outerGap": 0,
+        "visualGap": 120
+      },
+      {
+        "fromIndex": 1,
+        "toIndex": 2,
+        "from": "Commercial-scale automation without the training bottleneck.",
+        "to": "The Artly Advantage",
+        "outerGap": 0,
+        "visualGap": 128
+      },
+      {
+        "fromIndex": 2,
+        "toIndex": 3,
+        "from": "The Artly Advantage",
+        "to": "How it Works",
+        "outerGap": 0,
+        "visualGap": 128
+      },
+      {
+        "fromIndex": 3,
+        "toIndex": 4,
+        "from": "How it Works",
+        "to": "A deployment story belongs here.",
+        "outerGap": 0,
+        "visualGap": 128
+      },
+      {
+        "fromIndex": 4,
+        "toIndex": 5,
+        "from": "A deployment story belongs here.",
+        "to": "Trusted By",
+        "outerGap": 0,
+        "visualGap": 64
+      },
+      {
+        "fromIndex": 5,
+        "toIndex": 6,
+        "from": "Trusted By",
+        "to": "Meet the Team",
+        "outerGap": 0,
+        "visualGap": 64
+      },
+      {
+        "fromIndex": 6,
+        "toIndex": 7,
+        "from": "Meet the Team",
+        "to": "Press",
+        "outerGap": 0,
+        "visualGap": 128
+      },
+      {
+        "fromIndex": 7,
+        "toIndex": 8,
+        "from": "Press",
+        "to": "Frequently Asked Questions",
+        "outerGap": 0,
+        "visualGap": 128
+      },
+      {
+        "fromIndex": 8,
+        "toIndex": 9,
+        "from": "Frequently Asked Questions",
+        "to": "Believe in what we're building?",
+        "outerGap": 0,
+        "visualGap": 128
+      }
+    ]
+  },
+  "mobile": {
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "documentHeight": 11276,
+    "rows": [
+      {
+        "index": 0,
+        "id": "shopify-section-template--27203712778518__artly_ai_hero",
+        "heading": "The Core Training Layer for Physical AI",
+        "className": "section section--full-width color-scheme-1 spacing-style artly-system artly-ai-l1 artly-ai-l1-hero",
+        "visualSelector": ".artly-ai__rail.artly-ai__hero-inner",
+        "outer": {
+          "top": 93,
+          "bottom": 1155,
+          "height": 1062,
+          "left": 0,
+          "right": 390,
+          "width": 390
+        },
+        "visual": {
+          "top": 137,
+          "bottom": 1125,
+          "height": 988,
+          "left": 16,
+          "right": 374,
+          "width": 358
+        },
+        "outerStyle": {
+          "marginTop": "0px",
+          "marginBottom": "0px",
+          "paddingTop": "0px",
+          "paddingBottom": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "visualStyle": {
+          "marginTop": "0px",
+          "marginBottom": "0px",
+          "paddingTop": "20px",
+          "paddingBottom": "22px",
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      },
+      {
+        "index": 1,
+        "id": "shopify-section-template--27203712778518__artly_ai_overview_demo",
+        "heading": "Commercial-scale automation without the training bottleneck.",
+        "className": "section section--full-width color-scheme-1 spacing-style artly-system artly-ai-l1 artly-ai__band artly-ai__band--demo",
+        "visualSelector": ".artly-ai__rail.artly-ai__demo",
+        "outer": {
+          "top": 1155,
+          "bottom": 1848,
+          "height": 692,
+          "left": 0,
+          "right": 390,
+          "width": 390
+        },
+        "visual": {
+          "top": 1185,
+          "bottom": 1818,
+          "height": 632,
+          "left": 16,
+          "right": 374,
+          "width": 358
+        },
+        "outerStyle": {
+          "marginTop": "0px",
+          "marginBottom": "0px",
+          "paddingTop": "0px",
+          "paddingBottom": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "visualStyle": {
+          "marginTop": "0px",
+          "marginBottom": "0px",
+          "paddingTop": "30px",
+          "paddingBottom": "30px",
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      },
+      {
+        "index": 2,
+        "id": "shopify-section-template--27203712778518__artly_ai_advantage",
+        "heading": "The Artly Advantage",
+        "className": "section section--full-width color-scheme-1 spacing-style artly-system artly-ai-l1",
+        "visualSelector": ".artly-ai__rail.artly-ai__section.artly-ai__advantage",
+        "outer": {
+          "top": 1848,
+          "bottom": 3320,
+          "height": 1473,
+          "left": 0,
+          "right": 390,
+          "width": 390
+        },
+        "visual": {
+          "top": 1878,
+          "bottom": 3290,
+          "height": 1413,
+          "left": 16,
+          "right": 374,
+          "width": 358
+        },
+        "outerStyle": {
+          "marginTop": "0px",
+          "marginBottom": "0px",
+          "paddingTop": "0px",
+          "paddingBottom": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "visualStyle": {
+          "marginTop": "0px",
+          "marginBottom": "0px",
+          "paddingTop": "30px",
+          "paddingBottom": "30px",
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      },
+      {
+        "index": 3,
+        "id": "shopify-section-template--27203712778518__artly_ai_how_it_works",
+        "heading": "How it Works",
+        "className": "section section--full-width color-scheme-1 spacing-style artly-system artly-ai-l1",
+        "visualSelector": ".artly-ai__rail.artly-ai__section.artly-ai__how",
+        "outer": {
+          "top": 3320,
+          "bottom": 4637,
+          "height": 1317,
+          "left": 0,
+          "right": 390,
+          "width": 390
+        },
+        "visual": {
+          "top": 3350,
+          "bottom": 4607,
+          "height": 1257,
+          "left": 16,
+          "right": 374,
+          "width": 358
+        },
+        "outerStyle": {
+          "marginTop": "0px",
+          "marginBottom": "0px",
+          "paddingTop": "0px",
+          "paddingBottom": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "visualStyle": {
+          "marginTop": "0px",
+          "marginBottom": "0px",
+          "paddingTop": "30px",
+          "paddingBottom": "30px",
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      },
+      {
+        "index": 4,
+        "id": "shopify-section-template--27203712778518__artly_ai_case_study",
+        "heading": "A deployment story belongs here.",
+        "className": "section section--full-width color-scheme-1 spacing-style artly-system artly-ai-l1",
+        "visualSelector": ".artly-ai__rail.artly-ai__section.artly-ai__case",
+        "outer": {
+          "top": 4637,
+          "bottom": 5317,
+          "height": 680,
+          "left": 0,
+          "right": 390,
+          "width": 390
+        },
+        "visual": {
+          "top": 4667,
+          "bottom": 5287,
+          "height": 620,
+          "left": 16,
+          "right": 374,
+          "width": 358
+        },
+        "outerStyle": {
+          "marginTop": "0px",
+          "marginBottom": "0px",
+          "paddingTop": "0px",
+          "paddingBottom": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "visualStyle": {
+          "marginTop": "0px",
+          "marginBottom": "0px",
+          "paddingTop": "30px",
+          "paddingBottom": "30px",
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      },
+      {
+        "index": 5,
+        "id": "shopify-section-template--27203712778518__artly_ai_trusted_by_strip",
+        "heading": "Trusted By",
+        "className": "section section--page-width spacing-style color-scheme-1 trusted-by-logo-strip trusted-by-logo-strip--static trusted-by-logo-strip--center trusted-by-logo-strip--artly-ai",
+        "visualSelector": ".section.section--page-width.spacing-style.color-scheme-1.trusted-by-logo-strip.trusted-by-logo-strip--static.trusted-by-logo-strip--center.trusted-by-logo-strip--artly-ai",
+        "outer": {
+          "top": 5317,
+          "bottom": 6433,
+          "height": 1116,
+          "left": 0,
+          "right": 390,
+          "width": 390
+        },
+        "visual": {
+          "top": 5317,
+          "bottom": 6433,
+          "height": 1116,
+          "left": 0,
+          "right": 390,
+          "width": 390
+        },
+        "outerStyle": {
+          "marginTop": "0px",
+          "marginBottom": "0px",
+          "paddingTop": "0px",
+          "paddingBottom": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "visualStyle": {
+          "marginTop": "0px",
+          "marginBottom": "0px",
+          "paddingTop": "0px",
+          "paddingBottom": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      },
+      {
+        "index": 6,
+        "id": "shopify-section-template--27203712778518__artly_ai_team",
+        "heading": "Meet the Team",
+        "className": "section section--full-width color-scheme-1 spacing-style artly-system artly-ai-l1",
+        "visualSelector": ".artly-ai__rail.artly-ai__section.artly-ai__team",
+        "outer": {
+          "top": 6433,
+          "bottom": 7692,
+          "height": 1259,
+          "left": 0,
+          "right": 390,
+          "width": 390
+        },
+        "visual": {
+          "top": 6463,
+          "bottom": 7662,
+          "height": 1199,
+          "left": 16,
+          "right": 374,
+          "width": 358
+        },
+        "outerStyle": {
+          "marginTop": "0px",
+          "marginBottom": "0px",
+          "paddingTop": "0px",
+          "paddingBottom": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "visualStyle": {
+          "marginTop": "0px",
+          "marginBottom": "0px",
+          "paddingTop": "30px",
+          "paddingBottom": "30px",
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      },
+      {
+        "index": 7,
+        "id": "shopify-section-template--27203712778518__artly_ai_press",
+        "heading": "Press",
+        "className": "section section--full-width color-scheme-1 spacing-style artly-system artly-ai-l1",
+        "visualSelector": ".artly-ai__rail.artly-ai__section.artly-ai__press",
+        "outer": {
+          "top": 7692,
+          "bottom": 8591,
+          "height": 899,
+          "left": 0,
+          "right": 390,
+          "width": 390
+        },
+        "visual": {
+          "top": 7722,
+          "bottom": 8561,
+          "height": 839,
+          "left": 16,
+          "right": 374,
+          "width": 358
+        },
+        "outerStyle": {
+          "marginTop": "0px",
+          "marginBottom": "0px",
+          "paddingTop": "0px",
+          "paddingBottom": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "visualStyle": {
+          "marginTop": "0px",
+          "marginBottom": "0px",
+          "paddingTop": "30px",
+          "paddingBottom": "30px",
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      },
+      {
+        "index": 8,
+        "id": "shopify-section-template--27203712778518__artly_ai_faq",
+        "heading": "Frequently Asked Questions",
+        "className": "section section--full-width color-scheme-1 spacing-style artly-system artly-ai-l1",
+        "visualSelector": ".artly-ai__rail.artly-ai__section.artly-ai__faq",
+        "outer": {
+          "top": 8591,
+          "bottom": 9210,
+          "height": 619,
+          "left": 0,
+          "right": 390,
+          "width": 390
+        },
+        "visual": {
+          "top": 8621,
+          "bottom": 9180,
+          "height": 559,
+          "left": 16,
+          "right": 374,
+          "width": 358
+        },
+        "outerStyle": {
+          "marginTop": "0px",
+          "marginBottom": "0px",
+          "paddingTop": "0px",
+          "paddingBottom": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "visualStyle": {
+          "marginTop": "0px",
+          "marginBottom": "0px",
+          "paddingTop": "30px",
+          "paddingBottom": "30px",
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      },
+      {
+        "index": 9,
+        "id": "shopify-section-template--27203712778518__artly_ai_catch_all",
+        "heading": "Believe in what we're building?",
+        "className": "section section--full-width color-scheme-1 spacing-style artly-system artly-ai-l1 artly-ai__band artly-ai__band--closing",
+        "visualSelector": ".artly-ai__rail.artly-ai__closing",
+        "outer": {
+          "top": 9210,
+          "bottom": 10163,
+          "height": 954,
+          "left": 0,
+          "right": 390,
+          "width": 390
+        },
+        "visual": {
+          "top": 9240,
+          "bottom": 10133,
+          "height": 894,
+          "left": 16,
+          "right": 374,
+          "width": 358
+        },
+        "outerStyle": {
+          "marginTop": "0px",
+          "marginBottom": "0px",
+          "paddingTop": "0px",
+          "paddingBottom": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "visualStyle": {
+          "marginTop": "0px",
+          "marginBottom": "0px",
+          "paddingTop": "28px",
+          "paddingBottom": "28px",
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      }
+    ],
+    "gaps": [
+      {
+        "fromIndex": 0,
+        "toIndex": 1,
+        "from": "The Core Training Layer for Physical AI",
+        "to": "Commercial-scale automation without the training bottleneck.",
+        "outerGap": 0,
+        "visualGap": 60
+      },
+      {
+        "fromIndex": 1,
+        "toIndex": 2,
+        "from": "Commercial-scale automation without the training bottleneck.",
+        "to": "The Artly Advantage",
+        "outerGap": 0,
+        "visualGap": 60
+      },
+      {
+        "fromIndex": 2,
+        "toIndex": 3,
+        "from": "The Artly Advantage",
+        "to": "How it Works",
+        "outerGap": 0,
+        "visualGap": 60
+      },
+      {
+        "fromIndex": 3,
+        "toIndex": 4,
+        "from": "How it Works",
+        "to": "A deployment story belongs here.",
+        "outerGap": 0,
+        "visualGap": 60
+      },
+      {
+        "fromIndex": 4,
+        "toIndex": 5,
+        "from": "A deployment story belongs here.",
+        "to": "Trusted By",
+        "outerGap": 0,
+        "visualGap": 30
+      },
+      {
+        "fromIndex": 5,
+        "toIndex": 6,
+        "from": "Trusted By",
+        "to": "Meet the Team",
+        "outerGap": 0,
+        "visualGap": 30
+      },
+      {
+        "fromIndex": 6,
+        "toIndex": 7,
+        "from": "Meet the Team",
+        "to": "Press",
+        "outerGap": 0,
+        "visualGap": 60
+      },
+      {
+        "fromIndex": 7,
+        "toIndex": 8,
+        "from": "Press",
+        "to": "Frequently Asked Questions",
+        "outerGap": 0,
+        "visualGap": 60
+      },
+      {
+        "fromIndex": 8,
+        "toIndex": 9,
+        "from": "Frequently Asked Questions",
+        "to": "Believe in what we're building?",
+        "outerGap": 0,
+        "visualGap": 60
+      }
+    ]
+  }
+}

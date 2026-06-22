@@ -8,12 +8,17 @@ Claim one unclaimed task from `task-board.json`, complete it, and move it to rev
 
 After each completed task, reload `task-board.json` and check the live board again. Continue claiming safe `todo` tasks until Richard asks the Worker Agent to stop or the current list has no safe unclaimed work.
 
+At the start of the chat, choose a stable `agentName` such as `Worker Agent - Artly 01`. Use that exact value for every task board API call in this chat.
+
+Use `TEAM-WORK/00 Command Center/Task Board API Guide.md` for exact API payloads, examples, and error handling.
+
 ## Required First Steps
 
 1. Read `TEAM-WORK/00 Command Center/Simple Agent Workflow.md`.
-2. Read `TEAM-WORK/02 Task Boards/task-board.json`.
+2. Read the board. If the local backend is running, prefer `GET /api/board?agentName=...`; otherwise read `TEAM-WORK/02 Task Boards/task-board.json`.
 3. Choose one task from `columns.todo`.
-4. Before touching implementation files, claim the task. If the local backend is running, prefer `POST /api/claim-task`; otherwise update `task-board.json` directly:
+4. If the task includes `referenceImages`, inspect those image paths before planning implementation. Do not rely on chat-only screenshots when the task data gives a workflow image path.
+5. Before touching implementation files, claim the task. If the local backend is running, prefer `POST /api/claim-task` and include your stable `agentName`; otherwise update `task-board.json` directly:
    - Move the whole task object from `columns.todo` to `columns.claimed`.
    - Set `status` to `claimed`.
    - Set `claimedBy` to your agent name or thread ID.
@@ -47,14 +52,30 @@ After each completed task, reload `task-board.json` and check the live board aga
 
 When the task is complete:
 
-1. Move the task from `columns.claimed` to `columns.review`. If the local backend is running, prefer `POST /api/move-to-review`; otherwise update `task-board.json` directly.
+1. Move the task from `columns.claimed` to `columns.review`. If the local backend is running, prefer `POST /api/move-to-review` and include your stable `agentName`; otherwise update `task-board.json` directly.
 2. Set `status` to `review`.
 3. Set `reviewRequestedAt` to the current timestamp.
 4. Add a concise completion note to `notes`.
 5. Add touched files to `files` if they were not already listed.
-6. Update board `updatedAt`.
-7. Report the result and validation to Richard.
+6. Add `inspectionTargets` so Richard and the Review Agent know exactly where to visually inspect the change. Include URL/path, viewport or state, and short notes when useful.
+7. Update board `updatedAt`.
+8. Report the result, validation, and inspection target to Richard.
 
-After updating the board, reload `task-board.json` before deciding what to do next. If another safe `todo` task exists, do not stop; claim the next safe task and continue execution until Richard asks to stop. If no safe `todo` task exists, report that the list is clear or blocked.
+Use this shape for inspection targets:
+
+```json
+[
+  {
+    "label": "Artly AI hero section",
+    "url": "http://127.0.0.1:9292/pages/artly-ai",
+    "path": "templates/page.artly-ai.json",
+    "viewport": "desktop and mobile",
+    "state": "Open the page normally",
+    "notes": "Check the updated CTA and spacing."
+  }
+]
+```
+
+After updating the board, reload through `GET /api/board?agentName=...` when the backend is running, or reload `task-board.json` when it is not, before deciding what to do next. If another safe `todo` task exists, do not stop; claim the next safe task and continue execution until Richard asks to stop. If no safe `todo` task exists, report that the list is clear or blocked.
 
 Richard or the Review Agent moves accepted review tasks to `done`.

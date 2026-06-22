@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Artly Agent Task Board</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23191816'/%3E%3Crect x='13' y='14' width='8' height='36' rx='4' fill='%233f6f8f'/%3E%3Crect x='25' y='10' width='8' height='44' rx='4' fill='%239b5b25'/%3E%3Crect x='37' y='16' width='8' height='32' rx='4' fill='%236f5aa8'/%3E%3Crect x='49' y='20' width='8' height='28' rx='4' fill='%2334785d'/%3E%3C/svg%3E">
   <style>
     :root {
       --page: #f6f4ef;
@@ -16,8 +17,11 @@
       --review: #6f5aa8;
       --done: #34785d;
       --archived: #5f6872;
+      --workflow: #2f6f79;
       --archive-tab-height: 132px;
       --archive-tab-width: 40px;
+      --workflow-tab-height: 132px;
+      --workflow-tab-width: 40px;
       --shadow: 0 14px 34px rgba(25, 24, 22, 0.08);
     }
 
@@ -111,8 +115,18 @@
     }
 
     .board.is-done-focus {
-      grid-template-columns: repeat(4, 44px) minmax(0, 1fr);
+      display: flex;
+      gap: 10px;
       align-items: start;
+    }
+
+    .board.is-done-focus .folded-stack {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 10px;
+      flex: 0 0 64px;
+      width: 64px;
+      min-width: 0;
     }
 
     .archive-board {
@@ -223,18 +237,293 @@
       transform: translateX(0);
     }
 
+    .workflow-board {
+      position: fixed;
+      inset: 0 auto 0 0;
+      z-index: 8;
+      pointer-events: none;
+      isolation: isolate;
+    }
+
+    .workflow-tab {
+      pointer-events: auto;
+      position: fixed;
+      left: 0;
+      top: calc(50% - 158px);
+      width: var(--workflow-tab-width);
+      min-height: var(--workflow-tab-height);
+      border: 1px solid var(--line);
+      border-left: 0;
+      border-radius: 0 8px 8px 0;
+      background: var(--panel);
+      color: var(--ink);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 6px;
+      font-size: 13px;
+      font-weight: 760;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      transform: translateY(-50%);
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      z-index: 11;
+    }
+
+    .workflow-tab:hover {
+      border-color: #aaa197;
+      background: #fbfaf7;
+    }
+
+    .workflow-tab .dot {
+      --lane-color: var(--workflow);
+    }
+
+    .workflow-tray {
+      pointer-events: auto;
+      position: fixed;
+      left: 0;
+      top: 0;
+      height: 100vh;
+      width: min(860px, calc(100vw - var(--workflow-tab-width)));
+      background: rgba(246, 244, 239, 0.98);
+      transform: translateX(calc(-100% - 8px));
+      transition: transform 220ms ease;
+      z-index: 10;
+      overflow: auto;
+      padding: 18px 18px 18px calc(var(--workflow-tab-width) + 14px);
+      box-sizing: border-box;
+      box-shadow: 18px 0 42px rgba(25, 24, 22, 0.16);
+    }
+
+    .workflow-board.is-open .workflow-tray {
+      transform: translateX(0);
+    }
+
+    .workflow-panel {
+      min-height: calc(100vh - 36px);
+      border: 1px solid var(--line);
+      border-top: 5px solid var(--workflow);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.86);
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+
+    .workflow-panel-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .workflow-panel h2 {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .workflow-panel p {
+      margin: 6px 0 0;
+      color: var(--muted);
+    }
+
+    .workflow-graph {
+      display: grid;
+      gap: 14px;
+      margin-top: 12px;
+    }
+
+    .workflow-state-line {
+      display: grid;
+      grid-template-columns: minmax(180px, 240px) minmax(0, 1fr);
+      gap: 12px;
+      align-items: start;
+    }
+
+    .workflow-state-stack {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0;
+    }
+
+    .workflow-state {
+      border: 1px solid var(--line);
+      border-left: 5px solid var(--node-color);
+      border-radius: 8px;
+      background: var(--panel);
+      padding: 11px 12px;
+      min-width: 0;
+      min-height: 98px;
+      display: grid;
+      align-content: space-between;
+      gap: 10px;
+    }
+
+    .workflow-state-link {
+      width: 2px;
+      height: 28px;
+      background: var(--line);
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .workflow-state-link::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: -1px;
+      width: 8px;
+      height: 8px;
+      border-right: 2px solid var(--line);
+      border-bottom: 2px solid var(--line);
+      transform: translateX(-50%) rotate(45deg);
+      background: var(--page);
+    }
+
+    .workflow-state-title {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      font-weight: 760;
+    }
+
+    .workflow-state-title span:first-child {
+      overflow-wrap: anywhere;
+    }
+
+    .workflow-state-count {
+      flex: 0 0 auto;
+    }
+
+    .workflow-state-meta {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+      overflow-wrap: anywhere;
+    }
+
+    .workflow-edge-block {
+      min-height: 98px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 11px;
+      text-align: center;
+      min-width: 0;
+    }
+
+    .workflow-edge-block::before {
+      content: attr(data-arrow);
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fbfaf7;
+      color: var(--ink);
+      font-weight: 760;
+    }
+
+    .workflow-edge-label {
+      max-width: 70px;
+      overflow-wrap: anywhere;
+    }
+
+    .workflow-branch-column {
+      display: grid;
+      gap: 10px;
+      padding-top: 2px;
+    }
+
+    .workflow-branch-group {
+      display: grid;
+      gap: 10px;
+    }
+
+    .workflow-branch-group + .workflow-branch-group {
+      padding-top: 10px;
+      border-top: 1px solid var(--line);
+    }
+
+    .workflow-branch-label {
+      font-size: 12px;
+      font-weight: 760;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .workflow-branch {
+      border: 1px dashed var(--line);
+      border-radius: 8px;
+      background: #fbfaf7;
+      padding: 10px 12px;
+      color: #37332e;
+      min-width: 0;
+    }
+
+    .workflow-branch strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--ink);
+      font-weight: 760;
+    }
+
+    .workflow-branch code {
+      color: #245f89;
+      font-weight: 700;
+    }
+
+    .workflow-stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .workflow-stat {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfaf7;
+      padding: 9px 10px;
+    }
+
+    .workflow-stat strong {
+      display: block;
+      font-size: 18px;
+      line-height: 1.1;
+    }
+
+    .workflow-stat span {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
     .board.is-done-focus .lane:not(.done) {
-      min-height: min(58vh, 420px);
+      flex: 0 0 64px;
+      width: 64px;
+      min-height: 132px;
       cursor: default;
     }
 
     .board.is-done-focus .lane:not(.done) .lane-header {
-      height: 100%;
-      min-height: min(58vh, 420px);
+      height: 132px;
+      min-height: 132px;
       flex-direction: column;
       justify-content: flex-start;
       gap: 10px;
-      padding: 10px 5px;
+      padding: 10px 6px;
     }
 
     .board.is-done-focus .lane:not(.done) .lane-title {
@@ -248,7 +537,7 @@
     }
 
     .board.is-done-focus .lane:not(.done) .lane-title span:last-child {
-      max-height: 300px;
+      max-height: 72px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -262,6 +551,11 @@
     .board.is-done-focus .lane:not(.done) .lane-toggle,
     .board.is-done-focus .lane:not(.done) .lane-body {
       display: none;
+    }
+
+    .board.is-done-focus .done {
+      flex: 1 1 auto;
+      min-width: 0;
     }
 
     .board.is-done-focus .done .lane-body {
@@ -440,8 +734,8 @@
 
     .ticket h2 {
       margin: 0;
-      font-size: 16px;
-      line-height: 1.22;
+      font-size: 14px;
+      line-height: 1.25;
       letter-spacing: 0;
       overflow-wrap: anywhere;
       min-width: 0;
@@ -466,6 +760,39 @@
       font-size: 11px;
       font-weight: 760;
       white-space: nowrap;
+    }
+
+    .owner-badge {
+      border: 1px solid color-mix(in srgb, var(--lane-color) 46%, var(--line));
+      border-radius: 999px;
+      padding: 2px 8px;
+      background: color-mix(in srgb, var(--lane-color) 10%, #ffffff);
+      color: color-mix(in srgb, var(--lane-color) 82%, #191816);
+      font-size: 11px;
+      font-weight: 760;
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+
+    .done-status-badge {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 11px;
+      font-weight: 760;
+      white-space: nowrap;
+    }
+
+    .done-status-badge.success {
+      border-color: #b8d1c3;
+      background: #edf8f1;
+      color: #276044;
+    }
+
+    .done-status-badge.failed {
+      border-color: #e1b4ad;
+      background: #fff0ed;
+      color: #94382f;
     }
 
     .ticket-details {
@@ -512,6 +839,39 @@
     .done-feedback-actions {
       display: flex;
       justify-content: flex-end;
+    }
+
+    .richard-feedback {
+      display: grid;
+      gap: 6px;
+      margin: 0 0 10px;
+      padding: 10px;
+      border: 1px solid #d7c7ab;
+      border-radius: 8px;
+      background: #fff9ed;
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    .richard-feedback-label {
+      font-size: 12px;
+      font-weight: 760;
+      color: #665333;
+      text-transform: uppercase;
+    }
+
+    .richard-feedback p {
+      margin: 0;
+      color: #37332e;
+      min-width: 0;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
+    .richard-feedback-meta {
+      color: var(--muted);
+      font-size: 12px;
+      overflow-wrap: anywhere;
     }
 
     .ticket-actions {
@@ -581,6 +941,22 @@
       font-size: 12px;
       color: var(--muted);
       text-transform: uppercase;
+    }
+
+    .inspection-targets a {
+      color: #245f89;
+      font-weight: 700;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 2px;
+      overflow-wrap: anywhere;
+    }
+
+    .inspection-target-meta {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 12px;
+      overflow-wrap: anywhere;
     }
 
     ul {
@@ -680,6 +1056,25 @@
         padding-left: 10px;
         padding-right: 10px;
       }
+
+      .workflow-tab {
+        top: calc(50% - 148px);
+      }
+
+      .workflow-tray {
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+
+      .workflow-state-line,
+      .workflow-state-stack {
+        grid-template-columns: 1fr;
+        width: 100%;
+      }
+
+      .workflow-stats {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -706,6 +1101,7 @@
     <p class="status" id="status"></p>
 
     <section class="board" id="board" aria-label="Agent task board"></section>
+    <section class="workflow-board" id="workflowBoard" aria-label="Workflow graph"></section>
     <section class="archive-board" id="archiveBoard" aria-label="Archived task board"></section>
   </main>
 
@@ -732,6 +1128,7 @@
     };
 
     const boardEl = document.getElementById("board");
+    const workflowEl = document.getElementById("workflowBoard");
     const archiveEl = document.getElementById("archiveBoard");
     const statusEl = document.getElementById("status");
     const boardNameEl = document.getElementById("boardName");
@@ -741,6 +1138,7 @@
     const autoRefreshButton = document.getElementById("autoRefreshButton");
     const fileInput = document.getElementById("fileInput");
     const collapsedTasks = new Set();
+    let workflowPanelOpen = false;
     let archiveTrayOpen = false;
     let doneFocusOpen = false;
     let currentBoard = fallbackBoard;
@@ -766,13 +1164,47 @@
       return listItems(files, (file) => `<code>${escapeText(file)}</code>`);
     }
 
+    function renderInspectionTargets(targets) {
+      if (!Array.isArray(targets) || targets.length === 0) return "";
+      const items = targets.map((target) => {
+        if (!target || typeof target !== "object") {
+          return `<li>${escapeText(target)}</li>`;
+        }
+
+        const url = String(target.url || target.href || "").trim();
+        const path = String(target.path || "").trim();
+        const label = String(target.label || target.title || url || path || "Inspection target").trim();
+        const primary = url
+          ? `<a href="${escapeText(url)}" target="_blank" rel="noopener noreferrer">${escapeText(label)}</a>`
+          : `<span>${escapeText(label)}</span>`;
+        const detailParts = [
+          path ? `Path: ${path}` : "",
+          target.viewport ? `Viewport: ${target.viewport}` : "",
+          target.state ? `State: ${target.state}` : "",
+          target.notes ? `Notes: ${target.notes}` : ""
+        ].filter(Boolean);
+        const meta = detailParts.length
+          ? `<span class="inspection-target-meta">${escapeText(detailParts.join(" | "))}</span>`
+          : "";
+
+        return `<li>${primary}${meta}</li>`;
+      });
+      return `<ul class="inspection-targets">${items.join("")}</ul>`;
+    }
+
     function field(label, content) {
       if (!content) return "";
       return `<div class="field"><strong>${escapeText(label)}</strong>${content}</div>`;
     }
 
     function taskKey(task) {
-      return String(task.id || `${task.project || "task"}-${task.title || "untitled"}-${task.createdAt || ""}`);
+      return String(task.id || `${task.project || "task"}-${task.title || "missing-title"}-${task.createdAt || ""}`);
+    }
+
+    function hasRenderableTitle(task) {
+      if (!task || typeof task !== "object") return false;
+      const title = String(task.title || "").trim();
+      return Boolean(title && !title.toLowerCase().startsWith("untitled"));
     }
 
     function timestampValue(task) {
@@ -796,6 +1228,32 @@
       return parsed;
     }
 
+    function taskClaimOwner(task, columnKey) {
+      if (columnKey === "claimed") {
+        return {
+          label: "Worker",
+          name: String(task.claimedBy || "").trim() || "Unknown agent"
+        };
+      }
+      if (columnKey === "reviewing") {
+        return {
+          label: "Reviewer",
+          name: String(task.reviewClaimedBy || task.reviewingBy || "").trim() || "Unknown agent"
+        };
+      }
+      return null;
+    }
+
+    function doneStatusBadge(task, columnKey) {
+      if (columnKey !== "done") return "";
+      const reviewDecision = String(task.reviewDecision || "").toLowerCase();
+      const closedAs = String(task.closedAs || "").toLowerCase();
+      const isFailed = reviewDecision === "changes_requested" || closedAs === "replaced_by_follow_up" || task.replacedByTaskId;
+      const label = isFailed ? "Failed" : "Success";
+      const statusClass = isFailed ? "failed" : "success";
+      return `<span class="done-status-badge ${statusClass}">${label}</span>`;
+    }
+
     function doneFeedbackForm(task, key, columnKey) {
       if (columnKey !== "done") return "";
       const feedback = Array.isArray(task.richardFeedback) && task.richardFeedback.length
@@ -813,19 +1271,57 @@
       `;
     }
 
+    function latestRichardFeedback(task) {
+      const feedback = task?.richardFeedback;
+      if (Array.isArray(feedback)) {
+        return feedback.length ? feedback[feedback.length - 1] : null;
+      }
+      if (feedback && typeof feedback === "object") return feedback;
+      if (typeof feedback === "string" && feedback.trim()) {
+        return { feedback };
+      }
+      return null;
+    }
+
+    function richardFeedbackPanel(task, columnKey) {
+      if (columnKey === "done") return "";
+      const entry = latestRichardFeedback(task);
+      const feedback = String(entry?.feedback || "").trim();
+      if (!feedback) return "";
+      const meta = [
+        entry.returnedBy ? `From ${entry.returnedBy}` : "",
+        entry.returnedAt ? `Returned ${entry.returnedAt}` : ""
+      ].filter(Boolean).join(" - ");
+
+      return `
+        <section class="richard-feedback" aria-label="Richard feedback">
+          <div class="richard-feedback-label">Richard feedback</div>
+          <p>${escapeText(feedback)}</p>
+          ${meta ? `<div class="richard-feedback-meta">${escapeText(meta)}</div>` : ""}
+        </section>
+      `;
+    }
+
     function ticketCard(task, columnKey) {
+      const title = String(task.title || "").trim();
       const priority = escapeText(task.priority || "normal");
       const key = taskKey(task);
       const isCollapsed = collapsedTasks.has(key);
       const toggleLabel = isCollapsed ? "Expand task" : "Collapse task";
       const redoCount = taskRedoCount(task);
+      const claimOwner = taskClaimOwner(task, columnKey);
       const chips = [
         task.project,
         task.type,
         task.claimedBy ? `Claimed: ${task.claimedBy}` : "",
+        task.reviewClaimedBy ? `Reviewing: ${task.reviewClaimedBy}` : "",
         task.requestedBy ? `Requested: ${task.requestedBy}` : ""
       ].filter(Boolean);
       const redoBadge = redoCount > 0 ? `<span class="redo-badge">Redo x${redoCount}</span>` : "";
+      const ownerBadge = claimOwner
+        ? `<span class="owner-badge">${escapeText(claimOwner.label)}: ${escapeText(claimOwner.name)}</span>`
+        : "";
+      const doneBadge = doneStatusBadge(task, columnKey);
       const archiveButton = columnKey === "done"
         ? `<button class="text-button archive-task" type="button" data-archive-task="${escapeText(key)}">Archive</button>`
         : "";
@@ -834,8 +1330,8 @@
         <article class="ticket ${isCollapsed ? "is-collapsed" : ""}" data-task-id="${escapeText(key)}">
           <div class="ticket-title-row">
             <div class="ticket-main">
-              <h2>${escapeText(task.title || "Untitled task")}</h2>
-              <div class="ticket-meta">${redoBadge}</div>
+              <h2>${escapeText(title)}</h2>
+              <div class="ticket-meta">${doneBadge}${ownerBadge}${redoBadge}</div>
             </div>
             <div class="ticket-title-actions">
               ${archiveButton}
@@ -848,6 +1344,8 @@
               <div class="ticket-id">${escapeText(task.id || "No ID")}</div>
               <div class="priority ${priority.toLowerCase()}">${priority}</div>
             </div>
+            ${richardFeedbackPanel(task, columnKey)}
+            ${field("Inspect Change", renderInspectionTargets(task.inspectionTargets))}
             ${task.summary ? `<p class="summary">${escapeText(task.summary)}</p>` : ""}
             ${chips.length ? `<div class="chips">${chips.map((chip) => `<span class="chip">${escapeText(chip)}</span>`).join("")}</div>` : ""}
             ${field("Requirements", listItems(task.requirements))}
@@ -864,15 +1362,133 @@
       return `<button class="icon-button archive-close" type="button" data-archive-close aria-label="Close archived panel" title="Close archived panel">&times;</button>`;
     }
 
+    function workflowCloseButton() {
+      return `<button class="icon-button workflow-close" type="button" data-workflow-close aria-label="Close workflow panel" title="Close workflow panel">&times;</button>`;
+    }
+
     function doneFocusButton() {
       const label = doneFocusOpen ? "Restore all columns" : "Expand Done column";
       const icon = doneFocusOpen ? "&#x21A9;" : "&#x26F6;";
       return `<button class="icon-button done-focus-toggle" type="button" data-done-focus-toggle aria-pressed="${doneFocusOpen ? "true" : "false"}" aria-label="${label}" title="${label}">${icon}</button>`;
     }
 
+    function workflowCount(normalized, columnKey) {
+      return columnTasks(normalized.columns[columnKey], columnKey).length;
+    }
+
+    function workflowNode(step, count) {
+      return `
+        <section class="workflow-state workflow-state-${escapeText(step.key)}" style="--node-color: ${step.color}">
+          <div class="workflow-state-title">
+            <span>${escapeText(step.label)}</span>
+            <span class="count workflow-state-count" style="background: ${step.color}">${count}</span>
+          </div>
+          <div class="workflow-state-meta">${escapeText(step.meta)}</div>
+        </section>
+      `;
+    }
+
+    function workflowEdge(label, arrow = "->") {
+      return `
+        <div class="workflow-edge-block" data-arrow="${escapeText(arrow)}" aria-label="${escapeText(label)}">
+          <span class="workflow-edge-label">${escapeText(label)}</span>
+        </div>
+      `;
+    }
+
+    function workflowGraphMarkup(normalized) {
+      const steps = {
+        todo: { key: "todo", label: "To Do", color: "var(--todo)", meta: "Planned work ready for a worker claim." },
+        claimed: { key: "claimed", label: "Claimed", color: "var(--claimed)", meta: "A worker owns the task and implementation scope." },
+        review: { key: "review", label: "Review", color: "var(--review)", meta: "Implementation is ready for visual/product review." },
+        reviewing: { key: "reviewing", label: "Reviewing", color: "#7f6cae", meta: "A review agent owns the active review." },
+        done: { key: "done", label: "Done", color: "var(--done)", meta: "Accepted work, or failed work closed as replaced." },
+        archived: { key: "archived", label: "Archived", color: "var(--archived)", meta: "Accepted work hidden from the main board." }
+      };
+      const activeCount = ["todo", "claimed", "review", "reviewing"].reduce((total, key) => total + workflowCount(normalized, key), 0);
+      const doneCount = workflowCount(normalized, "done");
+      const archivedCount = workflowCount(normalized, "archived");
+      const mainFlow = `
+        <div class="workflow-state-stack" aria-label="Primary workflow state tree">
+          ${workflowNode(steps.todo, workflowCount(normalized, "todo"))}
+          <div class="workflow-state-link" aria-hidden="true"></div>
+          ${workflowNode(steps.claimed, workflowCount(normalized, "claimed"))}
+          <div class="workflow-state-link" aria-hidden="true"></div>
+          ${workflowNode(steps.review, workflowCount(normalized, "review"))}
+          <div class="workflow-state-link" aria-hidden="true"></div>
+          ${workflowNode(steps.reviewing, workflowCount(normalized, "reviewing"))}
+          <div class="workflow-state-link" aria-hidden="true"></div>
+          ${workflowNode(steps.done, doneCount)}
+          <div class="workflow-state-link" aria-hidden="true"></div>
+          ${workflowNode(steps.archived, archivedCount)}
+        </div>
+      `;
+
+      return `
+        <section class="workflow-panel" id="workflow-panel" aria-hidden="${workflowPanelOpen ? "false" : "true"}">
+          <div class="workflow-panel-header">
+            <div>
+              <h2>Workflow Map</h2>
+              <p>Live column counts and the current task lifecycle.</p>
+            </div>
+            ${workflowCloseButton()}
+          </div>
+          <div class="workflow-graph">
+            <div class="workflow-state-line">
+              ${mainFlow}
+              <div class="workflow-branch-column" aria-label="Workflow branches">
+                <div class="workflow-branch-group">
+                  <div class="workflow-branch-label">Reviewing branches</div>
+                  <div class="workflow-branch"><strong>Review passed</strong> Reviewing -> Done. Reviewer approves and records evidence.</div>
+                  <div class="workflow-branch"><strong>Review failed</strong> Reviewing -> Done as replaced, plus To Do follow-up. Failed task stores <code>replacedByTaskId</code>.</div>
+                </div>
+                <div class="workflow-branch-group">
+                  <div class="workflow-branch-label">Done branches</div>
+                  <div class="workflow-branch"><strong>User feedback</strong> Done -> Review when feedback is submitted from a done task card.</div>
+                  <div class="workflow-branch"><strong>Archive</strong> Done -> Archived when accepted work no longer needs to stay visible.</div>
+                </div>
+                <div class="workflow-branch-group">
+                  <div class="workflow-branch-label">Creation guard</div>
+                  <div class="workflow-branch"><strong>Duplicate check</strong> Planner and Review Agent scan all columns before creating new tickets.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="workflow-stats">
+            <div class="workflow-stat"><strong>${activeCount}</strong><span>active / waiting</span></div>
+            <div class="workflow-stat"><strong>${doneCount}</strong><span>done visible</span></div>
+            <div class="workflow-stat"><strong>${archivedCount}</strong><span>archived</span></div>
+          </div>
+        </section>
+      `;
+    }
+
+    function renderWorkflowPanel(normalized) {
+      workflowEl.classList.toggle("is-open", workflowPanelOpen);
+      workflowEl.innerHTML = `
+        <button class="workflow-tab" type="button" data-workflow-toggle aria-expanded="${workflowPanelOpen ? "true" : "false"}" aria-controls="workflow-panel">
+          <span class="dot" aria-hidden="true"></span>
+          <span>Workflow</span>
+        </button>
+        <div class="workflow-tray" aria-hidden="${workflowPanelOpen ? "false" : "true"}">
+          ${workflowGraphMarkup(normalized)}
+        </div>
+      `;
+    }
+
     function normalizeBoard(board) {
       const normalized = { ...fallbackBoard, ...board };
       normalized.columns = { ...fallbackBoard.columns, ...(board.columns || {}) };
+      const taskLookup = normalized.tasks && typeof normalized.tasks === "object" ? normalized.tasks : {};
+      Object.keys(normalized.columns).forEach((columnKey) => {
+        const tasks = Array.isArray(normalized.columns[columnKey]) ? normalized.columns[columnKey] : [];
+        normalized.columns[columnKey] = tasks
+          .map((task) => {
+            if (typeof task === "string") return taskLookup[task] || null;
+            return task;
+          })
+          .filter(hasRenderableTitle);
+      });
       return normalized;
     }
 
@@ -904,11 +1520,15 @@
     }
 
     function postJson(url, payload) {
+      const requestPayload = {
+        agentName: "Richard via task board viewer",
+        ...payload
+      };
       if (typeof window.fetch === "function") {
         return window.fetch(url, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
+          body: JSON.stringify(requestPayload)
         }).then(async (response) => {
           const data = await response.json().catch(() => ({}));
           if (!response.ok) throw new Error(data.error || `HTTP ${response.status}`);
@@ -935,7 +1555,7 @@
           reject(new Error(data.error || `HTTP ${request.status}`));
         };
         request.onerror = () => reject(new Error("Could not persist board action"));
-        request.send(JSON.stringify(payload));
+        request.send(JSON.stringify(requestPayload));
       });
     }
 
@@ -1003,14 +1623,27 @@
       sourceNameEl.textContent = `Source: ${sourceLabel}`;
 
       boardEl.classList.toggle("is-done-focus", doneFocusOpen);
-      boardEl.innerHTML = columns.map(([key, label]) => {
-        const tasks = columnTasks(normalized.columns[key], key);
-        return laneMarkup(key, label, tasks, {
-          extraActions: key === "done" ? doneFocusButton() : ""
-        });
-      }).join("");
+      if (doneFocusOpen) {
+        const foldedLanes = columns
+          .filter(([key]) => key !== "done")
+          .map(([key, label]) => laneMarkup(key, label, columnTasks(normalized.columns[key], key)))
+          .join("");
+        const doneTasks = columnTasks(normalized.columns.done, "done");
+        boardEl.innerHTML = `
+          <div class="folded-stack" aria-label="Folded task columns">${foldedLanes}</div>
+          ${laneMarkup("done", "Done", doneTasks, { extraActions: doneFocusButton() })}
+        `;
+      } else {
+        boardEl.innerHTML = columns.map(([key, label]) => {
+          const tasks = columnTasks(normalized.columns[key], key);
+          return laneMarkup(key, label, tasks, {
+            extraActions: key === "done" ? doneFocusButton() : ""
+          });
+        }).join("");
+      }
 
       const archivedTasks = columnTasks(normalized.columns.archived, "archived");
+      renderWorkflowPanel(normalized);
       archiveEl.classList.toggle("is-open", archiveTrayOpen);
       archiveEl.innerHTML = `
         <button class="archive-tab" type="button" data-archive-toggle aria-expanded="${archiveTrayOpen ? "true" : "false"}" aria-controls="archived-panel">
@@ -1031,6 +1664,15 @@
         archiveTrayOpen = forceOpen;
       } else {
         archiveTrayOpen = !archiveTrayOpen;
+      }
+      renderBoard(currentBoard, currentSourceLabel);
+    }
+
+    function toggleWorkflowPanel(forceOpen) {
+      if (typeof forceOpen === "boolean") {
+        workflowPanelOpen = forceOpen;
+      } else {
+        workflowPanelOpen = !workflowPanelOpen;
       }
       renderBoard(currentBoard, currentSourceLabel);
     }
@@ -1104,6 +1746,19 @@
       }
 
       returnTaskToReview(taskId, feedback);
+    });
+
+    workflowEl.addEventListener("click", (event) => {
+      const workflowToggleButton = event.target.closest("[data-workflow-toggle]");
+      if (workflowToggleButton) {
+        toggleWorkflowPanel();
+        return;
+      }
+
+      const workflowCloseButton = event.target.closest("[data-workflow-close]");
+      if (workflowCloseButton) {
+        toggleWorkflowPanel(false);
+      }
     });
 
     archiveEl.addEventListener("click", (event) => {

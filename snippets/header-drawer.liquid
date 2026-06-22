@@ -103,11 +103,18 @@
             {% assign animation_index = 0 %}
             {%- for link in linklist.links -%}
               {% assign animation_index = animation_index | plus: 1 %}
+              {% liquid
+                assign link_title_downcase = link.title | downcase
+                assign is_barista_bot_link = false
+                if link.handle == 'barista-bot' or link_title_downcase == 'barista bot'
+                  assign is_barista_bot_link = true
+                endif
+              %}
               <li
                 style="--menu-drawer-animation-index: {{ animation_index }};"
                 class="{%- if block_settings.drawer_accordion -%}menu-drawer__list-item--deep{%- else -%}menu-drawer__list-item--flat{%- endif -%}{% if block_settings.drawer_dividers %} menu-drawer__list-item--divider{% endif %}"
               >
-                {% if block_settings.drawer_accordion and link.links != blank %}
+                {% if block_settings.drawer_accordion and link.links != blank and is_barista_bot_link == false %}
                   {%- comment -%}
                     Accordion for links with children, in menus with fewer than 3 levels of links
                   {%- endcomment -%}
@@ -178,7 +185,7 @@
                     children: accordion_children,
                     open_by_default_on_mobile: should_open_first
                   %}
-                {% elsif block_settings.drawer_accordion == false and link.links != blank %}
+                {% elsif block_settings.drawer_accordion == false and link.links != blank and is_barista_bot_link == false %}
                   {%- comment -%}
                     Flat menus for links with children, in menus with fewer than 3 levels of links
                   {%- endcomment -%}
@@ -256,11 +263,18 @@
             {% assign animation_index = 0 %}
             {%- for link in linklist.links -%}
               {% assign animation_index = animation_index | plus: 1 %}
+              {% liquid
+                assign link_title_downcase = link.title | downcase
+                assign is_barista_bot_link = false
+                if link.handle == 'barista-bot' or link_title_downcase == 'barista bot'
+                  assign is_barista_bot_link = true
+                endif
+              %}
               <li
                 class="menu-drawer__list-item"
                 style="--menu-drawer-animation-index: {{ animation_index }};"
               >
-                {%- if link.links != blank -%}
+                {%- if link.links != blank and is_barista_bot_link == false -%}
                   {%- comment -%}
                     Regardless of the Accordion setting, in menus with 3 levels of links, we use a details element to handle the top level of the menu for links that have children.
                   {%- endcomment -%}
@@ -1413,4 +1427,133 @@
   .drawer-localization .language-selector .svg-wrapper.icon-caret svg {
     transform: none;
   }
+@media screen and (max-width: 989px) {
+  .menu-drawer-container .header__icon--summary {
+    min-width: 38px;
+    min-height: 38px;
+    padding: 0;
+    border: 1px solid rgba(213, 226, 224, 0.2);
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--artly-header-ink, #f4f8f7);
+    box-shadow: none;
+  }
+
+  .menu-drawer-container .header__icon--summary .svg-wrapper,
+  .menu-drawer-container .header__icon--summary svg {
+    color: currentColor;
+    stroke: currentColor;
+  }
+
+  .menu-drawer-container .header__icon--summary:is(:hover, :focus-visible) {
+    border-color: rgba(213, 226, 224, 0.32);
+    background: rgba(255, 255, 255, 0.1);
+    outline: 2px solid var(--artly-header-accent, #42b6b2);
+    outline-offset: 2px;
+  }
+
+  .menu-drawer,
+  .menu-drawer__submenu {
+    border-right: 1px solid rgba(213, 226, 224, 0.2) !important;
+    background:
+      linear-gradient(180deg, rgba(18, 25, 28, 0.98), rgba(10, 15, 17, 0.98)),
+      repeating-linear-gradient(90deg, rgba(213, 226, 224, 0.05) 0 1px, transparent 1px 72px) !important;
+    color: var(--artly-header-ink, #f4f8f7) !important;
+    box-shadow: 0 22px 64px rgba(0, 0, 0, 0.34) !important;
+  }
+
+  .menu-drawer {
+    --artly-drawer-gutter-fix: calc(max(16px, env(safe-area-inset-left)) + 1px);
+    box-sizing: border-box;
+    inset-inline-start: calc(-1 * var(--artly-drawer-gutter-fix)) !important;
+    left: calc(-1 * var(--artly-drawer-gutter-fix)) !important;
+    width: min(390px, 100vw);
+    max-width: 100vw;
+  }
+
+  .menu-drawer__navigation-container {
+    padding-top: 72px;
+  }
+
+  .menu-drawer__menu {
+    padding-inline: 14px;
+  }
+
+  .menu-drawer__menu > .menu-drawer__list-item {
+    min-height: 48px;
+  }
+
+  .menu-drawer__menu-item {
+    border-radius: 5px;
+    padding: 10px 12px;
+    color: var(--artly-header-muted, #b7c4c2) !important;
+  }
+
+  .menu-drawer__menu-item--mainlist {
+    min-height: 46px;
+    color: var(--artly-header-ink, #f4f8f7) !important;
+    font-weight: 760;
+    letter-spacing: 0.01em;
+  }
+
+  .menu-drawer__menu-item--parent {
+    color: var(--artly-header-ink, #f4f8f7) !important;
+  }
+
+  .menu-drawer__menu-item--child {
+    color: var(--artly-header-muted, #b7c4c2) !important;
+  }
+
+  .menu-drawer__menu-item:is(:hover, :focus-visible),
+  .menu-drawer__menu-item--active {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--artly-header-ink, #f4f8f7) !important;
+    box-shadow: inset 3px 0 0 var(--artly-header-accent, #42b6b2);
+    outline: none;
+  }
+
+  .menu-drawer__close-button,
+  .menu-drawer__back-button {
+    border: 1px solid rgba(213, 226, 224, 0.18) !important;
+    border-radius: 5px !important;
+    background: rgba(255, 255, 255, 0.06) !important;
+    color: var(--artly-header-ink, #f4f8f7) !important;
+  }
+
+  .menu-drawer__close-button:is(:hover, :focus-visible),
+  .menu-drawer__back-button:is(:hover, :focus-visible) {
+    border-color: rgba(213, 226, 224, 0.32) !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+    outline: 2px solid var(--artly-header-accent, #42b6b2);
+    outline-offset: 2px;
+  }
+
+  .menu-drawer__nav-buttons {
+    gap: 8px;
+    padding: 10px 12px;
+  }
+
+  .menu-drawer__backdrop {
+    --artly-drawer-gutter-fix: calc(max(16px, env(safe-area-inset-left)) + 1px);
+    box-sizing: border-box;
+    inset-inline-start: calc(-1 * var(--artly-drawer-gutter-fix)) !important;
+    left: calc(-1 * var(--artly-drawer-gutter-fix)) !important;
+    width: min(390px, 100vw) !important;
+    max-width: 100vw;
+    background: rgba(0, 0, 0, 0.42);
+    backdrop-filter: blur(4px) brightness(0.72);
+  }
+
+  body:has(.menu-drawer-container.menu-open) .artly-ai__demo-modal[hidden] {
+    display: none !important;
+  }
+
+  body:has(.menu-drawer-container.menu-open) .floating-contact {
+    display: none;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
 {% endstylesheet %}

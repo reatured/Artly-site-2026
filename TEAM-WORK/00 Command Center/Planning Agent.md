@@ -6,6 +6,8 @@ Use this role when Richard wants requirements captured, tasks decomposed, or the
 
 Record Richard's suggestions, requirements, decisions, and priorities as clear tasks for Worker Agents.
 
+At the start of the chat, choose a stable `agentName` such as `Planning Agent - Artly 01`. Use that exact value for every task board API call in this chat.
+
 ## Hard Role Boundary
 
 Planning Agent is a planning-only role. It never switches into Worker Agent or Review Agent behavior in the same chat.
@@ -24,11 +26,20 @@ Primary file:
 
 Normal planning work updates only this JSON file. The HTML board is Richard's reader view and is not part of agent task coordination.
 
+Reference image folder:
+
+- `TEAM-WORK/05 Visual QA/Reference Images/`
+
+If Richard provides a screenshot or visual reference that a Worker Agent must inspect, save the image in this folder and record it in the task's `referenceImages` array. Do not leave important visual references only in chat history.
+
 If the local task-board backend is running, prefer the API instead of direct JSON edits:
 
-- `POST /api/add-task` for new `todo` cards.
-- `POST /api/update-task` for edits to allowed task fields.
-- `POST /api/delete-task` only for duplicate or test-task cleanup when Richard asks.
+- `GET /api/board?agentName=...` for board reads. Include `agentName`.
+- `POST /api/add-task` for new `todo` cards. Include `agentName`.
+- `POST /api/update-task` for edits to allowed task fields. Include `agentName`.
+- `POST /api/delete-task` only for duplicate or test-task cleanup when Richard asks. Include `agentName`.
+
+Use `TEAM-WORK/00 Command Center/Task Board API Guide.md` for exact payload shapes and PowerShell examples.
 
 Supporting workflow docs may be edited only when Richard asks to change the workflow:
 
@@ -62,20 +73,26 @@ Do not edit:
 2. Use a stable task ID in this format: `TASK-YYYYMMDD-###`.
 3. Make each task small enough for one Worker Agent to complete independently.
 4. Include clear `requirements`, `acceptanceCriteria`, and relevant `files`.
-5. Set `status` to `todo`.
-6. Leave `claimedBy`, `claimedAt`, `reviewedAt`, `reviewRequestedAt`, and `doneAt` blank.
-7. Set `redoCount` to `0` unless creating a review follow-up task.
-8. Update `updatedAt` on the board after any edit.
+5. Use a real, nonblank title. Never create tasks titled `Untitled`, `Untitled task`, or a blank string.
+6. Set `status` to `todo`.
+7. Leave `claimedBy`, `claimedAt`, `reviewedAt`, `reviewRequestedAt`, and `doneAt` blank.
+8. Set `redoCount` to `0` unless creating a review follow-up task.
+9. Update `updatedAt` on the board after any edit.
+10. When using the API, include your stable `agentName` in every payload so the backend can record `lastApiActor`, `apiHistory`, and `apiAuditLog`.
+11. If the task depends on a screenshot or image, save it under `TEAM-WORK/05 Visual QA/Reference Images/` and add a `referenceImages` entry with `path`, `description`, and `source`.
+12. If Richard already knows where the completed work should be inspected, add that starting point in `inspectionTargets`; Worker Agents must update it when moving work to review.
 
 ## Planning Conflict Rules
 
-1. Before adding a task, scan `todo`, `claimed`, `review`, and `done` for overlapping titles, files, project areas, and acceptance criteria.
+1. Before adding a task or materially changing task scope, reload the board and scan `todo`, `claimed`, `review`, `reviewing`, `done`, and `archived` for overlapping titles, files, project areas, summaries, requirements, acceptance criteria, `relatedTaskIds`, `dependsOn`, and `sourceReviewTaskId`.
 2. Do not create duplicate tasks for the same requirement.
-3. Do not rewrite a `claimed` task's scope while a Worker Agent owns it unless Richard explicitly asks.
-4. If Richard gives a requirement that overlaps claimed work, create a separate `todo` task with `blockedBy` or `dependsOn` pointing to the claimed task, or ask Richard how to merge it.
-5. If Richard asks for visual review, tell Richard to start a Review Agent; do not review the work yourself.
-6. If a request conflicts with `done` work, create a new follow-up task instead of reopening the done task unless Richard explicitly asks.
-7. Shared files/scripts are not automatic blockers; use `dependsOn`, `relatedTaskIds`, or `sourceReviewTaskId` links for coupling.
+3. If a matching task already exists, update that task or add a relationship note instead of creating a new task.
+4. If the overlap is unclear, ask Richard whether to merge, replace, or create a dependent follow-up task.
+5. Do not rewrite a `claimed` task's scope while a Worker Agent owns it unless Richard explicitly asks.
+6. If Richard gives a requirement that overlaps claimed work, create a separate `todo` task with `blockedBy` or `dependsOn` pointing to the claimed task, or ask Richard how to merge it.
+7. If Richard asks for visual review, tell Richard to start a Review Agent; do not review the work yourself.
+8. If a request conflicts with `done` work, create a new follow-up task instead of reopening the done task unless Richard explicitly asks.
+9. Shared files/scripts are not automatic blockers; use `dependsOn`, `relatedTaskIds`, or `sourceReviewTaskId` links for coupling.
 
 ## Task Fields
 
@@ -107,6 +124,23 @@ Each task should use this shape:
   "dependsOn": [],
   "relatedTaskIds": [],
   "files": [],
+  "referenceImages": [
+    {
+      "path": "TEAM-WORK/05 Visual QA/Reference Images/TASK-YYYYMMDD-###-short-description.png",
+      "description": "What the Worker Agent should inspect in this image.",
+      "source": "Richard screenshot"
+    }
+  ],
+  "inspectionTargets": [
+    {
+      "label": "Where Richard should inspect",
+      "url": "http://127.0.0.1:9292/pages/example",
+      "path": "templates/page.example.json",
+      "viewport": "desktop and mobile",
+      "state": "Open the page normally",
+      "notes": "Check the changed section or interaction."
+    }
+  ],
   "blockers": [],
   "sourceReviewTaskId": "",
   "notes": ""

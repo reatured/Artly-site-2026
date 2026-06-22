@@ -5,6 +5,10 @@
 {% elsif template.name == 'page.artly-ai' %}
   {% assign is_artly_ai_page = true %}
 {% endif %}
+{% assign trusted_by_section_width = section.settings.section_width %}
+{% if is_artly_ai_page %}
+  {% assign trusted_by_section_width = 'full-width' %}
+{% endif %}
 {% assign strip_alignment = 'flex-start' %}
 {% case section.settings.alignment %}
   {% when 'center' %}
@@ -16,13 +20,13 @@
 <section
   class="
     section
-    section--{{ section.settings.section_width }}
+    section--{{ trusted_by_section_width }}
     spacing-style
     color-{{ section.settings.color_scheme }}
     trusted-by-logo-strip
     trusted-by-logo-strip--{{ section.settings.strip_mode }}
     trusted-by-logo-strip--{{ section.settings.alignment }}
-    {% if is_artly_ai_page %}trusted-by-logo-strip--artly-ai{% endif %}
+    {% if is_artly_ai_page %}artly-system artly-ai-l1 trusted-by-logo-strip--artly-ai{% endif %}
   "
   style="
     {%- render 'spacing-style', settings: section.settings -%}
@@ -33,7 +37,7 @@
   {{ section.shopify_attributes }}
 >
   {% if is_artly_ai_page %}
-    <div class="artly-ai__rail">
+    <div class="artly-ai__rail trusted-by-logo-strip__rail">
   {% endif %}
 
   {% if section.settings.show_heading and section.settings.heading != blank %}
@@ -69,7 +73,9 @@
 .trusted-by-logo-strip > .artly-ai__rail {
   display: grid;
   gap: var(--trusted-by-logo-gap);
+  box-sizing: border-box;
   width: 100%;
+  min-width: 0;
 }
 
 .trusted-by-logo-strip--artly-ai {
@@ -84,6 +90,10 @@
 }
 
 .trusted-by-logo-strip--artly-ai > .artly-ai__rail {
+  width: var(--artly-ai-rail, var(--artly-rail-width, min(1180px, calc(100% - 32px))));
+  max-width: var(--artly-ai-rail, var(--artly-rail-width, min(1180px, calc(100% - 32px))));
+  margin-inline: auto;
+  justify-self: center;
   gap: clamp(22px, 3vw, 34px);
   padding: clamp(22px, 3vw, 34px);
   background: rgba(255, 255, 255, 0.72);

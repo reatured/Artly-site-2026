@@ -1,17 +1,7 @@
 (function () {
   const viewTransitionRenderBlocker = document.getElementById('view-transition-render-blocker');
-  // Remove the view transition render blocker if the user has reduced motion enabled or is on a low power device.
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || isLowPowerDevice()) {
-    viewTransitionRenderBlocker?.remove();
-  } else {
-    // If the browser didn't manage to parse the main content quickly, at least let the user see something.
-    // We're aiming for the FCP to be under 1.8 seconds since the navigation started.
-    const RENDER_BLOCKER_TIMEOUT_MS = Math.max(0, 1800 - performance.now());
-
-    setTimeout(() => {
-      viewTransitionRenderBlocker?.remove();
-    }, RENDER_BLOCKER_TIMEOUT_MS);
-  }
+  // Do not hold ordinary navigation rendering behind view-transition consistency work.
+  viewTransitionRenderBlocker?.remove();
 
   const idleCallback = typeof requestIdleCallback === 'function' ? requestIdleCallback : setTimeout;
 
@@ -34,17 +24,18 @@
       );
     });
 
-    // Clean in case you landed on the pdp first. We want to remove the default transition type on the PDP media gallery so there is no duplicate transition name
-    document
-      .querySelectorAll('[data-view-transition-type]:not([data-view-transition-triggered])')
-      .forEach((element) => {
-        element.removeAttribute('data-view-transition-type');
-      });
-
     const transitionTriggered = document.querySelector('[data-view-transition-triggered]');
     const transitionType = transitionTriggered?.getAttribute('data-view-transition-type');
 
     if (transitionType) {
+      idleCallback(() => {
+        document
+          .querySelectorAll('[data-view-transition-type]:not([data-view-transition-triggered])')
+          .forEach((element) => {
+            element.removeAttribute('data-view-transition-type');
+          });
+      });
+
       viewTransition.types.clear();
       viewTransition.types.add(transitionType);
       sessionStorage.setItem('custom-transition-type', transitionType);
@@ -69,17 +60,19 @@
       viewTransition.types.clear();
       viewTransition.types.add(customTransitionType);
 
-      await viewTransition.finished;
+      viewTransition.finished
+        .catch(() => {})
+        .finally(() => {
+          viewTransition.types.clear();
+          viewTransition.types.add('page-navigation');
 
-      viewTransition.types.clear();
-      viewTransition.types.add('page-navigation');
-
-      idleCallback(() => {
-        sessionStorage.removeItem('custom-transition-type');
-        document.querySelectorAll('[data-view-transition-type]').forEach((element) => {
-          element.removeAttribute('data-view-transition-type');
+          idleCallback(() => {
+            sessionStorage.removeItem('custom-transition-type');
+            document.querySelectorAll('[data-view-transition-type]').forEach((element) => {
+              element.removeAttribute('data-view-transition-type');
+            });
+          });
         });
-      });
     } else {
       viewTransition.types.clear();
       viewTransition.types.add('page-navigation');

@@ -68,6 +68,18 @@
     assign class = class | append: ' ' | append: collapse_header_paddings_class
   endif
 
+  assign is_artly_ai_page = false
+
+  if template.suffix == 'artly-ai'
+    assign is_artly_ai_page = true
+  elsif template.name == 'page.artly-ai'
+    assign is_artly_ai_page = true
+  endif
+
+  if is_artly_ai_page
+    assign class = class | append: ' artly-site-header--artly-ai'
+  endif
+
   # Determine transparent background value
   assign top_transparent = false
 
@@ -207,18 +219,19 @@
   style="
     --color-scheme-top-row: rgba({{ section.settings.color_scheme_top.settings.background.rgba }});
     --color-scheme-bottom-row: rgba({{ section.settings.color_scheme_top.settings.background.rgba }});
-    --artly-header-ink: {{ section.settings.color_scheme_top.settings.foreground }};
-    --artly-header-muted: {{ section.settings.color_scheme_top.settings.foreground | color_modify: 'alpha', 0.6 }};
-    --artly-header-line: {{ section.settings.color_scheme_top.settings.border | default: section.settings.color_scheme_top.settings.foreground | color_modify: 'alpha', 0.18 }};
-    --artly-header-glass: {{ section.settings.color_scheme_top.settings.background | color_modify: 'alpha', 0.72 }};
-    --artly-header-shell: {{ section.settings.color_scheme_top.settings.background | color_modify: 'alpha', 0.78 }};
-    --artly-header-hover-bg: {{ section.settings.color_scheme_top.settings.background | color_modify: 'alpha', 0.88 }};
-    --artly-header-hover-border: {{ section.settings.color_scheme_top.settings.foreground | color_modify: 'alpha', 0.3 }};
-    --artly-header-surface: {{ section.settings.color_scheme_top.settings.foreground | color_modify: 'alpha', 0.08 }};
-    --artly-header-shadow: {{ section.settings.color_scheme_top.settings.foreground | color_modify: 'alpha', 0.12 }};
-    --artly-header-shimmer: {{ section.settings.color_scheme_top.settings.background | color_modify: 'alpha', 0.65 }};
-    --artly-header-stripe: {{ section.settings.color_scheme_top.settings.foreground | color_modify: 'alpha', 0.1 }};
-    --artly-header-base: {{ section.settings.color_scheme_top.settings.background | color_modify: 'alpha', 0.55 }};
+    --artly-header-ink: #f4f8f7;
+    --artly-header-muted: #b7c4c2;
+    --artly-header-line: rgba(213, 226, 224, 0.22);
+    --artly-header-glass: transparent;
+    --artly-header-shell: rgba(17, 23, 25, 0.94);
+    --artly-header-hover-bg: rgba(255, 255, 255, 0.08);
+    --artly-header-hover-border: rgba(213, 226, 224, 0.28);
+    --artly-header-surface: rgba(255, 255, 255, 0.055);
+    --artly-header-shadow: rgba(2, 7, 9, 0.18);
+    --artly-header-shimmer: rgba(213, 226, 224, 0.08);
+    --artly-header-stripe: rgba(213, 226, 224, 0.06);
+    --artly-header-base: rgba(17, 23, 25, 0.94);
+    --artly-header-accent: #42b6b2;
   "
 >
   {%- if request.page_type == 'index' -%}

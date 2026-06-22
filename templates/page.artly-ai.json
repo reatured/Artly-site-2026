@@ -222,17 +222,17 @@
       "type": "trusted-by-logo-strip",
       "name": "Trusted By",
       "settings": {
-        "show_heading": true,
-        "heading": "Trusted By",
-        "alignment": "center",
-        "strip_mode": "static",
-        "logo_height": 32,
-        "logo_gap": 22,
-        "open_in_new_tab": false,
-        "section_width": "page-width",
-        "color_scheme": "scheme-1",
-        "padding-block-start": 36,
-        "padding-block-end": 36
+      "show_heading": true,
+      "heading": "Trusted By",
+      "alignment": "center",
+      "strip_mode": "static",
+      "logo_height": 32,
+      "logo_gap": 22,
+      "open_in_new_tab": false,
+      "section_width": "full-width",
+      "color_scheme": "scheme-1",
+      "padding-block-start": 36,
+      "padding-block-end": 36
       },
       "blocks": {
         "logo-alexandria": {

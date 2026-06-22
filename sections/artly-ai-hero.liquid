@@ -52,6 +52,11 @@
               class="artly-button artly-button--secondary"
               type="button"
               data-artly-ai-contact-trigger="true"
+              data-artly-ai-contact-intent="Contact follow-up"
+              data-artly-ai-contact-title="Talk with the Artly AI team"
+              data-artly-ai-contact-description="Tell us about your operation, target task, and deployment goals. Our team will follow up with the right next step."
+              data-artly-ai-contact-submit="Send request"
+              data-artly-ai-contact-body="Contact follow-up request from the Artly AI page."
               aria-expanded="false"
               aria-controls="artly-ai-contact-modal"
             >
@@ -63,6 +68,11 @@
               class="artly-button artly-button--primary"
               type="button"
               data-artly-ai-contact-trigger="true"
+              data-artly-ai-contact-intent="Demo request"
+              data-artly-ai-contact-title="Book an Artly AI demo"
+              data-artly-ai-contact-description="Share what you want to automate and we will coordinate a focused demo around your workflow."
+              data-artly-ai-contact-submit="Request demo"
+              data-artly-ai-contact-body="Demo request from the Artly AI page."
               aria-expanded="false"
               aria-controls="artly-ai-contact-modal"
             >
@@ -101,7 +111,7 @@
         <div>
           <h2 id="ArtlyAiContactModalTitle" class="artly-ai__demo-title">Contact the Artly Team</h2>
           <p id="ArtlyAiContactModalDescription" class="artly-ai__demo-description">
-            Join the Artly AI updates list and our team will follow up with relevant deployment information.
+            Tell us about your operation, target task, and deployment goals. Our team will follow up with the right next step.
           </p>
         </div>
         <button
@@ -114,8 +124,10 @@
         </button>
       </div>
 
-      {%- form 'customer', id: artly_ai_contact_form_id, return_to: artly_ai_contact_return_to -%}
-        <input type="hidden" name="contact[tags]" value="newsletter,artly-ai-contact">
+      {%- form 'contact', id: artly_ai_contact_form_id, return_to: artly_ai_contact_return_to -%}
+        <input type="hidden" name="contact[tags]" value="artly-ai-contact">
+        <input type="hidden" name="contact[request_type]" value="Contact follow-up" data-artly-ai-contact-intent-field>
+        <input type="hidden" name="contact[body]" value="Contact follow-up request from the Artly AI page." data-artly-ai-contact-body-field>
 
         {% if form.errors and form.id == artly_ai_contact_form_id %}
           <div class="artly-ai__demo-message artly-ai__demo-message--error" role="alert">
@@ -123,7 +135,7 @@
           </div>
         {% elsif form.posted_successfully? and form.id == artly_ai_contact_form_id %}
           <div class="artly-ai__demo-message artly-ai__demo-message--success" role="status">
-            Thanks for subscribing. We'll send Artly AI updates and follow up with relevant deployment information.
+            Thanks. The Artly AI team will follow up about your request.
           </div>
         {% endif %}
 
@@ -133,9 +145,9 @@
             id="ArtlyAiContactName-{{ section.id }}"
             class="artly-ai__demo-input"
             type="text"
-            name="contact[first_name]"
+            name="contact[name]"
             autocomplete="name"
-            value="{% if customer %}{{ customer.first_name }}{% endif %}"
+            value="{% if form.name %}{{ form.name | escape }}{% elsif customer %}{{ customer.name | escape }}{% endif %}"
             required
           >
         </div>
@@ -159,8 +171,8 @@
           >
         </div>
 
-        <button class="artly-button artly-button--primary artly-ai__demo-submit" type="submit">
-          Join updates
+        <button class="artly-button artly-button--primary artly-ai__demo-submit" type="submit" data-artly-ai-contact-submit-button>
+          Send request
         </button>
       {%- endform -%}
     </div>
@@ -177,6 +189,11 @@
   const modalPanel = modal.querySelector('.artly-ai__demo-panel-wrap');
   const dialogPanel = modal.querySelector('.artly-ai__demo-panel');
   const closeButton = modal.querySelector('.artly-ai__demo-close');
+  const titleElement = modal.querySelector('#ArtlyAiContactModalTitle');
+  const descriptionElement = modal.querySelector('#ArtlyAiContactModalDescription');
+  const submitButton = modal.querySelector('[data-artly-ai-contact-submit-button]');
+  const intentField = modal.querySelector('[data-artly-ai-contact-intent-field]');
+  const bodyField = modal.querySelector('[data-artly-ai-contact-body-field]');
 
   const triggerSelector = '[data-artly-ai-contact-trigger]';
   const closeTargets = Array.from(modal.querySelectorAll('[data-artly-ai-contact-close]'));
@@ -189,6 +206,13 @@
     '[tabindex]:not([tabindex="-1"])'
   ].join(',');
   let lastTrigger = null;
+  const defaultModalContent = {
+    title: titleElement ? titleElement.textContent : '',
+    description: descriptionElement ? descriptionElement.textContent.trim() : '',
+    submit: submitButton ? submitButton.textContent.trim() : '',
+    intent: intentField ? intentField.value : '',
+    body: bodyField ? bodyField.value : ''
+  };
 
   function getTriggers() {
     return Array.from(document.querySelectorAll(triggerSelector));
@@ -203,6 +227,22 @@
     const preferredElements = Array.from(modal.querySelectorAll('.artly-ai__demo-input, .artly-ai__demo-textarea, .artly-ai__demo-close'))
       .filter((element) => element.offsetParent !== null && element.tabIndex >= 0);
     return preferredElements[0] || closeButton || dialogPanel || modal;
+  }
+
+  function setModalContent(trigger) {
+    const content = {
+      title: trigger && trigger.dataset.artlyAiContactTitle ? trigger.dataset.artlyAiContactTitle : defaultModalContent.title,
+      description: trigger && trigger.dataset.artlyAiContactDescription ? trigger.dataset.artlyAiContactDescription : defaultModalContent.description,
+      submit: trigger && trigger.dataset.artlyAiContactSubmit ? trigger.dataset.artlyAiContactSubmit : defaultModalContent.submit,
+      intent: trigger && trigger.dataset.artlyAiContactIntent ? trigger.dataset.artlyAiContactIntent : defaultModalContent.intent,
+      body: trigger && trigger.dataset.artlyAiContactBody ? trigger.dataset.artlyAiContactBody : defaultModalContent.body
+    };
+
+    if (titleElement) titleElement.textContent = content.title;
+    if (descriptionElement) descriptionElement.textContent = content.description;
+    if (submitButton) submitButton.textContent = content.submit;
+    if (intentField) intentField.value = content.intent;
+    if (bodyField) bodyField.value = content.body;
   }
 
   function focusInitialElement(attempt) {
@@ -240,6 +280,7 @@
     const formMessage = modal.querySelector('.artly-ai__demo-message');
     if (open) {
       lastTrigger = trigger;
+      setModalContent(trigger);
       if (modalPanel) {
         modalPanel.scrollTop = 0;
       }
@@ -256,6 +297,7 @@
     }
 
     modal.classList.remove('is-open');
+    setModalContent(null);
     modal.setAttribute('aria-hidden', 'true');
     setHiddenState(false);
     document.body.classList.remove('artly-ai-modal-open');

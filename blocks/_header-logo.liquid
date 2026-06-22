@@ -8,6 +8,10 @@
     assign use_inverse_logo = true
   elsif section.settings.enable_transparent_header_collection and template.name == 'collection' and section.settings.collection_color_scheme == 'inverse'
     assign use_inverse_logo = true
+  elsif template.name == 'index' and settings.logo_inverse != blank
+    assign use_inverse_logo = true
+  elsif template.name == 'page' and template.suffix == 'artly-ai' and settings.logo_inverse != blank
+    assign use_inverse_logo = true
   endif
 
   if use_inverse_logo
