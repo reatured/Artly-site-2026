@@ -65,11 +65,11 @@
               "settings": {
                 "unit": "pixel",
                 "percent_width": 100,
-                "pixel_height": 24,
-                "custom_mobile_size": false,
-                "unit_mobile": "percent",
+                "pixel_height": 80,
+                "custom_mobile_size": true,
+                "unit_mobile": "pixel",
                 "percent_width_mobile": 100,
-                "pixel_height_mobile": 120
+                "pixel_height_mobile": 72
               }
             },
             "text_newsletter_heading": {
