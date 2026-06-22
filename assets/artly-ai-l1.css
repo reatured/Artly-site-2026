@@ -2410,14 +2410,15 @@ html:has(.artly-ai-l1) {
   }
 }
 
-/* TASK-20260618-047: keep the Artly AI desktop hero title on one line at normal desktop widths. */
+/* TASK-20260622-008: keep the desktop hero title contained, wrapping when needed. */
 @media screen and (min-width: 1100px) {
   .artly-ai-l1 .artly-ai__hero-heading {
-    max-width: none !important;
-    font-size: clamp(3rem, 4.05vw, 4.45rem) !important;
-    line-height: 0.96 !important;
-    letter-spacing: -0.045em !important;
-    white-space: nowrap;
+    max-width: min(100%, 18.5ch) !important;
+    font-size: clamp(3rem, 3.6vw, 4.25rem) !important;
+    line-height: 1.02 !important;
+    white-space: normal !important;
+    text-wrap: balance;
+    overflow-wrap: normal;
   }
 }
 
@@ -2425,7 +2426,9 @@ html:has(.artly-ai-l1) {
   .artly-ai-l1 .artly-ai__hero-heading {
     font-size: clamp(2.72rem, 4.8vw, 3.35rem) !important;
     line-height: 0.98 !important;
-    letter-spacing: -0.04em !important;
+    max-width: 100% !important;
+    white-space: normal !important;
+    text-wrap: balance;
   }
 }
 
@@ -2531,7 +2534,12 @@ html:has(.artly-ai-l1) {
 
 /* TASK-20260618-053: Trusted By logo strip top/bottom rhythm. */
 .trusted-by-logo-strip--artly-ai {
+  display: block;
   padding-block: clamp(34px, 5vw, 64px) !important;
+}
+
+.trusted-by-logo-strip-section .trusted-by-logo-strip--artly-ai {
+  display: block !important;
 }
 
 .trusted-by-logo-strip--artly-ai > .artly-ai__rail {
@@ -2545,7 +2553,7 @@ html:has(.artly-ai-l1) {
   max-width: var(--artly-ai-rail, var(--artly-rail-width, min(1180px, calc(100% - 32px)))) !important;
   min-width: 0;
   margin-inline: auto !important;
-  justify-self: center;
+  justify-self: auto;
 }
 
 @media screen and (max-width: 749px) {
@@ -2607,6 +2615,24 @@ html:has(.artly-ai-l1) {
 .artly-ai-l1 {
   --artly-ai-page-section-y: clamp(42px, 5vw, 72px);
   --artly-ai-panel-section-y: clamp(40px, 4.5vw, 64px);
+}
+
+/* TASK-20260622-009: restore the approved Artly AI page pattern behind split sections. */
+body:has(.artly-ai-l1) {
+  background-color: #e9eef2;
+}
+
+.content-for-layout:has(.artly-ai-l1) {
+  background:
+    radial-gradient(circle at 84% 4%, rgba(8, 125, 150, 0.1), transparent 28%),
+    radial-gradient(circle at 12% 18%, rgba(139, 215, 232, 0.16), transparent 24%),
+    linear-gradient(180deg, rgba(248, 251, 252, 0.82), rgba(232, 239, 244, 0.94)),
+    repeating-linear-gradient(90deg, rgba(53, 73, 91, 0.055) 0 1px, transparent 1px 96px),
+    repeating-linear-gradient(180deg, rgba(53, 73, 91, 0.042) 0 1px, transparent 1px 96px) !important;
+}
+
+.content-for-layout > .shopify-section:has(.artly-ai-l1) > .section-background {
+  background: transparent !important;
 }
 
 .artly-ai-l1:not(.artly-ai-l1-hero),
@@ -2708,5 +2734,35 @@ html:has(.artly-ai-l1) {
 @media screen and (max-width: 989px) {
   .artly-ai-l1-hero .artly-ai__hero-cta {
     grid-template-columns: 1fr !important;
+  }
+}
+
+.artly-site-header--artly-ai {
+  --artly-header-pill-radius: 14px;
+}
+
+.artly-site-header--artly-ai .header-menu .menu-list__link {
+  font-weight: 600 !important;
+}
+
+.artly-site-header--artly-ai .header-menu .menu-list__link {
+  font-size: 0.95rem !important;
+  font-weight: 600 !important;
+}
+
+@media screen and (max-width: 749px) {
+  .artly-site-header--artly-ai .header__row--top {
+    padding-block: 8px !important;
+  }
+
+  .artly-site-header--artly-ai .header__row--top .header__columns {
+    min-height: 76px !important;
+    padding: 7px 10px !important;
+    border-radius: 8px !important;
+  }
+
+  .artly-site-header--artly-ai .header-logo {
+    width: 160px !important;
+    padding: 4px 8px !important;
   }
 }

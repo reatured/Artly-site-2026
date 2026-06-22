@@ -219,19 +219,35 @@
   style="
     --color-scheme-top-row: rgba({{ section.settings.color_scheme_top.settings.background.rgba }});
     --color-scheme-bottom-row: rgba({{ section.settings.color_scheme_top.settings.background.rgba }});
-    --artly-header-ink: #f4f8f7;
-    --artly-header-muted: #b7c4c2;
-    --artly-header-line: rgba(213, 226, 224, 0.22);
-    --artly-header-glass: transparent;
-    --artly-header-shell: rgba(17, 23, 25, 0.94);
-    --artly-header-hover-bg: rgba(255, 255, 255, 0.08);
-    --artly-header-hover-border: rgba(213, 226, 224, 0.28);
-    --artly-header-surface: rgba(255, 255, 255, 0.055);
-    --artly-header-shadow: rgba(2, 7, 9, 0.18);
-    --artly-header-shimmer: rgba(213, 226, 224, 0.08);
-    --artly-header-stripe: rgba(213, 226, 224, 0.06);
-    --artly-header-base: rgba(17, 23, 25, 0.94);
-    --artly-header-accent: #42b6b2;
+    {% if is_artly_ai_page %}
+      --artly-header-ink: #f4f8f7;
+      --artly-header-muted: #b7c4c2;
+      --artly-header-line: rgba(213, 226, 224, 0.22);
+      --artly-header-glass: transparent;
+      --artly-header-shell: rgba(17, 23, 25, 0.94);
+      --artly-header-hover-bg: rgba(255, 255, 255, 0.08);
+      --artly-header-hover-border: rgba(213, 226, 224, 0.28);
+      --artly-header-surface: rgba(255, 255, 255, 0.055);
+      --artly-header-shadow: rgba(2, 7, 9, 0.18);
+      --artly-header-shimmer: rgba(213, 226, 224, 0.08);
+      --artly-header-stripe: rgba(213, 226, 224, 0.06);
+      --artly-header-base: rgba(17, 23, 25, 0.94);
+      --artly-header-accent: #42b6b2;
+    {% else %}
+      --artly-header-ink: #202427;
+      --artly-header-muted: #5d6063;
+      --artly-header-line: rgba(32, 36, 39, 0.18);
+      --artly-header-glass: rgba(255, 255, 255, 0.72);
+      --artly-header-shell: rgba(232, 228, 218, 0.78);
+      --artly-header-hover-bg: rgba(255, 255, 255, 0.88);
+      --artly-header-hover-border: rgba(32, 36, 39, 0.3);
+      --artly-header-surface: rgba(32, 36, 39, 0.08);
+      --artly-header-shadow: rgba(26, 31, 34, 0.12);
+      --artly-header-shimmer: rgba(224, 219, 207, 0.65);
+      --artly-header-stripe: rgba(32, 36, 39, 0.1);
+      --artly-header-base: rgba(245, 242, 234, 0.55);
+      --artly-header-accent: #2d7775;
+    {% endif %}
   "
 >
   {%- if request.page_type == 'index' -%}

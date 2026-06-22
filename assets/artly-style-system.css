@@ -1563,3 +1563,35 @@ footer .footer-content--has-intro img.logo-block__image {
 .artly-site-header--artly-ai .header-logo:not(:has(.header-logo__image-container--inverse)) .header-logo__image {
   filter: brightness(0) invert(1) contrast(1.08) !important;
 }
+
+.artly-site-header--artly-ai .header__row--top {
+  padding-block: 10px !important;
+}
+
+.artly-site-header--artly-ai .header__row--top .header__columns {
+  min-height: 62px !important;
+  padding: 10px 32px !important;
+  border-radius: 18px !important;
+}
+
+.artly-site-header--artly-ai .header-logo {
+  height: var(--artly-header-pill-height) !important;
+  min-height: var(--artly-header-pill-height) !important;
+  max-height: var(--artly-header-pill-height) !important;
+  padding: 4px 18px !important;
+  border-radius: var(--artly-header-pill-radius) !important;
+}
+
+.artly-site-header--artly-ai .header-menu .menu-list__link {
+  height: var(--artly-header-pill-height) !important;
+  min-height: var(--artly-header-pill-height) !important;
+  max-height: var(--artly-header-pill-height) !important;
+  padding: 4px 18px !important;
+  border-radius: var(--artly-header-pill-radius) !important;
+}
+
+@media screen and (max-width: 749px) {
+  .artly-site-header--artly-ai .header__row--top .header__columns {
+    min-height: 62px !important;
+  }
+}

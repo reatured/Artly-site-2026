@@ -1,15 +1,30 @@
 # Artly Agent Instructions
 
-The active workflow is a simple JSON-backed task board with three separate agent roles.
+The active workflow is a simple JSON-backed task board with five separate agent roles. Current Site Audit Agent and Reference Research Agent create handoffs, Planning Agent turns selected handoffs and requirements into tasks, Worker Agents implement tasks, and Review Agents visually review completed work.
 
 ## Start Here
 
 - Workflow overview: `TEAM-WORK/00 Command Center/Simple Agent Workflow.md`
+- Current Site Audit Agent role: `TEAM-WORK/00 Command Center/Current Site Audit Agent.md`
+- Reference Research Agent role: `TEAM-WORK/00 Command Center/Reference Research Agent.md`
 - Planning Agent role: `TEAM-WORK/00 Command Center/Planning Agent.md`
 - Worker Agent role: `TEAM-WORK/00 Command Center/Worker Agent.md`
 - Review Agent role: `TEAM-WORK/00 Command Center/Review Agent.md`
+- Research handoff folder: `TEAM-WORK/07 Research Handoffs/`
 - Task board API guide: `TEAM-WORK/00 Command Center/Task Board API Guide.md`
 - Task board source of truth: `TEAM-WORK/02 Task Boards/task-board.json`
+
+## Agent Start Phrases
+
+Use these phrases at the start of a new chat to load the intended role:
+
+| Start phrase | Role file |
+| --- | --- |
+| `load as current site audit agent` | `TEAM-WORK/00 Command Center/Current Site Audit Agent.md` |
+| `load as research agent` | `TEAM-WORK/00 Command Center/Reference Research Agent.md` |
+| `load as planning agent` | `TEAM-WORK/00 Command Center/Planning Agent.md` |
+| `load as worker agent` | `TEAM-WORK/00 Command Center/Worker Agent.md` |
+| `load as review agent` | `TEAM-WORK/00 Command Center/Review Agent.md` |
 
 Backend start command (Windows PowerShell):
 
@@ -64,6 +79,10 @@ The HTML board at `TEAM-WORK/02 Task Boards/task-board.html` is for Richard to r
 
 ## Roles
 
+Use the Current Site Audit Agent role when Richard wants the current website or a specific page/flow inspected for design, UX, content, interaction, animation, and conversion opportunities. It writes a handoff file only.
+
+Use the Reference Research Agent role when Richard gives a market/category and wants an agent to research 30 to 50 external company websites, select the strongest references, summarize design and motion patterns, and write a handoff file.
+
 Use the Planning Agent role when Richard wants requirements captured, task cards created, priorities changed, or the board organized.
 
 Use the Worker Agent role when Richard wants implementation, code edits, QA, cleanup, or any task execution.
@@ -72,7 +91,13 @@ Use the Review Agent role when Richard wants completed work in `review` visually
 
 ## Hard Role Separation
 
-Planning Agent, Worker Agent, and Review Agent are separate agents. Agents do not switch roles inside the same chat.
+Current Site Audit Agent, Reference Research Agent, Planning Agent, Worker Agent, and Review Agent are separate agents. Agents do not switch roles inside the same chat.
+
+A Current Site Audit Agent never switches into Planning Agent, Worker Agent, or Review Agent behavior. It writes current-site audit handoff files in `TEAM-WORK/07 Research Handoffs/` only, with optional screenshots linked from `TEAM-WORK/05 Visual QA/Reference Images/`.
+
+A Reference Research Agent never switches into Planning Agent, Worker Agent, or Review Agent behavior. It researches external websites in Richard's assigned category and writes reference handoff files in `TEAM-WORK/07 Research Handoffs/` only, with optional screenshots linked from `TEAM-WORK/05 Visual QA/Reference Images/`.
+
+Current Site Audit Agent and Reference Research Agent must not create or update task-board tickets, claim tasks, move task statuses, review tasks, edit product code, or call task-board mutation APIs. Their output is a handoff for Planning Agent.
 
 A Planning Agent never switches into Worker Agent or Review Agent behavior. If Richard gives implementation or review requests to a Planning Agent, the Planning Agent records task requirements in `task-board.json` only and stops after reporting the board update.
 
@@ -86,7 +111,9 @@ A Review Agent may update only `TEAM-WORK/02 Task Boards/task-board.json`, plus 
 
 The Planning Agent records requirements and updates tasks. It may edit `task-board.json` and workflow planning docs when asked. It does not write product code and does not review completed work.
 
-Before creating any new task or materially changing task scope, the Planning Agent must reload the board and check all columns for duplicate or overlapping work, including `todo`, `claimed`, `review`, `reviewing`, `done`, and `archived`. If a matching task already exists, update or reference the existing task instead of creating a duplicate; if the overlap is unclear, ask Richard whether to merge, replace, or create a dependent follow-up.
+When Richard gives the Planning Agent one or more handoff files from `TEAM-WORK/07 Research Handoffs/`, the Planning Agent reads the handoff, compares it against the current site and existing task board, checks every column for duplicate or overlapping work, and creates or updates only the useful actionable `todo` tasks. It should record the handoff path in `sourceHandoffs` or task notes.
+
+Before creating any new task or materially changing task scope, the Planning Agent must reload the board and check all columns for duplicate or overlapping work, including `todo`, `claimed`, `review`, `reviewing`, `done`, and `archived`. Check title, scope, files, acceptance criteria, `relatedTaskIds`, `dependsOn`, `sourceHandoffs`, and `sourceReviewTaskId`. If a matching task already exists, update or reference the existing task instead of creating a duplicate; if the overlap is unclear, ask Richard whether to merge, replace, or create a dependent follow-up.
 
 If the local task-board backend is running, Planning Agents should create and edit cards through `/api/add-task` and `/api/update-task`, always including their `agentName`. Use `/api/delete-task` only to remove duplicate or test tasks when Richard asks for cleanup. If the backend is not running, update `task-board.json` directly using the same planning rules.
 
@@ -142,6 +169,6 @@ Before claiming work, Worker Agents should block only when a `claimed` task has:
 
 Shared files/scripts between tasks do not block by themselves. Same-file work may proceed in parallel when scopes are distinct or when either task explicitly records `relatedTaskIds`, `dependsOn`, or `sourceReviewTaskId` to show ownership intent.
 
-Planning Agent and Review Agent must avoid creating duplicate or conflicting `todo` tasks. Before either role creates a task, it must check all board columns for existing matching work by title, scope, files, acceptance criteria, `relatedTaskIds`, `dependsOn`, and `sourceReviewTaskId`. If Richard gives a requirement that overlaps claimed work, the Planning Agent records it as a separate blocked/dependent `todo` task or asks Richard how to merge it; it must not rewrite a claimed task's scope unless Richard explicitly asks. If Review Agent feedback overlaps an existing follow-up, the Review Agent updates that follow-up instead of creating another task.
+Planning Agent and Review Agent must avoid creating duplicate or conflicting `todo` tasks. Before either role creates a task, it must check all board columns for existing matching work by title, scope, files, acceptance criteria, `relatedTaskIds`, `dependsOn`, `sourceHandoffs`, and `sourceReviewTaskId`. If Richard gives a requirement that overlaps claimed work, the Planning Agent records it as a separate blocked/dependent `todo` task or asks Richard how to merge it; it must not rewrite a claimed task's scope unless Richard explicitly asks. If Review Agent feedback overlaps an existing follow-up, the Review Agent updates that follow-up instead of creating another task.
 
 Tasks in `review` or `done` are closed to Worker Agents unless Richard explicitly reopens or assigns follow-up work.
