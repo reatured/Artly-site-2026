@@ -22,6 +22,35 @@
   </div>
 </div>
 
+<style>
+  footer #shopify-section-{{ section.id }} .footer-content--has-intro .logo-block {
+    --artly-footer-logo-width: clamp(118px, 34vw, 164px);
+    --logo-width: var(--artly-footer-logo-width) !important;
+    --logo-width-mobile: var(--artly-footer-logo-width) !important;
+
+    width: var(--artly-footer-logo-width) !important;
+    max-width: 100% !important;
+    flex: 0 0 auto;
+  }
+
+  footer #shopify-section-{{ section.id }} .footer-content--has-intro .logo-block__image-wrapper,
+  footer #shopify-section-{{ section.id }} .footer-content--has-intro img.logo-block__image {
+    width: var(--artly-footer-logo-width) !important;
+    max-width: 100% !important;
+  }
+
+  footer #shopify-section-{{ section.id }} .footer-content--has-intro img.logo-block__image {
+    display: block;
+    height: auto !important;
+  }
+
+  @media screen and (min-width: 990px) {
+    footer #shopify-section-{{ section.id }} .footer-content--has-intro .logo-block {
+      --artly-footer-logo-width: clamp(132px, 12vw, 184px);
+    }
+  }
+</style>
+
 {% stylesheet %}
   .footer-content {
     display: grid;

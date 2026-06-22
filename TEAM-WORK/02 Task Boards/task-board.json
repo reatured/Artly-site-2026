@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0",
   "boardName": "Artly Agent Task Board",
-  "updatedAt": "2026-06-22T10:18:58-07:00",
+  "updatedAt": "2026-06-22T10:22:52-07:00",
   "workflowDocs": {
     "overview": "../00 Command Center/Simple Agent Workflow.md",
     "planningAgent": "../00 Command Center/Planning Agent.md",
@@ -62,7 +62,86 @@
     "closedWorkRule": "Review and done tasks are not broad locks for Worker task claims. Shared files/scripts alone are not blockers. Same-file work may proceed when scope is distinct or when planned coupling is recorded via relatedTaskIds/dependsOn/sourceReviewTaskId."
   },
   "columns": {
-    "todo": [],
+    "todo": [
+      {
+        "id": "TASK-20260622-006",
+        "title": "Normalize Trusted By vertical spacing to Artly AI section rhythm",
+        "project": "Artly AI page",
+        "priority": "high",
+        "type": "design-fix",
+        "status": "todo",
+        "requestedBy": "Richard",
+        "createdBy": "Planning Codex",
+        "createdAt": "2026-06-22T10:22:52-07:00",
+        "agentName": "Planning Codex",
+        "claimedBy": "",
+        "claimedAt": "",
+        "reviewClaimedBy": "",
+        "reviewClaimedAt": "",
+        "reviewRequestedAt": "",
+        "doneAt": "",
+        "reviewedBy": "",
+        "reviewedAt": "",
+        "redoCount": 0,
+        "summary": "Visual spacing audit found Trusted By is the only current Artly AI section spacing outlier: adjacent visual gaps are half the standard page rhythm on both desktop and mobile.",
+        "requirements": [
+          "Use the visual audit measurements as the baseline: desktop standard visual section gap is about 128px between major visible panels, with hero to overview at about 120px; mobile standard is about 60px.",
+          "Fix Trusted By so the Case story to Trusted By and Trusted By to Meet the Team transitions match the selected standard: about 128px desktop and 60px mobile.",
+          "Investigate the Trusted By spacing code path in sections/trusted-by-logo-strip.liquid and assets/artly-ai-l1.css, especially .trusted-by-logo-strip--artly-ai and its late overrides around the TASK-20260618-053/TASK-20260622-004 CSS blocks.",
+          "Trusted By currently follows a separate trusted-by-logo-strip spacing/width system instead of the normal Artly AI .artly-ai__section rhythm; align the vertical rhythm while preserving the width fix work from the related Trusted By rail ticket.",
+          "Do not change logo count, logo assets, heading copy, or the Trusted By proof styling except as needed for vertical spacing consistency.",
+          "Preserve desktop and mobile wrapping with no horizontal overflow."
+        ],
+        "acceptanceCriteria": [
+          "Desktop visual validation at roughly 1280px shows Case story to Trusted By and Trusted By to Meet the Team gaps matching the surrounding Artly AI section rhythm, approximately 128px each.",
+          "Mobile visual validation at roughly 390px shows Case story to Trusted By and Trusted By to Meet the Team gaps matching the surrounding rhythm, approximately 60px each.",
+          "Review Agent must visually validate the whole Artly AI page after the fix and confirm the measured spacing list no longer has Trusted By as a half-spacing outlier.",
+          "Trusted By width/rail alignment remains consistent with adjacent sections and does not regress TASK-20260622-004.",
+          "No other section spacing is changed unless required to keep the chosen page-wide standard consistent."
+        ],
+        "dependsOn": [],
+        "relatedTaskIds": [
+          "TASK-20260622-004"
+        ],
+        "files": [
+          "sections/trusted-by-logo-strip.liquid",
+          "assets/artly-ai-l1.css",
+          "assets/artly-style-system.css",
+          "templates/page.artly-ai.json"
+        ],
+        "referenceImages": [
+          {
+            "path": "TEAM-WORK/05 Visual QA/Reference Images/artly-ai-spacing-audit-desktop-1280.png",
+            "description": "Desktop full-page spacing audit screenshot used to compare visible gaps between Artly AI sections.",
+            "source": "Planning Agent visual audit"
+          },
+          {
+            "path": "TEAM-WORK/05 Visual QA/Reference Images/artly-ai-spacing-audit-mobile-390.png",
+            "description": "Mobile full-page spacing audit screenshot used to compare visible gaps between Artly AI sections.",
+            "source": "Planning Agent visual audit"
+          },
+          {
+            "path": "TEAM-WORK/05 Visual QA/Reference Images/artly-ai-spacing-audit-measurements.json",
+            "description": "Measured desktop/mobile visual gaps: standard desktop 128px, standard mobile 60px, Trusted By outlier 64px/30px.",
+            "source": "Planning Agent visual audit"
+          }
+        ],
+        "inspectionTargets": [],
+        "blockers": [],
+        "sourceReviewTaskId": "",
+        "notes": "Planning audit result on 2026-06-22: measured visible section gaps. Desktop: hero->overview 120, overview->Advantage 128, Advantage->How 128, How->Case 128, Case->Trusted 64, Trusted->Team 64, Team->Press 128, Press->FAQ 128, FAQ->Believe 128. Mobile: 60,60,60,60,30,30,60,60,60. Decision: use 128px desktop / 60px mobile as standard; Trusted By is the only spacing ticket needed from this audit.",
+        "lastApiAction": "add-task",
+        "lastApiActor": "Planning Codex",
+        "lastApiAt": "2026-06-22T10:22:52-07:00",
+        "apiHistory": [
+          {
+            "action": "add-task",
+            "agentName": "Planning Codex",
+            "at": "2026-06-22T10:22:52-07:00"
+          }
+        ]
+      }
+    ],
     "claimed": [
       {
         "id": "TASK-20260622-003",
@@ -10185,12 +10264,6 @@
   },
   "apiAuditLog": [
     {
-      "action": "approve-review",
-      "agentName": "Review Agent - Artly 02",
-      "taskId": "TASK-20260618-056",
-      "at": "2026-06-18T15:01:56-07:00"
-    },
-    {
       "action": "claim-review",
       "agentName": "Review Agent - Artly 02",
       "taskId": "TASK-20260618-057",
@@ -11383,6 +11456,12 @@
       "agentName": "Avery - Review Agent",
       "taskId": "TASK-20260618-015",
       "at": "2026-06-22T10:18:58-07:00"
+    },
+    {
+      "action": "add-task",
+      "agentName": "Planning Codex",
+      "taskId": "TASK-20260622-006",
+      "at": "2026-06-22T10:22:52-07:00"
     }
   ]
 }
