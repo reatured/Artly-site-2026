@@ -16,7 +16,11 @@
     {% if section.blocks.size > 0 %}
       <div class="artly-ai__press-grid">
         {% for block in section.blocks %}
-          <article class="artly-ai__press-card" {{ block.shopify_attributes }}>
+          {% assign press_card_state_class = 'artly-ai__press-card--text-only' %}
+          {% if block.settings.card_image != blank %}
+            {% assign press_card_state_class = 'artly-ai__press-card--has-image' %}
+          {% endif %}
+          <article class="artly-ai__press-card {{ press_card_state_class }}" {{ block.shopify_attributes }}>
             {% if block.settings.card_image != blank %}
               {% assign press_image_alt = block.settings.card_image_alt_text | default: block.settings.heading %}
               <div class="artly-ai__press-media">

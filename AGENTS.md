@@ -13,6 +13,7 @@ The active workflow is a simple JSON-backed task board with five separate agent 
 - Research handoff folder: `TEAM-WORK/07 Research Handoffs/`
 - Task board API guide: `TEAM-WORK/00 Command Center/Task Board API Guide.md`
 - Task board source of truth: `TEAM-WORK/02 Task Boards/task-board.json`
+- Task board dispatch settings: `TEAM-WORK/02 Task Boards/agent-dispatch-settings.json`
 
 ## Agent Start Phrases
 
@@ -50,10 +51,26 @@ Tail the API log:
 Get-Content ".\TEAM-WORK\02 Task Boards\task-board-api.log" -Tail 50 -Wait
 ```
 
+Tail the desktop viewer log:
+
+```powershell
+Get-Content ".\TEAM-WORK\02 Task Boards\task-board-viewer.log" -Tail 50 -Wait
+```
+
+Tail spawned non-interactive agent output:
+
+```powershell
+Get-Content ".\TEAM-WORK\02 Task Boards\spawned-agent-logs\*.log" -Tail 50 -Wait
+```
+
 When `TEAM-WORK/02 Task Boards/task-board-server.py` is running, use its task board API instead of manually editing or moving tasks in JSON:
 
 - `GET /api/board`
-- `GET /api/task?taskId=TASK-YYYYMMDD-###`
+- `GET /api/worker-board`
+- `GET /api/review-board`
+- `GET /api/task-detail?taskId=TASK-YYYYMMDD-###`
+- `GET /api/task?taskId=TASK-YYYYMMDD-###` legacy alias for task detail
+- `GET /api/duplicate-scan`
 - `GET /api/agents`
 - `POST /api/register-agent`
 - `POST /api/heartbeat-agent`
@@ -61,6 +78,7 @@ When `TEAM-WORK/02 Task Boards/task-board-server.py` is running, use its task bo
 - `POST /api/add-task`
 - `POST /api/update-task`
 - `POST /api/claim-task`
+- `POST /api/unclaim-task`
 - `POST /api/move-to-review`
 - `POST /api/claim-review`
 - `POST /api/approve-review`
@@ -71,9 +89,15 @@ When `TEAM-WORK/02 Task Boards/task-board-server.py` is running, use its task bo
 
 For payload shapes, examples, and error handling, read `TEAM-WORK/00 Command Center/Task Board API Guide.md`.
 
-Every agent must choose a stable `agentName` at the start of its chat and include that exact `agentName` in every task board API payload. Use a name that identifies the role and thread, for example `Planning Agent - Artly 01`, `Worker Agent - Artly 02`, or `Review Agent - Artly 03`. The backend records the name in `lastApiActor`, `apiHistory`, and `apiAuditLog`.
+Every agent must register at the start of its chat by calling `POST /api/register-agent` with `personalName`, `model` (`claude` or `codex`), and `role`. The server returns an `agentId` (for example `agt_a1b2c3`). Use that `agentId` in every later task board API payload. `personalName` is a short lowercase token like `alex`, `kai`, `north`; the Spawn button on the task board picks one for you from `TEAM-WORK/02 Task Boards/agent-color-schema.json#personalNamePool`, or use the name Richard gives you. The backend records the resolved display name in `lastApiActor`, `apiHistory`, and `apiAuditLog`, and the HTML board renders each agent as a chip with the model determining its background color and the role determining its border color.
 
-The backend also appends every API request, including `GET` reads, to `TEAM-WORK/02 Task Boards/task-board-api.log` as JSON Lines with timestamp, method, endpoint, task ID, agent name, status, and error details. This log is audit history only; agents still coordinate through `task-board.json`.
+The backend appends agent API requests under `/api/...`, including `GET` reads, to `TEAM-WORK/02 Task Boards/task-board-api.log` as JSON Lines with timestamp, method, endpoint, task ID, agent name, status, and error details. The desktop HTML viewer uses separate `/viewer/...` endpoints and writes to `TEAM-WORK/02 Task Boards/task-board-viewer.log`, so viewer polling does not mix with agent activity. These logs are audit history only; agents still coordinate through `task-board.json`.
+
+`GET /api/worker-board` and `GET /api/review-board` are compact queue views. They return only the role's active columns as task summaries and intentionally omit `done`, `archived`, the top-level `tasks` index, `apiAuditLog`, and workflow policy text. After choosing or claiming a task from a compact queue, use `GET /api/task-detail?taskId=...&agentId=...` to load full details for that single task. Use `GET /api/duplicate-scan?taskId=...&agentId=...&includeArchived=true` for targeted duplicate checks instead of loading the whole board.
+
+The desktop viewer Spawn buttons start Worker and Review agents as hidden non-interactive CLI processes, not new terminal tabs. Spawned output is written under `TEAM-WORK/02 Task Boards/spawned-agent-logs/`; the spawn response reports the process ID and log path.
+
+The desktop viewer can also auto-dispatch Worker and Review agents. Each role has a selected model (`codex` or `claude`), a maximum active agent count, and an Auto toggle stored in `TEAM-WORK/02 Task Boards/agent-dispatch-settings.json`. When Auto is on, the backend checks the board periodically: if `todo` has work and active/pending Worker agents are below the Worker max, it spawns a hidden Worker agent; if `review` has work and active/pending Review agents are below the Review max, it spawns a hidden Review agent.
 
 Worker Agents and Review Agents must register active presence with `/api/register-agent` at chat start, heartbeat with `/api/heartbeat-agent` after claiming or moving a task, and deregister with `/api/unregister-agent` before ending for any reason. The board viewer uses `/api/agents` to show active Worker Agents in the To Do header and active Review Agents in the Review header.
 
@@ -125,9 +149,9 @@ If the local task-board backend is running, Planning Agents should create and ed
 
 ## Worker Agent Rule
 
-A Worker Agent must read `task-board.json`, claim one `todo` task by moving it to `claimed`, complete only that task, then move it to `review`. A Worker Agent never moves its own task to `done`.
+A Worker Agent must read the worker board view (`todo` and `claimed` only), claim one `todo` task by moving it to `claimed`, complete only that task, then move it to `review`. A Worker Agent never moves its own task to `done`.
 
-If the local task-board backend is running, Worker Agents should claim and move tasks through `/api/claim-task` and `/api/move-to-review`, always including their `agentName`, so the transition is atomic. If the backend is not running, update `task-board.json` directly using the same status rules.
+If the local task-board backend is running, Worker Agents should read compact summaries through `/api/worker-board`, then claim and move tasks through `/api/claim-task` and `/api/move-to-review`, always including their `agentId`, so the transition is atomic. After claiming, they must load full details for only that task through `/api/task-detail?taskId=...&agentId=...`. If the backend is not running, update `task-board.json` directly using the same status rules while reading only `columns.todo` and `columns.claimed` unless Richard explicitly asks for broader context.
 
 After moving a task to `review`, a Worker Agent must reload `task-board.json` and check the current `todo` list again. If another safe unclaimed task exists and Richard has not asked the agent to stop, the Worker Agent should claim the next task and continue; otherwise it reports that the list is clear or no safe task is available.
 
@@ -139,10 +163,10 @@ When the backend is running, Worker Agents must register with `role: "worker"` b
 
 ## Review Agent Rule
 
-A Review Agent must read `task-board.json`, claim only a task currently in `columns.review` by moving it to `columns.reviewing`, use the browser to answer Richard's specific review question, then move it to `done` as approved or close it into `done` as replaced by a follow-up `todo` task.
+A Review Agent must read the review board view (`review` and `reviewing` only), claim only a task currently in `columns.review` by moving it to `columns.reviewing`, use the browser to answer Richard's specific review question, then move it to `done` as approved or close it into `done` as replaced by a follow-up `todo` task.
 A Review Agent never implements fixes or plans unrelated work.
 
-If the local task-board backend is running, Review Agents should use `/api/claim-review`, `/api/approve-review`, and `/api/request-changes`, always including their `agentName`, so review ownership and follow-up creation are atomic. If the backend is not running, update `task-board.json` directly using the same status rules.
+If the local task-board backend is running, Review Agents should read compact summaries through `/api/review-board`, then use `/api/claim-review`, `/api/approve-review`, and `/api/request-changes`, always including their `agentId`, so review ownership and follow-up creation are atomic. After claiming, they must load full details for only that task through `/api/task-detail?taskId=...&agentId=...`. If the backend is not running, update `task-board.json` directly using the same status rules while reading only `columns.review` and `columns.reviewing` unless a targeted duplicate scan is required.
 
 If a reviewed task contains `richardFeedback`, `returnedToReviewAt`, or notes beginning with `Richard feedback for re-review`, the Review Agent must treat that feedback as Richard's active review question. Use it when deciding whether to create or update follow-up `todo` tasks for Worker Agents.
 
@@ -150,7 +174,7 @@ If a reviewed task includes `inspectionTargets`, the Review Agent should use tho
 
 A task already in `columns.reviewing` is claimed by another Review Agent. Do not claim it, review it, move it, or duplicate its review work unless Richard explicitly reassigns it.
 
-Before creating any follow-up `todo` task, the Review Agent must reload the board and check all columns for an existing duplicate or matching follow-up, especially tasks with the same `sourceReviewTaskId`, overlapping title, overlapping files, or matching acceptance criteria. If a matching follow-up already exists, update that task and increment its redo context instead of creating a duplicate. When the Review Agent creates or updates a follow-up for failed work, it must add `replacedByTaskId` or `latestFollowUpTaskId` context to the failed original task, append a note saying which task replaces it, and close the failed original task at the top of `columns.done`.
+Before creating any follow-up `todo` task, the Review Agent must use `/api/duplicate-scan?taskId=...&agentId=...&includeArchived=true` when the backend is running, or otherwise reload the board directly, to check all columns for an existing duplicate or matching follow-up, especially tasks with the same `sourceReviewTaskId`, overlapping title, overlapping files, or matching acceptance criteria. If a matching follow-up already exists, update that task and increment its redo context instead of creating a duplicate. When the Review Agent creates or updates a follow-up for failed work, it must add `failureExpected`, `failureActual`, and `failureDecision` to the failed original task so the Done card starts with what should be true, what actually happened, and why the review failed. It must also add `replacedByTaskId` or `latestFollowUpTaskId` context to the failed original task, append a note saying which task replaces it, and close the failed original task at the top of `columns.done`.
 
 After finishing a review decision, a Review Agent must reload `task-board.json` and check the current `review` list again. If another unclaimed review task exists and Richard has not asked the agent to stop, the Review Agent should claim the next task into `columns.reviewing` and continue; otherwise it reports that the review list is clear.
 
@@ -168,6 +192,8 @@ When the backend is running, Review Agents must register with `role: "review"` b
 - `archived`: completed work hidden from the main board.
 
 The HTML board keeps those six columns in JSON for coordination but displays the main interface as three visual columns: To Do combines `claimed` above `todo`, Review combines `reviewing` above `review`, and Done shows `done`. Claimed and Reviewing cards are highlighted inside those combined columns.
+
+Richard can use the HTML board's expanded claimed-card `Unclaim task` button when a Worker Agent was killed or abandoned the task. This calls `/viewer/unclaim-task`, moves the task from `claimed` back to the top of `todo`, clears `claimedBy` and `claimedAt`, and clears matching active worker presence for that task.
 
 ## Conflict Rule
 

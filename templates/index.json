@@ -19,7 +19,7 @@
         "primary_cta_link": "shopify://pages/contact",
         "primary_cta_open_in_new_tab": false,
         "secondary_cta_label": "Explore the Platform",
-        "secondary_cta_link": "shopify://pages/platform",
+        "secondary_cta_link": "shopify://pages/artly-ai",
         "secondary_cta_open_in_new_tab": false,
         "media_panel_label": "Artly robotic coffee workcell visualization",
         "media_type": "image",
@@ -83,7 +83,7 @@
         "primary_cta_open_in_new_tab": false,
         "primary_cta_style": "button",
         "secondary_cta_label": "Learn More",
-        "secondary_cta_link": "shopify://pages/platform",
+        "secondary_cta_link": "shopify://pages/artly-ai",
         "secondary_cta_open_in_new_tab": false,
         "secondary_cta_style": "link",
         "media_type": "video",
@@ -479,7 +479,7 @@
             "heading": "Artly AI",
             "body": "The AI platform built on expert input and real-world data. With over 1.2 million actions collected from the field, our models are built to thrive in real environments.",
             "link_label": "Learn More",
-            "link_url": "/pages/platform",
+            "link_url": "/pages/artly-ai",
             "open_in_new_tab": false
           },
           "blocks": {}
@@ -503,8 +503,8 @@
             "heading": "Invest",
             "body": "The defining company in robotics won't just build hardware — it will own the intelligence layer. If that's a thesis you believe in, we'd love to connect.",
             "link_label": "Learn More",
-            "link_url": "/pages/investors",
-            "open_in_new_tab": false
+            "link_url": "https://www.startengine.com/offering/artly",
+            "open_in_new_tab": true
           },
           "blocks": {}
         }

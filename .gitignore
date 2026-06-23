@@ -14,6 +14,10 @@ Thumbs.db
 
 /docs
 
+# Local scratch artifacts.
+.tmp/*
+!.tmp/review-page-check.json
+
 *.md
 *.html
 

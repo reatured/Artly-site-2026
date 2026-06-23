@@ -146,7 +146,7 @@
           "type": "text",
           "name": "Company",
           "settings": {
-            "text": "<h3>Company</h3>\n<ul>\n  <li><a href=\"/pages/platform\">About us</a></li>\n  <li><a href=\"/pages/investors\">Investors</a></li>\n  <li><a href=\"/contact\">Contact us</a></li>\n</ul>",
+            "text": "<h3>Company</h3>\n<ul>\n  <li><a href=\"/pages/artly-ai\">About us</a></li>\n  <li><a href=\"https://www.startengine.com/offering/artly\" target=\"_blank\" rel=\"noopener\">Investors</a></li>\n  <li><a href=\"/contact\">Contact us</a></li>\n</ul>",
             "width": "100%",
             "max_width": "normal",
             "alignment": "left",
@@ -171,7 +171,7 @@
           "type": "text",
           "name": "Solutions",
           "settings": {
-            "text": "<h3>Solutions</h3>\n<ul>\n  <li><a href=\"/pages/barista-bot\">Barista Bot</a></li>\n  <li><a href=\"/pages/platform\">Platform</a></li>\n  <li><a href=\"/collections/all\">Automation Solutions</a></li>\n</ul>",
+            "text": "<h3>Solutions</h3>\n<ul>\n  <li><a href=\"/pages/barista-bot\">Barista Bot</a></li>\n  <li><a href=\"/pages/artly-ai\">Platform</a></li>\n  <li><a href=\"/collections/all\">Automation Solutions</a></li>\n</ul>",
             "width": "100%",
             "max_width": "normal",
             "alignment": "left",

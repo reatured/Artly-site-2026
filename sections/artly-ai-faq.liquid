@@ -11,6 +11,9 @@
       {% if section.settings.faq_heading != blank %}
         <h2 id="ArtlyAiFaqTitle-{{ section.id }}">{{ section.settings.faq_heading | escape }}</h2>
       {% endif %}
+      {% if section.settings.faq_intro != blank %}
+        <div class="artly-ai__faq-intro rte">{{ section.settings.faq_intro }}</div>
+      {% endif %}
     </div>
 
     {% if section.blocks.size > 0 %}
@@ -45,6 +48,12 @@
       "id": "faq_heading",
       "label": "Heading",
       "default": "Frequently Asked Questions"
+    },
+    {
+      "type": "richtext",
+      "id": "faq_intro",
+      "label": "Intro text",
+      "default": "<p>Answers to common questions about training, deployment, and where Artly AI fits best.</p>"
     },
     {
       "type": "color_scheme",

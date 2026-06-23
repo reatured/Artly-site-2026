@@ -1140,11 +1140,55 @@ body.artly-ai-modal-open {
   margin-inline: auto;
 }
 
+.artly-ai__faq .artly-ai__section-intro {
+  gap: 14px;
+  padding-block-end: 4px;
+}
+
+.artly-ai__faq .artly-ai__section-intro::after {
+  content: "";
+  display: block;
+  width: 76px;
+  height: 2px;
+  margin-block-start: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, var(--artly-ai-accent), transparent);
+}
+
+.artly-ai__faq-intro {
+  max-width: 640px;
+}
+
+.artly-ai__faq-intro.rte {
+  color: var(--artly-steel);
+  font-size: 0.98rem;
+  line-height: 1.55;
+}
+
 .artly-ai__faq-item {
+  position: relative;
   border: var(--artly-ai-card-border);
   border-radius: var(--artly-ai-radius-lg);
   background: rgba(255, 255, 255, 0.88);
   box-shadow: 0 8px 24px rgba(16, 27, 39, 0.05);
+}
+
+.artly-ai__faq-item[open]::before {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: 3px;
+  border-start-start-radius: inherit;
+  border-end-start-radius: inherit;
+  background: var(--artly-ai-accent);
+  pointer-events: none;
+}
+
+.artly-ai__faq-item > summary,
+.artly-ai__faq-item > .rte {
+  position: relative;
+  z-index: 1;
 }
 
 .artly-ai__faq-item summary {
@@ -1174,7 +1218,7 @@ body.artly-ai-modal-open {
 }
 
 .artly-ai__faq-item[open] summary {
-  box-shadow: inset 3px 0 0 var(--artly-ai-accent);
+  box-shadow: none;
 }
 
 .artly-ai__faq-item summary::-webkit-details-marker {
@@ -1183,14 +1227,47 @@ body.artly-ai-modal-open {
 
 .artly-ai__faq-item summary .artly-ai__faq-toggle {
   display: inline-flex;
-  flex: 0 0 18px;
+  position: relative;
+  flex: 0 0 24px;
   align-items: center;
   justify-content: center;
-  width: 18px;
-  height: 18px;
+  width: 24px;
+  height: 24px;
   margin-inline-start: auto;
-  transition: transform 160ms ease;
-  transform: rotate(0deg);
+  border: 1px solid rgba(8, 125, 150, 0.22);
+  border-radius: 999px;
+  color: transparent;
+  background: rgba(255, 255, 255, 0.78);
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.artly-ai__faq-item summary .artly-ai__faq-toggle::before,
+.artly-ai__faq-item summary .artly-ai__faq-toggle::after {
+  content: "";
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  width: 10px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--artly-ai-accent-strong);
+  transform: translate(-50%, -50%);
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease,
+    background-color 160ms ease;
+}
+
+.artly-ai__faq-item summary .artly-ai__faq-toggle::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.artly-ai__faq-item:hover summary .artly-ai__faq-toggle {
+  border-color: rgba(8, 125, 150, 0.4);
+  box-shadow: 0 6px 14px rgba(8, 125, 150, 0.12);
 }
 
 .artly-ai__faq-item summary .artly-ai__faq-question {
@@ -1200,7 +1277,19 @@ body.artly-ai-modal-open {
 }
 
 .artly-ai__faq-item[open] summary .artly-ai__faq-toggle {
-  transform: rotate(90deg);
+  border-color: var(--artly-ai-accent);
+  background: var(--artly-ai-accent);
+  box-shadow: 0 8px 18px rgba(8, 125, 150, 0.18);
+}
+
+.artly-ai__faq-item[open] summary .artly-ai__faq-toggle::before,
+.artly-ai__faq-item[open] summary .artly-ai__faq-toggle::after {
+  background: #ffffff;
+}
+
+.artly-ai__faq-item[open] summary .artly-ai__faq-toggle::after {
+  opacity: 0;
+  transform: translate(-50%, -50%) rotate(0deg);
 }
 
 .artly-ai__faq-item .rte {
@@ -1536,7 +1625,9 @@ body.artly-ai-modal-open {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .artly-ai__faq-item summary span:last-child {
+  .artly-ai__faq-item summary .artly-ai__faq-toggle,
+  .artly-ai__faq-item summary .artly-ai__faq-toggle::before,
+  .artly-ai__faq-item summary .artly-ai__faq-toggle::after {
     transition: none;
   }
 }
@@ -2560,9 +2651,92 @@ html:has(.artly-ai-l1) {
   margin-block-end: 0 !important;
 }
 
+/* TASK-20260622-022: Editorial press cards for image and text-only states. */
+.artly-ai-l1 .artly-ai__press-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: clamp(18px, 2.4vw, 24px) !important;
+  align-items: stretch;
+}
+
+.artly-ai-l1 .artly-ai__press-card {
+  position: relative;
+  isolation: isolate;
+  display: flex !important;
+  flex-direction: column;
+  min-height: clamp(218px, 20vw, 268px) !important;
+  overflow: hidden;
+  padding: clamp(18px, 2.2vw, 26px) !important;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.94), rgba(242, 247, 249, 0.78)),
+    repeating-linear-gradient(135deg, rgba(53, 73, 91, 0.035) 0 1px, transparent 1px 78px);
+}
+
+.artly-ai-l1 .artly-ai__press-card--text-only {
+  border-inline-start: 3px solid rgba(8, 125, 150, 0.68);
+}
+
+.artly-ai-l1 .artly-ai__press-card--text-only::before {
+  content: "";
+  display: block;
+  width: clamp(54px, 8vw, 92px);
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--artly-ai-accent), rgba(8, 125, 150, 0.16));
+}
+
+.artly-ai-l1 .artly-ai__press-card--has-image {
+  padding: clamp(12px, 1.4vw, 16px) !important;
+  background: rgba(255, 255, 255, 0.84);
+}
+
+.artly-ai-l1 .artly-ai__press-media {
+  flex: 0 0 auto;
+  border-color: rgba(42, 55, 68, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.42);
+}
+
+.artly-ai-l1 .artly-ai__press-card h3 {
+  max-width: 30ch;
+  margin-block: 0;
+  color: var(--artly-ink);
+  font-size: clamp(1.08rem, 1.45vw, 1.32rem) !important;
+  line-height: 1.12;
+}
+
+.artly-ai-l1 .artly-ai__press-card p {
+  flex: 1 1 auto;
+  color: rgba(53, 73, 91, 0.84);
+  font-size: clamp(0.9rem, 1vw, 0.96rem) !important;
+  line-height: 1.5 !important;
+}
+
+.artly-ai-l1 .artly-ai__press-card .artly-ai__text-link {
+  width: fit-content;
+  margin-block-start: auto;
+}
+
+.artly-ai-l1 .artly-ai__press-card .artly-ai__text-link--disabled {
+  color: rgba(53, 73, 91, 0.56);
+  opacity: 1;
+}
+
 @media screen and (max-width: 749px) {
   .artly-ai-l1 .artly-ai__press {
     padding-block: 28px !important;
+  }
+
+  .artly-ai-l1 .artly-ai__press-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .artly-ai-l1 .artly-ai__press-card {
+    min-height: auto !important;
+    padding: 18px !important;
+  }
+
+  .artly-ai-l1 .artly-ai__press-card--has-image {
+    padding: 12px !important;
   }
 }
 
@@ -2642,6 +2816,100 @@ html:has(.artly-ai-l1) {
 @media screen and (max-width: 749px) {
   .artly-ai-l1 .artly-ai__advantage {
     padding-block: 28px !important;
+  }
+}
+
+/* TASK-20260623-002: Rebalance Advantage cards without a featured top block. */
+.artly-ai-l1 .artly-ai__advantage-card:first-child {
+  border-color: rgba(8, 125, 150, 0.22) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(246, 249, 250, 0.78)),
+    repeating-linear-gradient(0deg, rgba(53, 73, 91, 0.04) 0 1px, transparent 1px 44px);
+  box-shadow: 0 10px 34px rgba(16, 27, 39, 0.055);
+}
+
+.artly-ai-l1 .artly-ai__advantage-card:first-child::before {
+  width: 3px;
+  background: linear-gradient(180deg, var(--artly-ai-accent), rgba(139, 215, 232, 0.28));
+}
+
+.artly-ai-l1 .artly-ai__advantage-card:first-child .artly-ai__advantage-icon {
+  border-color: rgba(8, 125, 150, 0.18);
+  background: transparent;
+  color: rgba(122, 135, 149, 0.58);
+}
+
+@media screen and (min-width: 750px) {
+  .artly-ai-l1 .artly-ai__advantage-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+  }
+
+  .artly-ai-l1 .artly-ai__advantage-card {
+    min-height: clamp(156px, 14vw, 178px);
+  }
+
+  .artly-ai-l1 .artly-ai__advantage-card:first-child {
+    grid-column: auto;
+    grid-template-columns: 44px minmax(0, 1fr);
+    padding: 18px 18px 18px 20px;
+  }
+
+  .artly-ai-l1 .artly-ai__advantage-card:first-child .artly-ai__advantage-icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  .artly-ai-l1 .artly-ai__advantage-card:first-child .artly-ai__advantage-icon-svg {
+    width: 36px;
+    height: 36px;
+  }
+
+  .artly-ai-l1 .artly-ai__advantage-card:first-child h3 {
+    font-size: clamp(1.02rem, 1.5vw, 1.2rem);
+  }
+
+  .artly-ai-l1 .artly-ai__advantage-card:first-child .rte {
+    max-width: none;
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .artly-ai-l1 .artly-ai__advantage-grid {
+    gap: clamp(14px, 1.5vw, 18px);
+  }
+
+  .artly-ai-l1 .artly-ai__advantage-card {
+    grid-template-columns: 38px minmax(0, 1fr);
+    min-height: clamp(150px, 10vw, 168px);
+    padding: 16px;
+  }
+
+  .artly-ai-l1 .artly-ai__advantage-card:first-child {
+    grid-template-columns: 38px minmax(0, 1fr);
+    padding: 16px;
+  }
+
+  .artly-ai-l1 .artly-ai__advantage-card .artly-ai__advantage-icon {
+    width: 38px;
+    height: 38px;
+  }
+
+  .artly-ai-l1 .artly-ai__advantage-card:first-child .artly-ai__advantage-icon {
+    width: 38px;
+    height: 38px;
+  }
+
+  .artly-ai-l1 .artly-ai__advantage-card .artly-ai__advantage-icon-svg {
+    width: 31px;
+    height: 31px;
+  }
+
+  .artly-ai-l1 .artly-ai__advantage-card:first-child .artly-ai__advantage-icon-svg {
+    width: 31px;
+    height: 31px;
   }
 }
 

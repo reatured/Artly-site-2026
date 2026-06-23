@@ -5,11 +5,11 @@
       "blocks": {
         "title": {
           "type": "text",
-          "name": "t:names.title",
+          "name": "Deployment headline",
           "settings": {
-            "text": "<h1>{{ closest.page.title }}</h1>",
+            "text": "<h1>Let's talk about your deployment</h1>",
             "width": "100%",
-            "max_width": "normal",
+            "max_width": "narrow",
             "alignment": "center",
             "type_preset": "h2",
             "font": "var(--font-primary--family)",
@@ -31,14 +31,14 @@
         },
         "content": {
           "type": "text",
-          "name": "t:names.content",
+          "name": "Intro",
           "settings": {
-            "text": "{{ closest.page.content }}",
+            "text": "<p>Tell us about your operation and what you want to automate. An Artly specialist will follow up to scope the right path, answer questions, and recommend next steps.</p>",
             "width": "100%",
             "max_width": "narrow",
             "alignment": "center",
             "type_preset": "rte",
-            "font": "var(--font-primary--family)",
+            "font": "var(--font-body--family)",
             "font_size": "",
             "line_height": "normal",
             "letter_spacing": "normal",
@@ -59,20 +59,72 @@
       "block_order": ["title", "content"],
       "settings": {
         "content_direction": "column",
-        "gap": 32,
+        "gap": 18,
         "color_scheme": "",
         "padding-block-start": 40,
-        "padding-block-end": 0
+        "padding-block-end": 24
       }
     },
     "form": {
       "type": "section",
       "blocks": {
+        "response_context": {
+          "type": "text",
+          "name": "Response Context",
+          "settings": {
+            "text": "<p>Share your timeline, location count, and current workflow. We typically respond within one business day.</p>",
+            "width": "100%",
+            "max_width": "narrow",
+            "alignment": "center",
+            "type_preset": "paragraph",
+            "font": "var(--font-body--family)",
+            "font_size": "",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "trust_signal": {
+          "type": "text",
+          "name": "Trust Signal",
+          "settings": {
+            "text": "<p>Trusted by teams at Cisco, Microsoft, Intel, and other enterprise innovators.</p>",
+            "width": "fit-content",
+            "max_width": "normal",
+            "alignment": "center",
+            "type_preset": "paragraph",
+            "font": "var(--font-body--family)",
+            "font_size": "",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "",
+            "background": true,
+            "background_color": "#f2f6f4",
+            "corner_radius": 8,
+            "padding-block-start": 12,
+            "padding-block-end": 12,
+            "padding-inline-start": 20,
+            "padding-inline-end": 20
+          },
+          "blocks": {}
+        },
         "contact_form_UwiCkQ": {
           "type": "contact-form",
           "settings": {
             "width": "custom",
-            "custom_width": 50,
+            "custom_width": 58,
             "width_mobile": "custom",
             "custom_width_mobile": 100,
             "inherit_color_scheme": true,
@@ -87,7 +139,7 @@
               "type": "contact-form-submit-button",
               "static": true,
               "settings": {
-                "label": "Submit",
+                "label": "Start the Conversation",
                 "style_class": "button",
                 "width": "fit-content",
                 "custom_width": 100,
@@ -100,7 +152,7 @@
           "block_order": []
         }
       },
-      "block_order": ["contact_form_UwiCkQ"],
+      "block_order": ["response_context", "trust_signal", "contact_form_UwiCkQ"],
       "name": "t:names.contact_form",
       "settings": {
         "content_direction": "column",
@@ -110,7 +162,7 @@
         "align_baseline": false,
         "horizontal_alignment_flex_direction_column": "center",
         "vertical_alignment_flex_direction_column": "center",
-        "gap": 32,
+        "gap": 24,
         "section_width": "page-width",
         "section_height": "",
         "section_height_custom": 50,
@@ -126,7 +178,7 @@
         "overlay_color": "#00000026",
         "overlay_style": "solid",
         "gradient_direction": "to top",
-        "padding-block-start": 32,
+        "padding-block-start": 8,
         "padding-block-end": 84
       }
     }

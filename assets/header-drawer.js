@@ -17,14 +17,30 @@ class HeaderDrawer extends Component {
   connectedCallback() {
     super.connectedCallback();
 
+    this.addEventListener('keydown', this.#onKeyDown);
     this.addEventListener('keyup', this.#onKeyUp);
     this.#setupAnimatedElementListeners();
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
+    this.removeEventListener('keydown', this.#onKeyDown);
     this.removeEventListener('keyup', this.#onKeyUp);
   }
+
+  /**
+   * Close drawer buttons need an explicit keyboard path because component click
+   * handlers do not receive Enter activation consistently in Chromium.
+   * @param {KeyboardEvent} event
+   */
+  #onKeyDown = (event) => {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    if (!(event.target instanceof Element)) return;
+    if (!event.target.closest('.menu-drawer__close-button')) return;
+
+    event.preventDefault();
+    this.close();
+  };
 
   /**
    * Close the main menu drawer when the Escape key is pressed

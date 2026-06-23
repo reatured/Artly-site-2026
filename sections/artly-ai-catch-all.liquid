@@ -30,7 +30,16 @@
       {% endif %}
       {% if closing_primary_label != blank %}
         {% if closing_primary_link != blank %}
-          <a class="artly-button artly-button--primary artly-ai__closing-primary-link" href="{{ closing_primary_link }}">
+          {% assign closing_primary_link_str = closing_primary_link | default: '' %}
+          {% assign closing_primary_is_external = false %}
+          {% if closing_primary_link_str contains '://' and closing_primary_link_str contains 'http' %}
+            {% assign closing_primary_is_external = true %}
+          {% endif %}
+          <a
+            class="artly-button artly-button--primary artly-ai__closing-primary-link"
+            href="{{ closing_primary_link }}"
+            {% if closing_primary_is_external %} target="_blank" rel="noopener"{% endif %}
+          >
             {{ closing_primary_label | escape }}
           </a>
         {% else %}
@@ -47,7 +56,17 @@
       <div class="artly-ai__closing-grid">
         {% for block in section.blocks %}
           {% if block.settings.link != blank %}
-            <a class="artly-ai__closing-card artly-ai__closing-card--link" href="{{ block.settings.link }}" {{ block.shopify_attributes }}>
+            {% assign block_link_str = block.settings.link | default: '' %}
+            {% assign block_link_is_external = false %}
+            {% if block_link_str contains '://' and block_link_str contains 'http' %}
+              {% assign block_link_is_external = true %}
+            {% endif %}
+            <a
+              class="artly-ai__closing-card artly-ai__closing-card--link"
+              href="{{ block.settings.link }}"
+              {% if block_link_is_external %} target="_blank" rel="noopener"{% endif %}
+              {{ block.shopify_attributes }}
+            >
               <div class="artly-ai__closing-icon" aria-hidden="true">
                 {% render 'icon-or-image',
                   icon: block.settings.icon,
