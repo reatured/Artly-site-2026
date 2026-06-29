@@ -20,6 +20,7 @@
   assign has_external_video = false
   assign has_image = false
   assign media_image = section.settings.media_fallback_image
+  assign media_poster_url = blank
 
   if media_type == 'video_url' and section.settings.media_video_url != blank
     assign has_external_video = true
@@ -47,15 +48,24 @@
 
   if has_video
     assign media_poster = section.settings.media_fallback_image
+    if media_poster == blank and section.settings.media_image != blank
+      assign media_poster = section.settings.media_image
+    endif
     if media_poster == blank
       assign media_poster = section.settings.media_video.preview_image
     endif
     assign media_alt_text = media_alt_text | default: section.settings.media_video.alt
     assign media_tag = section.settings.media_video
+    if media_poster != blank
+      assign media_poster_url = media_poster | image_url: width: 1800
+    endif
   endif
 
   if has_external_video
     assign media_poster = section.settings.media_fallback_image
+    if media_poster == blank and section.settings.media_image != blank
+      assign media_poster = section.settings.media_image
+    endif
     assign media_alt_text = media_alt_text | default: section.settings.media_video_url.alt
   endif
 
@@ -75,7 +85,11 @@
   "
   {{ section.shopify_attributes }}
 >
-  <div class="platform-overview__media-wrap" role="img"{% if media_alt_text != blank %} aria-label="{{ media_alt_text | escape }}"{% endif %}>
+  <div
+    class="platform-overview__media-wrap{% if has_video or has_external_video %} platform-overview__media-wrap--video{% endif %}"
+    role="{% if has_video or has_external_video %}group{% else %}img{% endif %}"
+    {% if media_alt_text != blank %} aria-label="{{ media_alt_text | escape }}"{% endif %}
+  >
     {% if has_external_video %}
       {% render 'video',
         video_from_url: true,
@@ -97,7 +111,7 @@
           muted: true,
           controls: true,
           playsinline: true,
-          poster: media_poster,
+          poster: media_poster_url,
           class: 'platform-overview__media'
       }}
     {% elsif has_image %}
@@ -190,7 +204,7 @@
     grid-template-areas:
       'media'
       'content';
-    align-items: center;
+    align-items: start;
     box-sizing: border-box;
   }
 
@@ -239,15 +253,34 @@
   .platform-overview__media-wrap {
     grid-area: media;
     position: relative;
+    isolation: isolate;
     min-width: 0;
     min-height: 0;
     aspect-ratio: 16 / 9;
     align-self: center;
-    background: #05070a;
-    border: 1px solid rgba(106, 118, 128, 0.2);
+    background:
+      linear-gradient(135deg, rgba(17, 25, 32, 0.94), rgba(5, 7, 10, 0.98)),
+      #05070a;
+    border: 1px solid rgba(23, 33, 42, 0.24);
     border-radius: var(--artly-home-media-radius, 8px);
-    box-shadow: none;
+    box-shadow:
+      0 18px 46px rgba(23, 33, 42, 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.26);
     overflow: hidden;
+  }
+
+  .platform-overview__media-wrap--video::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background:
+      linear-gradient(180deg, rgba(5, 7, 10, 0.42), transparent 18%, transparent 78%, rgba(5, 7, 10, 0.46));
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.18),
+      inset 0 14px 0 rgba(5, 7, 10, 0.2),
+      inset 0 -14px 0 rgba(5, 7, 10, 0.22);
   }
 
   .platform-overview__content {
@@ -266,6 +299,7 @@
     display: block;
     position: absolute;
     inset: 0;
+    z-index: 1;
     width: 100%;
     height: 100%;
     min-height: 0;
@@ -376,6 +410,13 @@
       width: 100%;
     }
 
+    .platform-overview__media-wrap--video::before {
+      box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.18),
+        inset 0 10px 0 rgba(5, 7, 10, 0.2),
+        inset 0 -10px 0 rgba(5, 7, 10, 0.22);
+    }
+
     .platform-overview__heading {
       font-size: 2rem;
       max-width: min(100%, 16ch);
@@ -395,6 +436,7 @@
   .platform-overview__actions > .size-style {
     max-width: 100%;
   }
+
 {% endstylesheet %}
 
 {% schema %}

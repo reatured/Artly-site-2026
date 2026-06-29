@@ -485,6 +485,13 @@
       pointer-events: none;
       transform: translateY(8px);
     }
+
+    .floating-contact.floating-contact--mobile-media-hidden:not(:has(.floating-contact__details[open])) {
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(8px);
+    }
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -550,6 +557,7 @@
       if (!(details instanceof HTMLDetailsElement)) return;
 
       this.setupArtlyAiMobileGuard(details);
+      this.setupHomeMobileMediaGuard(details);
 
       if (!(message instanceof HTMLElement)) return;
 
@@ -577,6 +585,59 @@
       details.addEventListener('toggle', updateState);
       window.addEventListener('scroll', updateState, { passive: true });
       window.addEventListener('resize', updateState);
+
+      if (mediaQuery.addEventListener) {
+        mediaQuery.addEventListener('change', updateState);
+      } else if (mediaQuery.addListener) {
+        mediaQuery.addListener(updateState);
+      }
+    }
+
+    setupHomeMobileMediaGuard(details) {
+      if (!(details instanceof HTMLDetailsElement)) return;
+      if (this.dataset.homeMediaGuardInitialized === 'true') return;
+
+      const media = document.querySelector(
+        ".content-for-layout[data-template='index'] .platform-overview__media-wrap--video"
+      );
+
+      if (!(media instanceof HTMLElement)) return;
+
+      this.dataset.homeMediaGuardInitialized = 'true';
+
+      const mediaQuery = window.matchMedia('(max-width: 749px)');
+      const summary = this.querySelector('.floating-contact__summary');
+      let frameRequest = null;
+
+      const updateState = () => {
+        const mediaRect = media.getBoundingClientRect();
+        const summaryRect = summary instanceof HTMLElement ? summary.getBoundingClientRect() : null;
+        const mediaInView = mediaRect.bottom > 0 && mediaRect.top < window.innerHeight;
+        const overlapsSummary = Boolean(
+          summaryRect &&
+            mediaRect.left < summaryRect.right &&
+            mediaRect.right > summaryRect.left &&
+            mediaRect.top < summaryRect.bottom + 8 &&
+            mediaRect.bottom > summaryRect.top - 8,
+        );
+        const shouldHide = mediaQuery.matches && !details.open && mediaInView && overlapsSummary;
+
+        this.classList.toggle('floating-contact--mobile-media-hidden', shouldHide);
+      };
+
+      const scheduleUpdate = () => {
+        if (frameRequest !== null) return;
+
+        frameRequest = requestAnimationFrame(() => {
+          frameRequest = null;
+          updateState();
+        });
+      };
+
+      updateState();
+      details.addEventListener('toggle', updateState);
+      window.addEventListener('scroll', scheduleUpdate, { passive: true });
+      window.addEventListener('resize', scheduleUpdate);
 
       if (mediaQuery.addEventListener) {
         mediaQuery.addEventListener('change', updateState);

@@ -15,15 +15,6 @@
     {%- endif -%}
 
     {% # theme-check-disable RemoteAsset %}
-    {% comment %} This a way to wait for main content to load when navigating to a new page so that the view transitions can work consistently {% endcomment %}
-    {% if settings.transition_to_main_product or settings.page_transition_enabled %}
-      <link
-        rel="expect"
-        href="#MainContent"
-        blocking="render"
-        id="view-transition-render-blocker"
-      >
-    {% endif %}
 
     {%- render 'meta-tags' -%}
     {%- render 'stylesheets' -%}
@@ -122,6 +113,44 @@
       data-product-transition="{{ settings.transition_to_main_product }}"
       data-template="{{ template }}"
     >
+      <script>
+        (function(){try{if(sessionStorage.getItem('artlyNavPending')==='fade'){var m=document.getElementById('MainContent');if(m){var o=document.createElement('div');o.className='artly-page-fade-overlay';m.appendChild(o);m.setAttribute('data-artly-fade','in');}}}catch(e){}})();
+      </script>
+      <script>
+        // Early fallback for page-fade cleanup. HeaderComponent owns the same
+        // behavior after its module loads; this keeps history restore cleanup
+        // available even if the component lifecycle is delayed.
+        (function(){
+          var key = 'artlyNavPending';
+
+          function removeFadeState(clearSession) {
+            var overlays = document.querySelectorAll('.artly-page-fade-overlay');
+            for (var i = 0; i < overlays.length; i++) overlays[i].remove();
+            var mc = document.getElementById('MainContent');
+            if (mc) mc.removeAttribute('data-artly-fade');
+            if (!clearSession) return;
+            try { sessionStorage.removeItem(key); } catch(e) {}
+          }
+
+          function scheduleRestoreCleanup() {
+            removeFadeState(true);
+            window.requestAnimationFrame(function(){ removeFadeState(true); });
+            window.setTimeout(function(){ removeFadeState(true); }, 80);
+          }
+
+          window.addEventListener('pagehide', function(){ removeFadeState(false); });
+          window.addEventListener('pageshow', function(event){
+            if (!event.persisted) return;
+            scheduleRestoreCleanup();
+          });
+
+          try {
+            if (sessionStorage.getItem('artlyNavPending') === 'fade') return;
+          } catch(e) {}
+
+          removeFadeState(true);
+        })();
+      </script>
       {{ content_for_layout }}
     </main>
 

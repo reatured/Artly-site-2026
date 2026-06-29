@@ -36,6 +36,21 @@ Local preview URL:
 http://127.0.0.1:9292/
 ```
 
+## Team Work Task Board Server
+
+Start the local Team Work task board backend from the repo root:
+
+```powershell
+cd C:\Artly\Artly-site-2026
+py ".\TEAM-WORK\02 Task Boards\task-board-server.py"
+```
+
+Task board URL:
+
+```text
+http://127.0.0.1:4177/task-board.html
+```
+
 Open the current development theme or editor after a dev theme exists:
 
 ```powershell

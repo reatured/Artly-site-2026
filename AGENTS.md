@@ -75,12 +75,14 @@ When `TEAM-WORK/02 Task Boards/task-board-server.py` is running, use its task bo
 - `POST /api/register-agent`
 - `POST /api/heartbeat-agent`
 - `POST /api/unregister-agent`
+- `POST /api/terminate-agent` owner/viewer recovery only; not a normal agent action
 - `POST /api/add-task`
 - `POST /api/update-task`
 - `POST /api/claim-task`
 - `POST /api/unclaim-task`
 - `POST /api/move-to-review`
 - `POST /api/claim-review`
+- `POST /api/unclaim-review`
 - `POST /api/approve-review`
 - `POST /api/request-changes`
 - `POST /api/return-to-review`
@@ -95,7 +97,7 @@ The backend appends agent API requests under `/api/...`, including `GET` reads, 
 
 `GET /api/worker-board` and `GET /api/review-board` are compact queue views. They return only the role's active columns as task summaries and intentionally omit `done`, `archived`, the top-level `tasks` index, `apiAuditLog`, and workflow policy text. After choosing or claiming a task from a compact queue, use `GET /api/task-detail?taskId=...&agentId=...` to load full details for that single task. Use `GET /api/duplicate-scan?taskId=...&agentId=...&includeArchived=true` for targeted duplicate checks instead of loading the whole board.
 
-The desktop viewer Spawn buttons start Worker and Review agents as hidden non-interactive CLI processes, not new terminal tabs. Spawned output is written under `TEAM-WORK/02 Task Boards/spawned-agent-logs/`; the spawn response reports the process ID and log path.
+The desktop viewer Spawn buttons start Worker and Review agents as hidden non-interactive CLI processes, not new terminal tabs. Spawned output is written under `TEAM-WORK/02 Task Boards/spawned-agent-logs/`; the spawn response reports the process ID and log path. Spawned Codex, Claude, and Qwen logs are formatted into readable text and end with `Token usage summary` when the CLI reports usage; if the CLI exits before reporting usage, the log says token usage is unavailable. Each displayed agent tab has a Terminate button for Richard. Terminate writes a timestamped note to the spawned-agent log when one is known, stops the trusted spawned process PID when available, removes matching pending spawn state, and marks matching active presence as terminated.
 
 The desktop viewer can also auto-dispatch Worker and Review agents. Each role has a selected model (`codex` or `claude`), a maximum active agent count, and an Auto toggle stored in `TEAM-WORK/02 Task Boards/agent-dispatch-settings.json`. When Auto is on, the backend checks the board periodically: if `todo` has work and active/pending Worker agents are below the Worker max, it spawns a hidden Worker agent; if `review` has work and active/pending Review agents are below the Review max, it spawns a hidden Review agent.
 
@@ -117,7 +119,7 @@ Use the Planning Agent role when Richard wants requirements captured, task cards
 
 Use the Worker Agent role when Richard wants implementation, code edits, QA, cleanup, or any task execution.
 
-Use the Review Agent role when Richard wants completed work in `review` visually checked in the browser and either approved into `done` or sent back as a follow-up `todo` task.
+Use the Review Agent role when Richard wants completed work in `review` visually checked in BrowserOS and either approved into `done` or sent back as a follow-up `todo` task.
 
 ## Hard Role Separation
 
@@ -143,7 +145,7 @@ The Planning Agent records requirements and updates tasks. It may edit `task-boa
 
 When Richard gives the Planning Agent one or more handoff files from `TEAM-WORK/07 Research Handoffs/`, the Planning Agent reads the handoff, compares it against the current site and existing task board, checks every column for duplicate or overlapping work, and creates or updates only the useful actionable `todo` tasks. It should record the handoff path in `sourceHandoffs` or task notes.
 
-Before creating any new task or materially changing task scope, the Planning Agent must reload the board and check all columns for duplicate or overlapping work, including `todo`, `claimed`, `review`, `reviewing`, `done`, and `archived`. Check title, scope, files, acceptance criteria, `relatedTaskIds`, `dependsOn`, `sourceHandoffs`, and `sourceReviewTaskId`. If a matching task already exists, update or reference the existing task instead of creating a duplicate; if the overlap is unclear, ask Richard whether to merge, replace, or create a dependent follow-up.
+Before creating any new task or materially changing task scope, the Planning Agent must reload the board and check all columns for duplicate or overlapping work, including `todo`, `claimed`, `review`, `reviewing`, `done`, and `archived`. Check title, scope, files, acceptance criteria, `relatedTaskIds`, `dependsOn`, `sourceHandoffs`, and `sourceReviewTaskId`. The Planning Agent may edit an existing task only when that task is still in `columns.todo`, still has `status: "todo"`, and has not been claimed, moved to review, reviewed, completed, or archived. If a matching task is already in `claimed`, `review`, `reviewing`, `done`, or `archived`, do not rewrite it; in most cases create a new related `todo` ticket with `relatedTaskIds`, `dependsOn`, `sourceReviewTaskId`, or a clear note pointing back to the existing task. If the overlap is unclear, ask Richard whether to merge, replace, or create a dependent follow-up.
 
 If the local task-board backend is running, Planning Agents should create and edit cards through `/api/add-task` and `/api/update-task`, always including their `agentName`. Use `/api/delete-task` only to remove duplicate or test tasks when Richard asks for cleanup. If the backend is not running, update `task-board.json` directly using the same planning rules.
 
@@ -163,7 +165,7 @@ When the backend is running, Worker Agents must register with `role: "worker"` b
 
 ## Review Agent Rule
 
-A Review Agent must read the review board view (`review` and `reviewing` only), claim only a task currently in `columns.review` by moving it to `columns.reviewing`, use the browser to answer Richard's specific review question, then move it to `done` as approved or close it into `done` as replaced by a follow-up `todo` task.
+A Review Agent must read the review board view (`review` and `reviewing` only), claim only a task currently in `columns.review` by moving it to `columns.reviewing`, use BrowserOS to visually answer Richard's specific review question, then move it to `done` as approved or close it into `done` as replaced by a follow-up `todo` task.
 A Review Agent never implements fixes or plans unrelated work.
 
 If the local task-board backend is running, Review Agents should read compact summaries through `/api/review-board`, then use `/api/claim-review`, `/api/approve-review`, and `/api/request-changes`, always including their `agentId`, so review ownership and follow-up creation are atomic. After claiming, they must load full details for only that task through `/api/task-detail?taskId=...&agentId=...`. If the backend is not running, update `task-board.json` directly using the same status rules while reading only `columns.review` and `columns.reviewing` unless a targeted duplicate scan is required.
@@ -172,9 +174,13 @@ If a reviewed task contains `richardFeedback`, `returnedToReviewAt`, or notes be
 
 If a reviewed task includes `inspectionTargets`, the Review Agent should use those targets as the primary inspection locations before approving or requesting changes.
 
+A Review Agent must use BrowserOS to inspect the actual changed page, section, viewport, and interaction state before approving. It must not approve from code inspection, task text, screenshots alone, or assumptions. The review must judge whether the result is visually appealing and works correctly in practice, including layout, hierarchy, spacing, responsive behavior, motion/transition quality, interaction states, obvious accessibility basics, and nearby regressions. If BrowserOS or the inspection target is unavailable, the Review Agent must not approve; it should report the blocker or request changes only when visible evidence clearly supports a failure.
+
 A task already in `columns.reviewing` is claimed by another Review Agent. Do not claim it, review it, move it, or duplicate its review work unless Richard explicitly reassigns it.
 
 Before creating any follow-up `todo` task, the Review Agent must use `/api/duplicate-scan?taskId=...&agentId=...&includeArchived=true` when the backend is running, or otherwise reload the board directly, to check all columns for an existing duplicate or matching follow-up, especially tasks with the same `sourceReviewTaskId`, overlapping title, overlapping files, or matching acceptance criteria. If a matching follow-up already exists, update that task and increment its redo context instead of creating a duplicate. When the Review Agent creates or updates a follow-up for failed work, it must add `failureExpected`, `failureActual`, and `failureDecision` to the failed original task so the Done card starts with what should be true, what actually happened, and why the review failed. It must also add `replacedByTaskId` or `latestFollowUpTaskId` context to the failed original task, append a note saying which task replaces it, and close the failed original task at the top of `columns.done`.
+
+When approving work into `done`, the Review Agent must include `reviewNotes` written for Richard in common language. The note must explain what changed, where it was visually inspected, what Richard should expect to see when reviewing it, and any caveats. Avoid raw implementation jargon unless it directly helps Richard inspect the result.
 
 After finishing a review decision, a Review Agent must reload `task-board.json` and check the current `review` list again. If another unclaimed review task exists and Richard has not asked the agent to stop, the Review Agent should claim the next task into `columns.reviewing` and continue; otherwise it reports that the review list is clear.
 
@@ -195,6 +201,8 @@ The HTML board keeps those six columns in JSON for coordination but displays the
 
 Richard can use the HTML board's expanded claimed-card `Unclaim task` button when a Worker Agent was killed or abandoned the task. This calls `/viewer/unclaim-task`, moves the task from `claimed` back to the top of `todo`, clears `claimedBy` and `claimedAt`, and clears matching active worker presence for that task.
 
+Richard can use the HTML board's expanded reviewing-card `Unclaim review` button when a Review Agent was killed or abandoned the review. This calls `/viewer/unclaim-review`, moves the task from `reviewing` back to the top of `review`, clears `reviewClaimedBy` and `reviewClaimedAt`, and clears matching active review presence for that task.
+
 ## Conflict Rule
 
 `task-board.json` is the coordination lock. A task in `claimed` reserves its listed files, project area, and direct scope for the claiming Worker Agent.
@@ -207,6 +215,6 @@ Before claiming work, Worker Agents should block only when a `claimed` task has:
 
 Shared files/scripts between tasks do not block by themselves. Same-file work may proceed in parallel when scopes are distinct or when either task explicitly records `relatedTaskIds`, `dependsOn`, or `sourceReviewTaskId` to show ownership intent.
 
-Planning Agent and Review Agent must avoid creating duplicate or conflicting `todo` tasks. Before either role creates a task, it must check all board columns for existing matching work by title, scope, files, acceptance criteria, `relatedTaskIds`, `dependsOn`, `sourceHandoffs`, and `sourceReviewTaskId`. If Richard gives a requirement that overlaps claimed work, the Planning Agent records it as a separate blocked/dependent `todo` task or asks Richard how to merge it; it must not rewrite a claimed task's scope unless Richard explicitly asks. If Review Agent feedback overlaps an existing follow-up, the Review Agent updates that follow-up instead of creating another task.
+Planning Agent and Review Agent must avoid creating duplicate or conflicting `todo` tasks. Before either role creates a task, it must check all board columns for existing matching work by title, scope, files, acceptance criteria, `relatedTaskIds`, `dependsOn`, `sourceHandoffs`, and `sourceReviewTaskId`. Planning Agent edits are allowed only for matching tickets that are still untouched in `columns.todo`; if the matching ticket has moved to `claimed`, `review`, `reviewing`, `done`, or `archived`, Planning Agent should usually create a new related `todo` ticket instead of editing the moved ticket. If Richard gives a requirement that overlaps claimed work, the Planning Agent records it as a separate blocked/dependent `todo` task or asks Richard how to merge it; it must not rewrite a claimed task's scope unless Richard explicitly asks. If Review Agent feedback overlaps an existing follow-up, the Review Agent updates that follow-up instead of creating another task.
 
 Tasks in `review` or `done` are closed to Worker Agents unless Richard explicitly reopens or assigns follow-up work.

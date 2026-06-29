@@ -1,31 +1,34 @@
+/* TASK-20260624-004: Bright color palette — align Artly AI page with Home page palette.
+   Replace all dark/industrial/navy treatments with bright Home-compatible surfaces. */
+
 .artly-ai-l1 {
   --artly-ai-rail: var(--artly-rail-width, min(1180px, calc(100% - 32px)));
   --artly-ai-section-y: clamp(44px, 7vw, 84px);
   --artly-ai-section-y-tight: clamp(32px, 5vw, 60px);
-  --artly-ai-page-bg: #eef2f5;
+  --artly-ai-page-bg: #f5f7f9;
   --artly-ai-surface-base: #ffffff;
-  --artly-ai-surface-band: #e1e8ed;
-  --artly-ai-surface-panel: #f8fafb;
+  --artly-ai-surface-band: #eef1f4;
+  --artly-ai-surface-panel: #f9fafb;
   --artly-ai-surface-raised: #ffffff;
-  --artly-ai-surface-inverse: #111b27;
-  --artly-ai-card-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(246, 249, 250, 0.95));
-  --artly-ai-card-border: 1px solid rgba(42, 55, 68, 0.2);
-  --artly-ai-border-subtle: rgba(42, 55, 68, 0.14);
-  --artly-ai-border-strong: rgba(42, 55, 68, 0.26);
-  --artly-ai-shadow-panel: 0 1px 0 rgba(255, 255, 255, 0.9) inset, 0 16px 44px rgba(16, 27, 39, 0.08);
-  --artly-ai-shadow-raised: 0 1px 0 rgba(255, 255, 255, 0.95) inset, 0 22px 70px rgba(16, 27, 39, 0.12);
+  --artly-ai-surface-inverse: var(--artly-ink);
+  --artly-ai-card-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.95));
+  --artly-ai-card-border: 1px solid rgba(42, 55, 68, 0.18);
+  --artly-ai-border-subtle: rgba(42, 55, 68, 0.12);
+  --artly-ai-border-strong: rgba(42, 55, 68, 0.24);
+  --artly-ai-shadow-panel: 0 1px 0 rgba(255, 255, 255, 0.9) inset, 0 16px 44px rgba(16, 27, 39, 0.06);
+  --artly-ai-shadow-raised: 0 1px 0 rgba(255, 255, 255, 0.95) inset, 0 22px 70px rgba(16, 27, 39, 0.1);
   --artly-ai-radius-sm: 4px;
   --artly-ai-radius-md: 6px;
   --artly-ai-radius-lg: 8px;
-  --artly-ai-accent: #087d96;
-  --artly-ai-accent-strong: #064b63;
-  --artly-ai-focus-ring: 0 0 0 3px rgba(8, 125, 150, 0.22);
-  --artly-ai-grid-line: rgba(53, 73, 91, 0.06);
+  --artly-ai-accent: var(--artly-signal, #00a8b5);
+  --artly-ai-accent-strong: var(--artly-signal-dark, #007985);
+  --artly-ai-focus-ring: 0 0 0 3px rgba(0, 168, 181, 0.2);
+  --artly-ai-grid-line: rgba(53, 73, 91, 0.04);
   overflow-x: clip;
   color: var(--artly-ink);
   background:
-    radial-gradient(circle at 85% 0%, rgba(17, 27, 39, 0.08), transparent 30%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(238, 242, 245, 0.98)),
+    radial-gradient(circle at 85% 0%, rgba(0, 168, 181, 0.06), transparent 30%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(245, 248, 250, 0.98)),
     repeating-linear-gradient(90deg, var(--artly-ai-grid-line) 0 1px, transparent 1px 96px),
     repeating-linear-gradient(180deg, var(--artly-ai-grid-line) 0 1px, transparent 1px 96px);
 }
@@ -484,18 +487,78 @@
 .artly-ai__video-shell,
 .artly-ai__image-panel {
   position: relative;
+  isolation: isolate;
   overflow: hidden;
   border: 1px solid var(--artly-ai-border-strong);
   border-radius: var(--artly-ai-radius-lg);
   background:
-    linear-gradient(135deg, rgba(17, 27, 39, 0.08), rgba(255, 255, 255, 0.24)),
+    linear-gradient(135deg, rgba(17, 27, 39, 0.18), rgba(255, 255, 255, 0.24)),
     #dce3e8;
 }
 
 .artly-ai__video-shell {
   width: min(840px, 100%);
   aspect-ratio: 16 / 9;
-  box-shadow: var(--artly-ai-shadow-raised);
+  border-color: rgba(42, 55, 68, 0.3);
+  background:
+    linear-gradient(135deg, rgba(17, 27, 39, 0.94), rgba(8, 14, 22, 0.98)),
+    #111b27;
+  box-shadow:
+    0 24px 72px rgba(16, 27, 39, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.artly-ai__video-shell--video::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(8, 14, 22, 0.5), transparent 18%, transparent 76%, rgba(8, 14, 22, 0.56)),
+    repeating-linear-gradient(90deg, rgba(139, 215, 232, 0.12) 0 1px, transparent 1px 72px);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.16),
+    inset 0 14px 0 rgba(8, 14, 22, 0.24),
+    inset 0 -14px 0 rgba(8, 14, 22, 0.26);
+}
+
+.artly-ai__video-play {
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  left: 50%;
+  width: clamp(52px, 7vw, 74px);
+  aspect-ratio: 1;
+  border: 1px solid rgba(236, 244, 247, 0.72);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 25%, rgba(255, 255, 255, 0.92), rgba(236, 244, 247, 0.52) 36%, rgba(8, 14, 22, 0.5) 100%);
+  box-shadow:
+    0 14px 40px rgba(2, 8, 15, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.74);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease;
+}
+
+.artly-ai__video-play::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 52%;
+  width: 0;
+  height: 0;
+  border-block: 10px solid transparent;
+  border-left: 15px solid rgba(8, 14, 22, 0.88);
+  transform: translate(-35%, -50%);
+}
+
+.artly-ai__video-shell--video:is(:hover, :focus-within) .artly-ai__video-play {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.94);
 }
 
 .artly-ai__external-video,
@@ -511,6 +574,8 @@
 .artly-ai__image-placeholder,
 .artly-ai__portrait-placeholder {
   display: block;
+  position: relative;
+  z-index: 1;
   width: 100%;
   height: 100%;
 }
@@ -523,6 +588,25 @@
 .artly-ai__demo-video img,
 .artly-ai__media-image {
   object-fit: cover;
+}
+
+@media screen and (max-width: 749px) {
+  .artly-ai__video-shell--video::before {
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.16),
+      inset 0 10px 0 rgba(8, 14, 22, 0.24),
+      inset 0 -10px 0 rgba(8, 14, 22, 0.26);
+  }
+
+  .artly-ai__video-play {
+    width: 50px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .artly-ai__video-play {
+    transition: none;
+  }
 }
 
 .artly-ai__advantage {
@@ -1969,11 +2053,11 @@ body.artly-ai-modal-open {
 }
 
 html:has(.artly-ai-l1) {
-  scroll-padding-top: 76px;
+  scroll-padding-top: var(--artly-sticky-scroll-padding, 112px);
 }
 
 .artly-ai-l1 :is(.artly-ai__section, .artly-ai__demo, .artly-ai__how, .artly-ai__team, .artly-ai__press, .artly-ai__faq, .artly-ai__closing) {
-  scroll-margin-top: 76px;
+  scroll-margin-top: clamp(12px, 1.5vw, 20px);
 }
 
 .artly-site-header--artly-ai {
@@ -2005,11 +2089,11 @@ html:has(.artly-ai-l1) {
 
 @media screen and (max-width: 749px) {
   html:has(.artly-ai-l1) {
-    scroll-padding-top: 64px;
+    scroll-padding-top: var(--artly-sticky-scroll-padding, 116px);
   }
 
   .artly-ai-l1 :is(.artly-ai__section, .artly-ai__demo, .artly-ai__how, .artly-ai__team, .artly-ai__press, .artly-ai__faq, .artly-ai__closing) {
-    scroll-margin-top: 64px;
+    scroll-margin-top: 14px;
   }
 
   .artly-site-header--artly-ai .header__columns {
@@ -2964,6 +3048,10 @@ body:has(.artly-ai-l1) {
   .artly-ai__closing
 ) {
   padding-block: var(--artly-ai-panel-section-y) !important;
+  padding-block-start: max(
+    var(--artly-ai-panel-section-y),
+    var(--artly-sticky-section-top-clearance, 102px)
+  ) !important;
 }
 
 .artly-ai-l1.artly-ai__band--closing {
@@ -3078,4 +3166,639 @@ body:has(.artly-ai-l1) {
     width: 150px !important;
     padding: 4px 8px !important;
   }
+}
+
+/* TASK-20260623-014: compress the Artly AI mobile hero while preserving all content. */
+@media screen and (max-width: 749px) {
+  .artly-ai-l1-hero .artly-ai__hero {
+    padding-block: 14px 22px !important;
+  }
+
+  .artly-ai-l1-hero .artly-ai__hero-inner {
+    gap: 14px !important;
+    padding: 16px 14px 18px !important;
+  }
+
+  .artly-ai-l1-hero .artly-ai__hero-heading {
+    max-width: 100% !important;
+    font-size: clamp(2rem, 8.8vw, 2.35rem) !important;
+    line-height: 1.04 !important;
+    letter-spacing: 0 !important;
+    text-wrap: balance;
+  }
+
+  .artly-ai-l1-hero .artly-ai__hero-body {
+    max-width: 100% !important;
+    font-size: 0.92rem !important;
+    line-height: 1.44 !important;
+  }
+
+  .artly-ai-l1-hero .artly-ai__stat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    padding: 6px !important;
+  }
+
+  .artly-ai-l1-hero .artly-ai__stat {
+    grid-template-columns: 28px minmax(0, 1fr) !important;
+    gap: 7px !important;
+    min-height: 0 !important;
+    align-items: center;
+    padding: 9px 8px !important;
+  }
+
+  .artly-ai-l1-hero .artly-ai__stat::before {
+    width: 2px;
+  }
+
+  .artly-ai-l1-hero .artly-ai__stat-icon-wrap {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .artly-ai-l1-hero .artly-ai__stat-icon {
+    width: 17px;
+    height: 17px;
+  }
+
+  .artly-ai-l1-hero .artly-ai__stat-content {
+    gap: 1px !important;
+  }
+
+  .artly-ai-l1-hero .artly-ai__stat strong {
+    font-size: clamp(0.96rem, 4vw, 1.04rem) !important;
+    line-height: 1.05 !important;
+    letter-spacing: 0 !important;
+  }
+
+  .artly-ai-l1-hero .artly-ai__stat span span {
+    font-size: 0.66rem !important;
+    line-height: 1.16 !important;
+    letter-spacing: 0 !important;
+  }
+
+  .artly-ai-l1-hero .artly-ai__hero-cta {
+    gap: 12px !important;
+    padding: 13px !important;
+  }
+
+  .artly-ai-l1-hero .artly-ai__hero-cta-copy {
+    gap: 5px !important;
+  }
+
+  .artly-ai-l1-hero .artly-ai__cta-heading {
+    font-size: 1rem !important;
+    line-height: 1.18 !important;
+    letter-spacing: 0 !important;
+  }
+
+  .artly-ai-l1-hero .artly-ai__cta-body {
+    font-size: 0.88rem !important;
+    line-height: 1.38 !important;
+  }
+
+  .artly-ai-l1-hero .artly-ai__hero-cta .artly-ai__actions {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch !important;
+    gap: 8px !important;
+    width: 100%;
+  }
+
+  .artly-ai-l1-hero .artly-ai__hero-cta .artly-button {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 44px;
+    padding: 10px 8px;
+    font-size: 0.82rem;
+    line-height: 1.1;
+    white-space: normal;
+  }
+}
+
+/* TASK-20260623-013: make the Artly AI hero feel more technical and less card-heavy. */
+.artly-ai-l1-hero .artly-ai__hero-inner > * {
+  position: relative;
+  z-index: 1;
+}
+
+.artly-ai-l1-hero .artly-ai__hero-inner::before {
+  z-index: 2;
+}
+
+.artly-ai-l1-hero .artly-ai__hero-inner::after {
+  content: "";
+  position: absolute;
+  inset: clamp(18px, 3vw, 34px) clamp(18px, 4vw, 54px) auto auto;
+  width: min(46vw, 560px);
+  height: min(34vw, 360px);
+  pointer-events: none;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 68% 36%, rgba(139, 215, 232, 0.26), transparent 0 8%, transparent 38%),
+    linear-gradient(135deg, rgba(139, 215, 232, 0.14), transparent 52%),
+    repeating-linear-gradient(90deg, rgba(139, 215, 232, 0.12) 0 1px, transparent 1px 18px);
+  filter: blur(0.2px);
+  opacity: 0.72;
+  transform: rotate(-8deg);
+  z-index: 0;
+}
+
+@media screen and (min-width: 990px) {
+  .artly-ai-l1-hero .artly-ai__hero-inner {
+    gap: clamp(22px, 2.4vw, 30px) !important;
+    padding: clamp(34px, 4vw, 52px) !important;
+    background:
+      radial-gradient(circle at 82% 20%, rgba(8, 125, 150, 0.24), transparent 0 23%),
+      linear-gradient(135deg, rgba(7, 14, 24, 0.98), rgba(18, 31, 45, 0.94)),
+      repeating-linear-gradient(90deg, rgba(139, 215, 232, 0.07) 0 1px, transparent 1px 82px) !important;
+  }
+
+  .artly-ai-l1-hero .artly-ai__hero-heading {
+    letter-spacing: 0 !important;
+  }
+
+  .artly-ai-l1-hero .artly-ai__hero-body {
+    color: rgba(244, 249, 251, 0.9) !important;
+    font-size: 1.02rem !important;
+    line-height: 1.56 !important;
+  }
+
+  .artly-ai-l1-hero .artly-ai__stat-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 0 !important;
+    max-width: none !important;
+    padding: 6px !important;
+    overflow: hidden;
+    border-color: rgba(139, 215, 232, 0.24) !important;
+    background:
+      linear-gradient(90deg, rgba(7, 14, 24, 0.7), rgba(20, 36, 51, 0.54)),
+      repeating-linear-gradient(90deg, rgba(139, 215, 232, 0.12) 0 1px, transparent 1px 64px) !important;
+    box-shadow: 0 16px 48px rgba(2, 8, 15, 0.22) !important;
+  }
+
+  .artly-ai-l1-hero .artly-ai__stat {
+    grid-template-columns: 36px minmax(0, 1fr) !important;
+    gap: 10px !important;
+    min-height: 78px !important;
+    padding: 13px 14px !important;
+    border: 0 !important;
+    border-left: 1px solid rgba(139, 215, 232, 0.2) !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .artly-ai-l1-hero .artly-ai__stat:first-child {
+    border-left: 0 !important;
+  }
+
+  .artly-ai-l1-hero .artly-ai__stat::before {
+    display: none;
+  }
+
+  .artly-ai-l1-hero .artly-ai__stat:hover {
+    border-color: rgba(139, 215, 232, 0.2) !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+
+  .artly-ai-l1-hero .artly-ai__stat-icon-wrap {
+    width: 36px !important;
+    height: 36px !important;
+    background: rgba(139, 215, 232, 0.12) !important;
+  }
+
+  .artly-ai-l1-hero .artly-ai__stat strong {
+    font-size: clamp(1rem, 1.25vw, 1.18rem) !important;
+    line-height: 1.08 !important;
+    letter-spacing: 0 !important;
+  }
+
+  .artly-ai-l1-hero .artly-ai__stat span span {
+    font-size: 0.68rem !important;
+    line-height: 1.16 !important;
+    letter-spacing: 0 !important;
+  }
+
+  .artly-ai-l1-hero .artly-ai__hero-cta {
+    padding: clamp(22px, 2.5vw, 30px) !important;
+    border-color: rgba(139, 215, 232, 0.26) !important;
+    background:
+      linear-gradient(135deg, rgba(6, 12, 20, 0.64), rgba(18, 31, 45, 0.46)) !important;
+    box-shadow: 0 16px 48px rgba(2, 8, 15, 0.2) !important;
+  }
+}
+
+@media screen and (min-width: 750px) and (max-width: 989px) {
+  .artly-ai-l1-hero .artly-ai__stat-grid {
+    gap: 0 !important;
+    overflow: hidden;
+  }
+
+  .artly-ai-l1-hero .artly-ai__stat {
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+}
+
+/* ============================================================
+   TASK-20260624-004: Bright palette overrides — ALL dark/industrial
+   treatments replaced with Home page bright palette.
+   These overrides appear after all prior rules to ensure they win.
+   ============================================================ */
+
+/* --- Bright header --- */
+.artly-site-header--artly-ai {
+  --artly-header-ink: var(--artly-ink) !important;
+  --artly-header-muted: var(--artly-steel) !important;
+  --artly-header-line: rgba(32, 36, 39, 0.18) !important;
+  --artly-header-glass: rgba(255, 255, 255, 0.72) !important;
+  --artly-header-shell: rgba(232, 228, 218, 0.78) !important;
+  --artly-header-hover-bg: rgba(255, 255, 255, 0.88) !important;
+  --artly-header-hover-border: rgba(32, 36, 39, 0.3) !important;
+  --artly-header-surface: rgba(32, 36, 39, 0.08) !important;
+  --artly-header-shadow: rgba(26, 31, 34, 0.12) !important;
+  --artly-header-accent: var(--artly-signal, #00a8b5) !important;
+  --artly-header-pill-radius: 14px !important;
+  color: var(--artly-ink) !important;
+  background: transparent !important;
+  border-bottom-color: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+.artly-site-header--artly-ai .header__row--top .header__columns {
+  background:
+    linear-gradient(135deg, rgb(var(--color-background-rgb) / 0.82) 0%, rgb(var(--color-background-rgb) / 0.58) 52%, rgb(var(--color-background-rgb) / 0.74) 100%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0) 46%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.45) !important;
+  box-shadow:
+    0 16px 36px rgba(26, 31, 34, 0.13),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.1) !important;
+}
+
+.artly-site-header--artly-ai .header-logo {
+  background: var(--artly-header-glass) !important;
+  color: var(--artly-header-ink) !important;
+  border-color: var(--artly-header-line) !important;
+  box-shadow: 0 8px 18px var(--artly-header-shadow) !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+  --header-logo-display: block !important;
+  --header-logo-inverse-display: none !important;
+}
+
+.artly-site-header--artly-ai .header-logo:has(.header-logo__image-container--inverse) {
+  --header-logo-display: block !important;
+  --header-logo-inverse-display: none !important;
+}
+
+.artly-site-header--artly-ai .header-logo :is(.header-logo__image-container--original, .header-logo__image-container--inverse) {
+  background: transparent !important;
+}
+
+.artly-site-header--artly-ai .header-logo:has(.header-logo__image-container--inverse) .header-logo__image,
+.artly-site-header--artly-ai .header-logo:not(:has(.header-logo__image-container--inverse)) .header-logo__image,
+.artly-site-header--artly-ai :is(.header-logo img, .header__heading-logo, .header__heading-logo img, .header__heading-link img, .header-logo svg, .header__heading-link svg) {
+  filter: none !important;
+  mix-blend-mode: normal !important;
+}
+
+.artly-site-header--artly-ai .header-menu .menu-list__link {
+  background: var(--artly-header-glass) !important;
+  color: var(--artly-header-ink) !important;
+  border-color: var(--artly-header-line) !important;
+  box-shadow: 0 8px 18px var(--artly-header-shadow) !important;
+}
+
+.artly-site-header--artly-ai .header-menu .menu-list__link:is(:hover, :focus-visible),
+.artly-site-header--artly-ai .header-menu .menu-list__link:where(.is-nav-pending, [data-artly-nav-pending='true']),
+.artly-site-header--artly-ai .header-logo:where(.is-nav-pending, [data-artly-nav-pending='true']),
+.artly-site-header--artly-ai .header-menu .menu-list__link--active,
+.artly-site-header--artly-ai .menu-list:not(:has(.menu-list__list-item:hover)) .menu-list__link--active,
+.artly-site-header--artly-ai .menu-list .menu-list__list-item:where(:hover, :focus-within) .menu-list__link,
+.artly-site-header--artly-ai .menu-list .menu-list__list-item[slot='overflow'] .menu-list__link[aria-expanded='true'] {
+  border-color: var(--artly-header-hover-border) !important;
+  background: var(--artly-header-hover-bg) !important;
+  color: var(--artly-header-ink) !important;
+  box-shadow: 0 8px 18px var(--artly-header-shadow) !important;
+}
+
+.artly-site-header--artly-ai .header__column--right .header-actions__action {
+  background: var(--artly-header-glass) !important;
+  color: var(--artly-header-ink) !important;
+  border-color: var(--artly-header-line) !important;
+  box-shadow: 0 8px 18px var(--artly-header-shadow) !important;
+}
+
+/* --- Bright hero: replace dark gradient with bright surface --- */
+.artly-ai-l1-hero {
+  background:
+    radial-gradient(circle at 82% 0%, rgba(0, 168, 181, 0.12), transparent 30%),
+    radial-gradient(circle at 8% 18%, rgba(185, 220, 229, 0.12), transparent 26%),
+    linear-gradient(180deg, #f8fafb 0%, #eef1f4 72%, var(--artly-ai-page-bg) 100%) !important;
+}
+
+.artly-ai-l1-hero .artly-ai__hero-inner {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(246, 249, 252, 0.94)),
+    repeating-linear-gradient(90deg, rgba(53, 73, 91, 0.03) 0 1px, transparent 1px 80px) !important;
+  border-color: rgba(42, 55, 68, 0.14) !important;
+  box-shadow: var(--artly-ai-shadow-raised) !important;
+}
+
+.artly-ai-l1-hero .artly-ai__hero-inner::before {
+  background: linear-gradient(180deg, var(--artly-signal, #00a8b5), rgba(0, 168, 181, 0.18)) !important;
+}
+
+.artly-ai-l1-hero .artly-ai__hero-inner::after {
+  background:
+    radial-gradient(circle at 68% 36%, rgba(0, 168, 181, 0.18), transparent 0 8%, transparent 38%),
+    linear-gradient(135deg, rgba(0, 168, 181, 0.08), transparent 52%),
+    repeating-linear-gradient(90deg, rgba(0, 168, 181, 0.06) 0 1px, transparent 1px 18px) !important;
+}
+
+.artly-ai-l1-hero .artly-ai__hero-heading {
+  color: var(--artly-ink) !important;
+}
+
+.artly-ai-l1-hero .artly-ai__hero-body {
+  color: var(--artly-steel) !important;
+}
+
+.artly-ai-l1-hero .artly-ai__stat-grid {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.72), rgba(239, 245, 248, 0.58)),
+    repeating-linear-gradient(90deg, rgba(53, 73, 91, 0.05) 0 1px, transparent 1px 72px) !important;
+  border-color: rgba(42, 55, 68, 0.12) !important;
+  box-shadow: var(--artly-ai-shadow-panel) !important;
+}
+
+.artly-ai-l1-hero .artly-ai__stat {
+  background: var(--artly-ai-card-bg) !important;
+  border-color: rgba(42, 55, 68, 0.14) !important;
+  box-shadow: var(--artly-ai-shadow-panel) !important;
+}
+
+.artly-ai-l1-hero .artly-ai__stat strong {
+  color: var(--artly-ink) !important;
+}
+
+.artly-ai-l1-hero .artly-ai__stat span span {
+  color: var(--artly-steel) !important;
+}
+
+.artly-ai-l1-hero .artly-ai__stat-icon-wrap {
+  background: linear-gradient(135deg, rgba(0, 168, 181, 0.12), rgba(185, 220, 229, 0.2)) !important;
+  border-color: rgba(0, 168, 181, 0.16) !important;
+  color: var(--artly-signal-dark, #007985) !important;
+}
+
+.artly-ai-l1-hero .artly-ai__hero-cta {
+  background: rgba(255, 255, 255, 0.72) !important;
+  border-color: rgba(42, 55, 68, 0.12) !important;
+  box-shadow: var(--artly-ai-shadow-panel) !important;
+}
+
+.artly-ai-l1-hero .artly-ai__cta-heading {
+  color: var(--artly-ink) !important;
+}
+
+.artly-ai-l1-hero .artly-ai__cta-body {
+  color: var(--artly-steel) !important;
+}
+
+.artly-ai-l1-hero .artly-button--primary {
+  box-shadow: 0 12px 34px rgba(0, 168, 181, 0.2) !important;
+}
+
+.artly-ai-l1-hero .artly-button--secondary {
+  color: var(--artly-ink) !important;
+  background: var(--artly-paper, #ffffff) !important;
+  border-color: rgba(42, 55, 68, 0.2) !important;
+}
+
+.artly-ai-l1-hero .artly-button--secondary:hover,
+.artly-ai-l1-hero .artly-button--secondary:focus-visible {
+  color: var(--artly-ink) !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-color: var(--artly-signal, #00a8b5) !important;
+}
+
+/* --- Bright video shell --- */
+.artly-ai__video-shell {
+  border-color: rgba(42, 55, 68, 0.18) !important;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(239, 245, 248, 0.5)),
+    #e8edf0 !important;
+  box-shadow: var(--artly-ai-shadow-panel) !important;
+}
+
+.artly-ai__video-shell--video::before {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.12), transparent 18%, transparent 76%, rgba(255, 255, 255, 0.08)),
+    repeating-linear-gradient(90deg, rgba(53, 73, 91, 0.04) 0 1px, transparent 1px 72px) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.2),
+    inset 0 14px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -14px 0 rgba(255, 255, 255, 0.1) !important;
+}
+
+.artly-ai__video-play {
+  border-color: rgba(42, 55, 68, 0.2) !important;
+  background:
+    radial-gradient(circle at 35% 25%, rgba(255, 255, 255, 0.96), rgba(239, 245, 248, 0.8) 36%, rgba(42, 55, 68, 0.08) 100%) !important;
+  box-shadow:
+    0 14px 40px rgba(16, 27, 39, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+}
+
+.artly-ai__video-play::before {
+  border-left-color: rgba(16, 27, 39, 0.72) !important;
+}
+
+/* --- Bright case story section --- */
+.artly-ai__case {
+  background:
+    radial-gradient(circle at 18% 0%, rgba(0, 168, 181, 0.08), transparent 34%),
+    linear-gradient(135deg, #ffffff, #f5f8fa 64%, #eef1f4) !important;
+  border-color: rgba(42, 55, 68, 0.14) !important;
+  box-shadow: var(--artly-ai-shadow-raised) !important;
+}
+
+.artly-ai__case .artly-ai__image-panel {
+  border-color: rgba(42, 55, 68, 0.16) !important;
+  box-shadow: var(--artly-ai-shadow-panel) !important;
+}
+
+.artly-ai__case-copy h2 {
+  color: var(--artly-ink) !important;
+}
+
+.artly-ai__case-copy .rte {
+  color: var(--artly-steel) !important;
+}
+
+.artly-ai__case .artly-ai__eyebrow {
+  color: var(--artly-signal-dark, #007985) !important;
+}
+
+.artly-ai__case .artly-ai__text-link {
+  color: var(--artly-signal-dark, #007985) !important;
+}
+
+.artly-ai__case .artly-ai__text-link--disabled {
+  color: var(--artly-steel) !important;
+}
+
+/* --- Bright closing/believe section --- */
+.artly-ai__closing {
+  background:
+    radial-gradient(circle at 8% 0%, rgba(0, 168, 181, 0.08), transparent 34%),
+    linear-gradient(135deg, #ffffff, #f5f8fa 64%, #eef1f4) !important;
+  border-color: rgba(42, 55, 68, 0.12) !important;
+  box-shadow: var(--artly-ai-shadow-raised) !important;
+}
+
+.artly-ai__closing-copy h2 {
+  color: var(--artly-ink) !important;
+}
+
+.artly-ai__closing-copy .rte {
+  color: var(--artly-steel) !important;
+}
+
+.artly-ai__closing-icon {
+  background: linear-gradient(135deg, rgba(0, 168, 181, 0.12), rgba(185, 220, 229, 0.18)) !important;
+  border-color: rgba(0, 168, 181, 0.16) !important;
+  color: var(--artly-signal-dark, #007985) !important;
+}
+
+.artly-ai__closing-card {
+  background: var(--artly-ai-card-bg) !important;
+  border-color: rgba(42, 55, 68, 0.14) !important;
+  box-shadow: var(--artly-ai-shadow-panel) !important;
+}
+
+.artly-ai__closing-card h3 {
+  color: var(--artly-ink) !important;
+}
+
+.artly-ai__closing-card .rte {
+  color: var(--artly-steel) !important;
+}
+
+.artly-ai__closing .artly-ai__text-link {
+  color: var(--artly-signal-dark, #007985) !important;
+  text-decoration-color: rgba(0, 121, 133, 0.4) !important;
+}
+
+.artly-ai__closing .artly-ai__text-link::after {
+  color: var(--artly-signal, #00a8b5) !important;
+}
+
+.artly-ai__closing .artly-ai__text-link:hover,
+.artly-ai__closing .artly-ai__text-link:focus-visible {
+  color: var(--artly-ink) !important;
+  text-decoration-color: var(--artly-signal, #00a8b5) !important;
+}
+
+.artly-ai__closing .artly-ai__text-link:focus-visible {
+  outline-color: var(--artly-signal, #00a8b5) !important;
+  box-shadow: 0 0 0 3px rgba(0, 168, 181, 0.18) !important;
+}
+
+.artly-ai__closing-card:hover {
+  border-color: var(--artly-ai-border-strong) !important;
+  box-shadow: var(--artly-ai-shadow-raised) !important;
+}
+
+.artly-ai__closing-card--link:focus-visible {
+  border-color: var(--artly-signal, #00a8b5) !important;
+  outline-color: var(--artly-signal, #00a8b5) !important;
+  box-shadow:
+    var(--artly-ai-shadow-raised),
+    0 0 0 4px rgba(0, 168, 181, 0.12) !important;
+}
+
+/* --- Bright team section --- */
+.artly-ai-l1 .artly-ai__team {
+  border-color: rgba(42, 55, 68, 0.12) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(242, 247, 249, 0.66)),
+    repeating-linear-gradient(90deg, rgba(53, 73, 91, 0.028) 0 1px, transparent 1px 88px) !important;
+  box-shadow: var(--artly-ai-shadow-panel) !important;
+}
+
+.artly-ai-l1 .artly-ai__team .artly-ai__section-intro h2 {
+  color: var(--artly-ink) !important;
+}
+
+.artly-ai-l1 .artly-ai__team .artly-ai__section-intro :is(p, .rte) {
+  color: var(--artly-steel) !important;
+}
+
+.artly-ai-l1 .artly-ai__team-card,
+.artly-ai-l1 .artly-ai__team-card:first-child,
+.artly-ai-l1 .artly-ai__team-card:nth-child(2),
+.artly-ai-l1 .artly-ai__team-card:nth-child(3) {
+  background: linear-gradient(180deg, #ffffff 0%, #f4f7f9 100%) !important;
+  color: var(--artly-ink) !important;
+  border-color: rgba(42, 55, 68, 0.14) !important;
+  box-shadow: var(--artly-ai-shadow-panel) !important;
+}
+
+.artly-ai-l1 .artly-ai__team-card:hover,
+.artly-ai-l1 .artly-ai__team-card:focus-within {
+  border-color: var(--artly-signal, #00a8b5) !important;
+  background: linear-gradient(180deg, #f8fafb 0%, #eef3f6 100%) !important;
+}
+
+.artly-ai-l1 .artly-ai__team-image,
+.artly-ai-l1 .artly-ai__team-card:first-child .artly-ai__team-image {
+  background: linear-gradient(135deg, #dce3e8, #eef3f5) !important;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.6) !important;
+}
+
+.artly-ai-l1 .artly-ai__team-card > h3,
+.artly-ai-l1 .artly-ai__team-card:first-child > h3 {
+  color: var(--artly-ink) !important;
+}
+
+.artly-ai-l1 .artly-ai__team-card > p,
+.artly-ai-l1 .artly-ai__team-card:first-child > p {
+  color: var(--artly-steel) !important;
+}
+
+/* --- Bright stat/icon defaults (overrides for any remaining dark stat treatments) --- */
+.artly-ai__stat-icon-wrap {
+  background: linear-gradient(135deg, rgba(0, 168, 181, 0.1), rgba(185, 220, 229, 0.16)) !important;
+  border-color: rgba(0, 168, 181, 0.14) !important;
+  color: var(--artly-signal-dark, #007985) !important;
+}
+
+/* --- Bright band background --- */
+.artly-ai__band--demo,
+.artly-ai__band--logos,
+.artly-ai__band--closing {
+  background:
+    radial-gradient(circle at 12% 0%, rgba(0, 168, 181, 0.06), transparent 32%),
+    linear-gradient(90deg, rgba(248, 250, 252, 0.98), rgba(238, 243, 246, 0.98)),
+    repeating-linear-gradient(90deg, rgba(53, 73, 91, 0.04) 0 1px, transparent 1px 72px) !important;
+}
+
+/* --- Body/content background for Artly AI page --- */
+body:has(.artly-ai-l1) {
+  background-color: #f0f3f6 !important;
+}
+
+.content-for-layout:has(.artly-ai-l1) {
+  background:
+    radial-gradient(circle at 84% 4%, rgba(0, 168, 181, 0.06), transparent 28%),
+    radial-gradient(circle at 12% 18%, rgba(185, 220, 229, 0.1), transparent 24%),
+    linear-gradient(180deg, rgba(250, 252, 253, 0.9), rgba(240, 245, 248, 0.94)),
+    repeating-linear-gradient(90deg, rgba(53, 73, 91, 0.035) 0 1px, transparent 1px 96px),
+    repeating-linear-gradient(180deg, rgba(53, 73, 91, 0.028) 0 1px, transparent 1px 96px) !important;
 }

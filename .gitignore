@@ -18,6 +18,15 @@ Thumbs.db
 .tmp/*
 !.tmp/review-page-check.json
 
+# Shopify CLI transient upload artifacts (layout/*.liquid.*.tmp etc.).
+*.tmp
+
+# PowerShell stray artifact.
+$null
+
+# Temporary API payload leftovers.
+tmp/*.json
+
 *.md
 *.html
 

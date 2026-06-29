@@ -251,7 +251,6 @@ p:empty {
 
   /* Have the root transition during page navigation */
   html:active-view-transition-type(page-navigation),
-  html:active-view-transition-type(artly-home-ai-navigation),
   html:active-view-transition-type(product-image-transition) {
     view-transition-name: root-custom;
   }
@@ -260,23 +259,12 @@ p:empty {
     pointer-events: none;
   }
 
-  html:active-view-transition-type(page-navigation) main[data-page-transition-enabled='true'],
-  html:active-view-transition-type(artly-home-ai-navigation) main#MainContent {
+  html:active-view-transition-type(page-navigation) main[data-page-transition-enabled='true'] {
     view-transition-name: main-content;
   }
 
-  html:active-view-transition-type(page-navigation) main[data-product-transition='true'][data-template*='product'],
-  html:active-view-transition-type(artly-home-ai-navigation) main[data-product-transition='true'][data-template*='product'] {
+  html:active-view-transition-type(page-navigation) main[data-product-transition='true'][data-template*='product'] {
     view-transition-name: none;
-  }
-
-  ::view-transition-old(main-content) {
-    animation: 150ms var(--ease-out-cubic, ease) both artlyPageTransitionOut;
-    transform-origin: center top;
-  }
-
-  ::view-transition-new(main-content) {
-    animation: 180ms ease both artlyPageTransitionIn;
   }
 
   html:active-view-transition-type(product-image-transition) {
@@ -319,7 +307,6 @@ p:empty {
   }
 
   html:active-view-transition-type(page-navigation),
-  html:active-view-transition-type(artly-home-ai-navigation),
   html:active-view-transition-type(product-image-transition),
   main[data-page-transition-enabled='true'] {
     view-transition-name: none !important;
@@ -334,10 +321,6 @@ p:empty {
   ::view-transition-image-pair(main-content),
   ::view-transition-old(main-content),
   ::view-transition-new(main-content),
-  ::view-transition-group(artly-home-ai-navigation),
-  ::view-transition-image-pair(artly-home-ai-navigation),
-  ::view-transition-old(artly-home-ai-navigation),
-  ::view-transition-new(artly-home-ai-navigation),
   ::view-transition-group(product-image-transition),
   ::view-transition-image-pair(product-image-transition),
   ::view-transition-old(product-image-transition),
@@ -3492,28 +3475,6 @@ fly-to-cart.fly-to-cart--sticky {
 @keyframes slideInTopViewTransition {
   from {
     transform: translateY(100px);
-  }
-}
-
-@keyframes artlyPageTransitionOut {
-  from {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  to {
-    opacity: 0.94;
-    transform: translateY(3px);
-  }
-}
-
-@keyframes artlyPageTransitionIn {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
   }
 }
 

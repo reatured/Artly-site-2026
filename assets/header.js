@@ -1,13 +1,12 @@
 import { Component } from '@theme/component';
 import { onDocumentLoaded, changeMetaThemeColor, setHeaderMenuStyle } from '@theme/utilities';
 
-const NAVIGATION_FEEDBACK_DELAY = 115;
-const NAVIGATION_FEEDBACK_ARM_CLEAR_DELAY = 700;
+const NAVIGATION_FEEDBACK_CLEAR_DELAY = 520;
 const NAVIGATION_FEEDBACK_SELECTOR =
   '.menu-list__link[href], .menu-drawer__menu-item[href], .header-logo[href], .header__heading-link[href]';
-const HOME_ARTLY_AI_TRANSITION_TYPE = 'artly-home-ai-navigation';
-const CUSTOM_TRANSITION_STORAGE_KEY = 'custom-transition-type';
-const CUSTOM_TRANSITION_STORAGE_AT_KEY = 'custom-transition-type-at';
+const PAGE_FADE_STORAGE_KEY = 'artlyNavPending';
+const PAGE_FADE_PENDING_VALUE = 'fade';
+const PAGE_FADE_OVERLAY_SELECTOR = '.artly-page-fade-overlay';
 
 /**
  * @typedef {Object} HeaderComponentRefs
@@ -66,34 +65,10 @@ class HeaderComponent extends Component {
   #scrollRafId = null;
 
   /**
-   * Timeout used to let pending nav feedback paint before same-site navigation.
+   * Timeout used to clear pending navigation feedback state.
    * @type {number | null}
    */
-  #pendingNavigationTimer = null;
-
-  /**
-   * Timeout used to clear pointer-armed feedback when no click follows.
-   * @type {number | null}
-   */
-  #armedNavigationTimer = null;
-
-  /**
-   * Header link that was visually armed on pointerdown/touchstart.
-   * @type {HTMLAnchorElement | null}
-   */
-  #armedNavigationLink = null;
-
-  /**
-   * Timeout used to clear the short-lived rail feedback state.
-   * @type {number | null}
-   */
-  #railFeedbackTimer = null;
-
-  /**
-   * Timeout used to clear page feedback if navigation is interrupted.
-   * @type {number | null}
-   */
-  #pageFeedbackTimer = null;
+  #feedbackClearTimer = null;
 
   /**
    * Header links that have direct keyboard feedback listeners.
@@ -101,16 +76,26 @@ class HeaderComponent extends Component {
    */
   #navigationFeedbackLinks = new Set();
 
+  /**
+   * Whether a fade-out navigation is currently in progress.
+   * @type {boolean}
+   */
+  #isFadeNavigationPending = false;
+
+  /**
+   * Bound handler for pageshow events (bfcache restoration cleanup).
+   * @type {((event: Event) => void) | null}
+   */
+  #pageshowHandler = null;
+
+  /**
+   * Bound handler for pagehide events (bfcache storage cleanup).
+   * @type {((event: Event) => void) | null}
+   */
+  #pagehideHandler = null;
+
   handleNavigationFeedbackEvent = (event) => {
     this.#handleNavigationFeedback(event);
-  };
-
-  handleNavigationFeedbackPointerdownEvent = (event) => {
-    this.#handleNavigationFeedbackPointerdown(event);
-  };
-
-  handleNavigationFeedbackTouchstartEvent = (event) => {
-    this.#handleNavigationFeedbackTouchstart(event);
   };
 
   handleNavigationFeedbackKeydownEvent = (event) => {
@@ -243,7 +228,9 @@ class HeaderComponent extends Component {
   };
 
   /**
-   * Adds instant feedback for ordinary same-site header navigation.
+   * Adds instant feedback for ordinary same-site header navigation by setting
+   * a short-lived is-nav-pending highlight on the clicked link, then triggers
+   * a fade-to-white transition before the browser navigates.
    * @param {MouseEvent} event
    */
   #handleNavigationFeedback = (event) => {
@@ -253,41 +240,13 @@ class HeaderComponent extends Component {
     if (!(link instanceof HTMLAnchorElement) || !this.contains(link)) return;
     if (!isEligibleNavigationEvent(event, link)) return;
 
-    event.preventDefault();
-    this.#commitNavigationFeedback(link);
+    this.#setPendingLinkFeedback(link);
+    this.#handleFadeNavigation(link, event);
   };
 
   /**
-   * Arms visual feedback as soon as a primary pointer starts the Home <-> Artly AI navigation.
-   * Click still commits navigation so cancelled taps and modified clicks keep browser defaults.
-   * @param {PointerEvent} event
-   */
-  #handleNavigationFeedbackPointerdown = (event) => {
-    if (event.defaultPrevented || !(event.target instanceof Element)) return;
-
-    const link = event.target.closest(NAVIGATION_FEEDBACK_SELECTOR);
-    if (!(link instanceof HTMLAnchorElement) || !this.contains(link)) return;
-    if (!isEligiblePointerNavigationEvent(event, link) || !isHomeArtlyAiNavigation(link)) return;
-
-    this.#armNavigationFeedback(link);
-  };
-
-  /**
-   * Fallback for touch browsers that do not dispatch PointerEvent early enough.
-   * @param {TouchEvent} event
-   */
-  #handleNavigationFeedbackTouchstart = (event) => {
-    if (event.defaultPrevented || !(event.target instanceof Element)) return;
-
-    const link = event.target.closest(NAVIGATION_FEEDBACK_SELECTOR);
-    if (!(link instanceof HTMLAnchorElement) || !this.contains(link)) return;
-    if (!isEligibleTouchNavigationEvent(event, link) || !isHomeArtlyAiNavigation(link)) return;
-
-    this.#armNavigationFeedback(link);
-  };
-
-  /**
-   * Adds the same accepted navigation feedback for keyboard-activated links.
+   * Adds the same accepted navigation feedback for keyboard-activated links,
+   * then triggers a fade-to-white transition before navigation.
    * @param {KeyboardEvent} event
    */
   #handleNavigationFeedbackKeydown = (event) => {
@@ -299,118 +258,45 @@ class HeaderComponent extends Component {
     if (!(link instanceof HTMLAnchorElement) || !this.contains(link)) return;
     if (!isEligibleKeyboardNavigationEvent(event, link)) return;
 
-    event.preventDefault();
-    this.#commitNavigationFeedback(link);
+    this.#setPendingLinkFeedback(link);
+    this.#handleFadeNavigation(link, event);
   };
 
   /**
+   * Applies the is-nav-pending highlight to the given link and schedules an
+   * automatic clear. Navigation proceeds natively via the browser.
    * @param {HTMLAnchorElement} link
    */
-  #armNavigationFeedback(link) {
-    if (this.#pendingNavigationTimer !== null) return;
-
-    this.#applyNavigationFeedbackState(link, NAVIGATION_FEEDBACK_ARM_CLEAR_DELAY);
-    this.#armedNavigationLink = link;
-
-    if (this.#armedNavigationTimer !== null) {
-      clearTimeout(this.#armedNavigationTimer);
-    }
-
-    this.#armedNavigationTimer = window.setTimeout(() => {
-      if (this.#pendingNavigationTimer === null && this.#armedNavigationLink === link) {
-        this.#clearNavigationFeedbackState({ clearStoredTransition: true });
-      }
-      this.#armedNavigationLink = null;
-      this.#armedNavigationTimer = null;
-    }, NAVIGATION_FEEDBACK_ARM_CLEAR_DELAY);
-  }
-
-  /**
-   * @param {HTMLAnchorElement} link
-   */
-  #commitNavigationFeedback(link) {
-    if (this.#pendingNavigationTimer !== null) {
-      clearTimeout(this.#pendingNavigationTimer);
-      this.#pendingNavigationTimer = null;
-    }
-    if (this.#armedNavigationTimer !== null) {
-      clearTimeout(this.#armedNavigationTimer);
-      this.#armedNavigationTimer = null;
-    }
-    if (this.#railFeedbackTimer !== null) {
-      clearTimeout(this.#railFeedbackTimer);
-      this.#railFeedbackTimer = null;
-    }
-    if (this.#pageFeedbackTimer !== null) {
-      clearTimeout(this.#pageFeedbackTimer);
-      this.#pageFeedbackTimer = null;
-    }
-    this.#armedNavigationLink = null;
-
-    this.#applyNavigationFeedbackState(link);
-
-    this.#railFeedbackTimer = window.setTimeout(() => {
-      this.classList.remove('is-transition-committing');
-      if (this.dataset.artlyTransitionState === 'committing') {
-        delete this.dataset.artlyTransitionState;
-      }
-      this.#railFeedbackTimer = null;
-    }, 180);
-
-    const targetUrl = link.href;
-    this.#pendingNavigationTimer = window.setTimeout(() => {
-      window.location.assign(targetUrl);
-    }, NAVIGATION_FEEDBACK_DELAY);
-  }
-
-  /**
-   * @param {HTMLAnchorElement} link
-   * @param {number} clearDelay
-   */
-  #applyNavigationFeedbackState(link, clearDelay = 240) {
+  #setPendingLinkFeedback(link) {
     this.querySelectorAll('[data-artly-nav-pending="true"]').forEach((element) => {
       element.classList.remove('is-nav-pending');
       if (element instanceof HTMLElement) {
         delete element.dataset.artlyNavPending;
       }
     });
-    this.querySelectorAll('[data-view-transition-triggered="true"]').forEach((element) => {
-      element.removeAttribute('data-view-transition-triggered');
-      element.removeAttribute('data-view-transition-type');
-    });
 
-    this.classList.add('is-transition-committing');
-    this.dataset.artlyTransitionState = 'committing';
     link.classList.add('is-nav-pending');
     link.dataset.artlyNavPending = 'true';
-    if (isHomeArtlyAiNavigation(link)) {
-      link.setAttribute('data-view-transition-triggered', 'true');
-      link.setAttribute('data-view-transition-type', HOME_ARTLY_AI_TRANSITION_TYPE);
-      sessionStorage.setItem(CUSTOM_TRANSITION_STORAGE_KEY, HOME_ARTLY_AI_TRANSITION_TYPE);
-      sessionStorage.setItem(CUSTOM_TRANSITION_STORAGE_AT_KEY, Date.now().toString());
-    } else {
-      sessionStorage.removeItem(CUSTOM_TRANSITION_STORAGE_KEY);
-      sessionStorage.removeItem(CUSTOM_TRANSITION_STORAGE_AT_KEY);
+
+    if (this.#feedbackClearTimer !== null) {
+      clearTimeout(this.#feedbackClearTimer);
     }
-    this.#applyPageTransitionFeedback(clearDelay);
+
+    this.#feedbackClearTimer = window.setTimeout(() => {
+      this.querySelectorAll('[data-artly-nav-pending="true"]').forEach((element) => {
+        element.classList.remove('is-nav-pending');
+        if (element instanceof HTMLElement) {
+          delete element.dataset.artlyNavPending;
+        }
+      });
+      this.#feedbackClearTimer = null;
+    }, NAVIGATION_FEEDBACK_CLEAR_DELAY);
   }
 
-  /**
-   * @param {{ clearStoredTransition?: boolean }} [options]
-   */
-  #clearNavigationFeedbackState(options = {}) {
-    if (this.#railFeedbackTimer !== null) {
-      clearTimeout(this.#railFeedbackTimer);
-      this.#railFeedbackTimer = null;
-    }
-    if (this.#pageFeedbackTimer !== null) {
-      clearTimeout(this.#pageFeedbackTimer);
-      this.#pageFeedbackTimer = null;
-    }
-
-    this.classList.remove('is-transition-committing');
-    if (this.dataset.artlyTransitionState === 'committing') {
-      delete this.dataset.artlyTransitionState;
+  #clearPendingLinkFeedback() {
+    if (this.#feedbackClearTimer !== null) {
+      clearTimeout(this.#feedbackClearTimer);
+      this.#feedbackClearTimer = null;
     }
 
     this.querySelectorAll('[data-artly-nav-pending="true"]').forEach((element) => {
@@ -419,54 +305,86 @@ class HeaderComponent extends Component {
         delete element.dataset.artlyNavPending;
       }
     });
-    this.querySelectorAll('[data-view-transition-triggered="true"]').forEach((element) => {
-      element.removeAttribute('data-view-transition-triggered');
-      element.removeAttribute('data-view-transition-type');
-    });
-
-    const main = document.querySelector('#MainContent');
-    document.body.classList.remove('artly-page-transition-out');
-    if (main instanceof HTMLElement) {
-      main.classList.remove('artly-page-transition-out');
-      if (main.dataset.artlyPageTransition === 'leaving') {
-        delete main.dataset.artlyPageTransition;
-      }
-    }
-
-    if (options.clearStoredTransition) {
-      sessionStorage.removeItem(CUSTOM_TRANSITION_STORAGE_KEY);
-      sessionStorage.removeItem(CUSTOM_TRANSITION_STORAGE_AT_KEY);
-    }
   }
 
   /**
-   * @param {number} clearDelay
+   * Cleans up stale page-fade artifacts when a page is restored from bfcache.
+   * Removes any leftover .artly-page-fade-overlay, clears data-artly-fade on
+   * #MainContent, clears sessionStorage artlyNavPending, and resets the
+   * fade-navigation re-entrancy guard so header links work again.
+   * Does not touch is-nav-pending highlight state.
+   * @param {PageTransitionEvent} event
    */
-  #applyPageTransitionFeedback(clearDelay = 240) {
-    const main = document.querySelector('#MainContent');
-    if (!(main instanceof HTMLElement)) return;
+  #handlePageshow = (event) => {
+    if (!isHistoryRestoreEvent(event)) return;
 
-    if (this.#pageFeedbackTimer !== null) {
-      clearTimeout(this.#pageFeedbackTimer);
-      this.#pageFeedbackTimer = null;
+    this.#isFadeNavigationPending = false;
+    schedulePageFadeRestoreCleanup({ clearSession: true });
+  };
+
+  #handlePagehide = () => {
+    this.#isFadeNavigationPending = false;
+    cleanupPageFadeArtifacts({ clearSession: false });
+  };
+
+  /**
+   * Triggers a fade-to-white transition on #MainContent before navigating.
+   * When prefers-reduced-motion is active, skips the fade and lets the
+   * browser navigate immediately.
+   * @param {HTMLAnchorElement} link
+   * @param {Event} event
+   */
+  #handleFadeNavigation(link, event) {
+    if (
+      this.#isFadeNavigationPending &&
+      !hasPageFadeArtifacts() &&
+      getPageFadeStorageValue() !== PAGE_FADE_PENDING_VALUE
+    ) {
+      this.#isFadeNavigationPending = false;
     }
 
-    document.body.classList.add('artly-page-transition-out');
-    main.classList.add('artly-page-transition-out');
-    main.dataset.artlyPageTransition = 'leaving';
+    if (this.#isFadeNavigationPending) return;
 
-    this.#pageFeedbackTimer = window.setTimeout(() => {
-      document.body.classList.remove('artly-page-transition-out');
-      main.classList.remove('artly-page-transition-out');
-      if (main.dataset.artlyPageTransition === 'leaving') {
-        delete main.dataset.artlyPageTransition;
-      }
-      this.querySelectorAll('[data-view-transition-triggered="true"]').forEach((element) => {
-        element.removeAttribute('data-view-transition-triggered');
-        element.removeAttribute('data-view-transition-type');
-      });
-      this.#pageFeedbackTimer = null;
-    }, clearDelay);
+    const targetUrl = link.href;
+
+    if (prefersReducedMotion()) {
+      event.preventDefault();
+      cleanupPageFadeArtifacts({ clearSession: true });
+      window.location.assign(targetUrl);
+      return;
+    }
+
+    this.#isFadeNavigationPending = true;
+    event.preventDefault();
+    setPageFadeStorageValue(PAGE_FADE_PENDING_VALUE);
+
+    const mainContent = document.getElementById('MainContent');
+    if (!mainContent) {
+      this.#isFadeNavigationPending = false;
+      removePageFadeStorageValue();
+      window.location.assign(targetUrl);
+      return;
+    }
+
+    const overlay = document.createElement('div');
+    overlay.className = PAGE_FADE_OVERLAY_SELECTOR.slice(1);
+    mainContent.appendChild(overlay);
+
+    mainContent.setAttribute('data-artly-fade', 'out');
+
+    const cleanup = () => {
+      overlay.removeEventListener('transitionend', onTransitionEnd);
+      window.location.assign(targetUrl);
+    };
+
+    const onTransitionEnd = (e) => {
+      if (e.propertyName !== 'opacity') return;
+      clearTimeout(settleTimer);
+      cleanup();
+    };
+
+    overlay.addEventListener('transitionend', onTransitionEnd);
+    const settleTimer = setTimeout(cleanup, 320);
   }
 
   #bindNavigationFeedbackLinks() {
@@ -494,6 +412,11 @@ class HeaderComponent extends Component {
     this.addEventListener('click', this.#handleNavigationFeedback);
     this.#bindNavigationFeedbackLinks();
 
+    this.#pageshowHandler = (event) => this.#handlePageshow(event);
+    this.#pagehideHandler = (event) => this.#handlePagehide(event);
+    window.addEventListener('pageshow', this.#pageshowHandler);
+    window.addEventListener('pagehide', this.#pagehideHandler);
+
     const stickyMode = this.getAttribute('sticky');
     if (stickyMode) {
       this.#observeStickyPosition(stickyMode === 'always');
@@ -512,27 +435,17 @@ class HeaderComponent extends Component {
     this.removeEventListener('click', this.#handleNavigationFeedback);
     this.#unbindNavigationFeedbackLinks();
     document.removeEventListener('scroll', this.#handleWindowScroll);
+    if (this.#pageshowHandler) {
+      window.removeEventListener('pageshow', this.#pageshowHandler);
+    }
+    if (this.#pagehideHandler) {
+      window.removeEventListener('pagehide', this.#pagehideHandler);
+    }
     if (this.#scrollRafId !== null) {
       cancelAnimationFrame(this.#scrollRafId);
       this.#scrollRafId = null;
     }
-    if (this.#pendingNavigationTimer !== null) {
-      clearTimeout(this.#pendingNavigationTimer);
-      this.#pendingNavigationTimer = null;
-    }
-    if (this.#armedNavigationTimer !== null) {
-      clearTimeout(this.#armedNavigationTimer);
-      this.#armedNavigationTimer = null;
-    }
-    this.#armedNavigationLink = null;
-    if (this.#railFeedbackTimer !== null) {
-      clearTimeout(this.#railFeedbackTimer);
-      this.#railFeedbackTimer = null;
-    }
-    if (this.#pageFeedbackTimer !== null) {
-      clearTimeout(this.#pageFeedbackTimer);
-      this.#pageFeedbackTimer = null;
-    }
+    this.#clearPendingLinkFeedback();
     document.body.style.setProperty('--header-height', '0px');
   }
 }
@@ -541,27 +454,8 @@ if (!customElements.get('header-component')) {
   customElements.define('header-component', HeaderComponent);
 }
 
-document.addEventListener('pointerdown', routeDocumentNavigationFeedbackPointerdown, { capture: true });
-document.addEventListener('touchstart', routeDocumentNavigationFeedbackTouchstart, { capture: true, passive: true });
 document.addEventListener('click', routeDocumentNavigationFeedback, { capture: true });
 document.addEventListener('keydown', routeDocumentNavigationFeedbackKeydown, { capture: true });
-
-/**
- * Capture early pointer intent before click handlers can move the browser on.
- * @param {PointerEvent} event
- */
-function routeDocumentNavigationFeedbackPointerdown(event) {
-  const header = getNavigationFeedbackHeader(event);
-  header?.handleNavigationFeedbackPointerdownEvent(event);
-}
-
-/**
- * @param {TouchEvent} event
- */
-function routeDocumentNavigationFeedbackTouchstart(event) {
-  const header = getNavigationFeedbackHeader(event);
-  header?.handleNavigationFeedbackTouchstartEvent(event);
-}
 
 /**
  * Capture click navigation before nested header menu handlers can move the browser on.
@@ -664,27 +558,6 @@ function isEligibleNavigationEvent(event, link) {
 }
 
 /**
- * @param {PointerEvent} event
- * @param {HTMLAnchorElement} link
- * @returns {boolean}
- */
-function isEligiblePointerNavigationEvent(event, link) {
-  if (event.button !== 0 || event.isPrimary === false) return false;
-  if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return false;
-  return isEligibleNavigationLink(link);
-}
-
-/**
- * @param {TouchEvent} event
- * @param {HTMLAnchorElement} link
- * @returns {boolean}
- */
-function isEligibleTouchNavigationEvent(event, link) {
-  if (event.touches.length > 1 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return false;
-  return isEligibleNavigationLink(link);
-}
-
-/**
  * @param {KeyboardEvent} event
  * @param {HTMLAnchorElement} link
  * @returns {boolean}
@@ -725,26 +598,152 @@ function isEligibleNavigationLink(link) {
 }
 
 /**
- * @param {HTMLAnchorElement} link
  * @returns {boolean}
  */
-function isHomeArtlyAiNavigation(link) {
-  const targetPath = normalizeTransitionPath(new URL(link.href, window.location.href).pathname);
-  const currentPath = normalizeTransitionPath(window.location.pathname);
-  const isHomeToArtlyAi = currentPath === '/' && targetPath === '/pages/artly-ai';
-  const isArtlyAiToHome = currentPath === '/pages/artly-ai' && targetPath === '/';
-
-  return isHomeToArtlyAi || isArtlyAiToHome;
+function prefersReducedMotion() {
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
 /**
- * @param {string} pathname
- * @returns {string}
+ * Module-level safety-net for bfcache restoration.
+ * Runs regardless of whether a HeaderComponent instance is connected.
+ * Strips any stale .artly-page-fade-overlay, data-artly-fade attribute,
+ * and artlyNavPending session key when a page is restored from history.
+ * Does not touch is-nav-pending highlight state.
  */
-function normalizeTransitionPath(pathname) {
-  if (pathname.length > 1 && pathname.endsWith('/')) {
-    return pathname.slice(0, -1);
+window.addEventListener('pagehide', () => {
+  cleanupPageFadeArtifacts({ clearSession: false });
+});
+
+window.addEventListener('pageshow', (event) => {
+  if (!isHistoryRestoreEvent(event)) return;
+
+  schedulePageFadeRestoreCleanup({ clearSession: true });
+});
+
+function initPageFadeIn() {
+  if (getPageFadeStorageValue() !== PAGE_FADE_PENDING_VALUE) return;
+  removePageFadeStorageValue();
+
+  if (prefersReducedMotion()) {
+    cleanupPageFadeArtifacts({ clearSession: true });
+    return;
   }
 
-  return pathname || '/';
+  const mainContent = document.getElementById('MainContent');
+  if (!mainContent) return;
+
+  const overlay = mainContent.querySelector(PAGE_FADE_OVERLAY_SELECTOR);
+  if (!overlay) {
+    mainContent.removeAttribute('data-artly-fade');
+    return;
+  }
+
+  mainContent.setAttribute('data-artly-fade', 'in');
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      mainContent.removeAttribute('data-artly-fade');
+    });
+  });
+
+  const removeOverlay = () => {
+    overlay.removeEventListener('transitionend', removeOverlay);
+    overlay.remove();
+  };
+  overlay.addEventListener('transitionend', removeOverlay);
+  setTimeout(() => {
+    if (overlay.parentNode) overlay.remove();
+  }, 400);
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initPageFadeIn);
+} else {
+  initPageFadeIn();
+}
+
+/**
+ * Removes only the page-fade overlay/state. Header is-nav-pending feedback is
+ * intentionally left alone because it is separate navigation feedback.
+ * @param {{ clearSession?: boolean }} [options]
+ */
+function cleanupPageFadeArtifacts(options = {}) {
+  const { clearSession = true } = options;
+
+  document.querySelectorAll(PAGE_FADE_OVERLAY_SELECTOR).forEach((el) => el.remove());
+
+  const mainContent = document.getElementById('MainContent');
+  if (mainContent) {
+    mainContent.removeAttribute('data-artly-fade');
+  }
+
+  if (clearSession) {
+    removePageFadeStorageValue();
+  }
+}
+
+/**
+ * Runs cleanup more than once because browser history restoration can replay
+ * styles and DOM state around the first pageshow frame.
+ * @param {{ clearSession?: boolean }} [options]
+ */
+function schedulePageFadeRestoreCleanup(options = {}) {
+  cleanupPageFadeArtifacts(options);
+  requestAnimationFrame(() => cleanupPageFadeArtifacts(options));
+  window.setTimeout(() => cleanupPageFadeArtifacts(options), 80);
+}
+
+/**
+ * @returns {boolean}
+ */
+function hasPageFadeArtifacts() {
+  const mainContent = document.getElementById('MainContent');
+  return (
+    document.querySelector(PAGE_FADE_OVERLAY_SELECTOR) !== null ||
+    mainContent?.hasAttribute('data-artly-fade') === true
+  );
+}
+
+/**
+ * @param {Event} event
+ * @returns {boolean}
+ */
+function isHistoryRestoreEvent(event) {
+  if ('persisted' in event && event.persisted === true) return true;
+
+  if (typeof performance === 'undefined' || typeof performance.getEntriesByType !== 'function') return false;
+
+  const [navigationEntry] = performance.getEntriesByType('navigation');
+  return navigationEntry?.type === 'back_forward';
+}
+
+/**
+ * @returns {string | null}
+ */
+function getPageFadeStorageValue() {
+  try {
+    return sessionStorage.getItem(PAGE_FADE_STORAGE_KEY);
+  } catch (e) {
+    return null;
+  }
+}
+
+/**
+ * @param {string} value
+ */
+function setPageFadeStorageValue(value) {
+  try {
+    sessionStorage.setItem(PAGE_FADE_STORAGE_KEY, value);
+  } catch (e) {
+    /* sessionStorage unavailable */
+  }
+}
+
+function removePageFadeStorageValue() {
+  try {
+    sessionStorage.removeItem(PAGE_FADE_STORAGE_KEY);
+  } catch (e) {
+    /* sessionStorage unavailable */
+  }
 }

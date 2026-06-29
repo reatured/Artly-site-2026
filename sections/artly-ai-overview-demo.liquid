@@ -45,6 +45,9 @@
   if has_demo_video
     assign demo_media_object = section.settings.demo_video
     assign demo_media_poster = section.settings.demo_image
+    if demo_media_poster == blank and demo_media_object.preview_image != blank
+      assign demo_media_poster = demo_media_object.preview_image
+    endif
     if demo_media_poster != blank
       assign demo_media_poster_url = demo_media_poster | image_url: width: 1800
     endif
@@ -77,8 +80,8 @@
     </div>
 
     <div
-      class="artly-ai__video-shell"
-      role="img"
+      class="artly-ai__video-shell{% if has_demo_video or has_demo_video_url %} artly-ai__video-shell--video{% endif %}"
+      role="{% if has_demo_video or has_demo_video_url %}group{% else %}img{% endif %}"
       aria-label="{{ demo_media_alt | escape }}"
       data-demo-media-state="{{ demo_media_state }}"
     >
@@ -134,6 +137,9 @@
           <circle cx="260" cy="170" r="58" fill="#dbe4e9"/>
           <circle cx="632" cy="362" r="40" fill="#dbe4e9"/>
         </svg>
+      {% endif %}
+      {% if demo_media_state == 'uploaded_video' or demo_media_state == 'external_video' %}
+        <span class="artly-ai__video-play" aria-hidden="true"></span>
       {% endif %}
     </div>
   </div>

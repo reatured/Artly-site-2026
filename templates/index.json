@@ -25,7 +25,7 @@
         "media_type": "image",
         "media_image": "shopify://shop_images/blog-banner.jpg",
         "media_alt_text": "Artly robotic coffee workcell in a commercial service setting",
-        "media_blur_amount": 4,
+        "media_blur_amount": 2,
         "video_autoplay": true,
         "video_loop": true,
         "video_controls": false,
