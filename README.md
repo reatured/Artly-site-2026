@@ -1,8 +1,8 @@
-# Artly Shopify Theme
+# Shopify Theme
 
-This repository contains the Shopify theme for the Artly site.
+This repository contains a Shopify theme project.
 
-Use Shopify CLI local preview before committing changes to GitHub. A commit pushed to the connected GitHub branch automatically updates the Shopify store through Shopify's GitHub integration, so preview first and commit only when the change is ready.
+Use Shopify CLI local preview before committing changes to GitHub. When this repository is connected to a Shopify store through Shopify's GitHub integration, pushing a commit to the connected branch automatically updates the store, so preview first and commit only when the change is ready.
 
 ## Preview Before Commit
 
@@ -17,16 +17,10 @@ shopify auth login
 Start the local Shopify theme preview:
 
 ```bash
-shopify theme dev --path . --environment default --port 9292 --open
+shopify theme dev --environment default --open
 ```
 
-The preview opens at:
-
-```text
-http://127.0.0.1:9292/
-```
-
-Keep `shopify theme dev` running while editing. It syncs local theme files to a development preview theme and hot-reloads changes in the browser.
+Shopify CLI opens the preview in the browser and prints the preview link in the terminal. Keep `shopify theme dev` running while editing. It syncs local theme files to a development preview theme and hot-reloads changes in the browser.
 
 ## Commit And Store Update
 
@@ -36,10 +30,10 @@ After the change has been checked in the local preview:
 git status --short
 git add .
 git commit -m "Describe the change"
-git push origin main
+git push
 ```
 
-Pushing the commit updates the connected Shopify store automatically. There is no separate manual Shopify deploy step for normal theme changes.
+Pushing the commit updates the connected Shopify store automatically when the branch is connected in Shopify. There is no separate manual Shopify deploy step for normal theme changes.
 
 ## Initiating The Workflow
 
